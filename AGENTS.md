@@ -77,7 +77,6 @@
 
 ## 9. 已知待办（当前差距，勿当 bug）
 
-- `patient` 新增依赖 `id_no_hash`，待 `IdNoEncryptor`（S6）具备后可用
 - **枚举副本有三处**：`docs/database-design.md` §2（权威）、本仓 `src/views/appt/options.ts`（筛选/表单/列表）、后端 VO 的 `@ExcelDictFormat(readConverterExp=...)`（导出）。改枚举必须三处同步（未采用 sys_dict，避免第四份副本）
 
 ## 10. 提交纪律

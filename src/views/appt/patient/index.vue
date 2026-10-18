@@ -88,7 +88,9 @@
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
       <el-form ref="patientFormRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="账号" prop="userId">
-          <el-input-number v-model="form.userId" controls-position="right" />
+          <el-select v-model="form.userId" placeholder="请选择账号" clearable filterable style="width: 100%">
+            <el-option v-for="item in userOptions" :key="item.userId" :label="item.nickName || item.userName" :value="item.userId" />
+          </el-select>
         </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name" placeholder="请输入就诊人姓名" />
@@ -99,7 +101,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="证件号" prop="idNo">
-          <el-input v-model="form.idNo" placeholder="请输入证件号：生产 AES 密文，演示期明文" />
+          <el-input v-model="form.idNo" placeholder="新增必填；修改留空表示不修改（摘要落库，原文不回显）" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-switch
@@ -128,6 +130,8 @@ import {
   updatePatient
 } from '@/api/appt/patient';
 import { PatientForm, PatientQuery, PatientVO } from '@/api/appt/patient/types';
+import { listUser } from '@/api/system/user';
+import { UserVO } from '@/api/system/user/types';
 import { useLoading } from '@/hooks/async/useLoading';
 import { useFormDialog } from '@/hooks/dialog/useFormDialog';
 import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
@@ -141,6 +145,8 @@ import { ID_TYPE_OPTIONS, STATUS_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 const patientList = ref<PatientVO[]>([]);
+/** 账号下拉选项 */
+const userOptions = ref<UserVO[]>([]);
 const buttonLoading = ref(false);
 const { loading, withLoading } = useLoading(true);
 const { showSearch } = useSearchToggle();
@@ -181,19 +187,16 @@ id: [
       { required: true, message: "主键不能为空", trigger: "change" }
     ],
 userId: [
-      { required: true, message: "归属账号id不能为空", trigger: "change" }
+      { required: true, message: "账号不能为空", trigger: "change" }
     ],
 name: [
       { required: true, message: "就诊人姓名不能为空", trigger: "blur" }
     ],
 idType: [
-      { required: true, message: "证件类型：IDCARD身份证 CARD就诊卡不能为空", trigger: "change" }
-    ],
-idNo: [
-      { required: true, message: "证件号：生产 AES 密文，演示期明文不能为空", trigger: "blur" }
+      { required: true, message: "证件类型不能为空", trigger: "change" }
     ],
 status: [
-      { required: true, message: "状态：0正常 1停用不能为空", trigger: "change" }
+      { required: true, message: "状态不能为空", trigger: "change" }
     ],
   }
 });
@@ -296,8 +299,15 @@ const handleExport = () => {
 
 
 
+/** 加载账号下拉选项 */
+const loadOptions = async () => {
+  const res = await listUser({ pageNum: 1, pageSize: 500 });
+  userOptions.value = res.data?.rows ?? [];
+};
+
 onMounted(() => {
   getList();
+  loadOptions();
 });
 </script>
 

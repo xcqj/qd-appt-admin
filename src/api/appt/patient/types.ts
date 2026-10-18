@@ -33,7 +33,7 @@ export interface PatientForm extends BaseEntity {
   /**
    * 归属账号id（sys_user）
    */
-  userId?: number;
+  userId?: string | number;
   /**
    * 就诊人姓名
    */
@@ -60,7 +60,7 @@ export interface PatientQuery extends PageQuery {
   /**
    * 归属账号id（sys_user）
    */
-  userId?: number;
+  userId?: string | number;
   /**
    * 就诊人姓名
    */
