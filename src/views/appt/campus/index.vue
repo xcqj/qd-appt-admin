@@ -63,7 +63,7 @@
         <el-table-column label="地址" align="center" prop="address" />
         <el-table-column label="封面图" align="center" prop="coverUrl" width="100">
           <template #default="scope">
-            <image-preview v-if="scope.row.coverUrl" :src="scope.row.coverUrl" :width="60" :height="40" />
+            <image-preview v-if="scope.row.coverImageUrl || scope.row.coverUrl" :src="scope.row.coverImageUrl || scope.row.coverUrl" :width="60" :height="40" />
             <span v-else>-</span>
           </template>
         </el-table-column>

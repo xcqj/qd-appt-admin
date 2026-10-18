@@ -19,6 +19,7 @@ export interface StaffVO {
    * 头像（占位图）
    */
   avatar: string;
+  avatarUrl?: string;
   /**
    * 职称：CHIEF主任医师 ASSOC_CHIEF副主任医师 ATTENDING主治医师 PHYSICIAN医师 ASSOC_CHIEF_NURSE副主任护师
    */

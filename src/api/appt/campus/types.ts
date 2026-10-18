@@ -15,6 +15,7 @@ export interface CampusVO {
    * 封面图（占位图）
    */
   coverUrl: string;
+  coverImageUrl?: string;
   /**
    * 排序
    */

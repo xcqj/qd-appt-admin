@@ -51,7 +51,7 @@
 6. label 用 UI 文案（"状态" / "午别" / "职称"），**不要**直接拿 DDL 注释原文当标签。
 7. 列表展示枚举/布尔时做中文映射（`AM`→上午、`true/false`→正常/停用）。
 8. 引用下拉只列**正常项**（`useApptOptions` 内过滤 `status === true`）；科室父级树保留停用节点但标记 `disabled`，保证子节点仍挂在树上但不可被选为父级。
-9. 图片字段用 `<image-upload v-model="form.xxx" :limit="1" />`（框架组件，走 `/resource/oss/upload`），列表用 `<image-preview :src="..." :width="40" :height="40" />`；字段存 **URL 字符串**（不存 ossId）。
+9. 图片字段用 `<image-upload v-model="form.xxx" :limit="1" />`——**该组件回填 ossId，不是 URL**。后端 VO 必须加 `<field>Url`（如 `avatarUrl`）并 `@Translation(type = TransConstant.OSS_ID_TO_URL, mapper = "<field>")`；列表绑 `scope.row.xxxUrl || scope.row.xxx`（后者兜底历史上存了 URL 的旧数据）；**导出不含图片列**（`@Translation` 只在 JSON 序列化时生效，导出对象上取不到值）。
 
 ## 6. 生成器产物纪律
 

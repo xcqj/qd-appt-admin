@@ -89,7 +89,7 @@
         <el-table-column label="姓名" align="center" prop="name" />
         <el-table-column label="头像" align="center" prop="avatar" width="90">
           <template #default="scope">
-            <image-preview v-if="scope.row.avatar" :src="scope.row.avatar" :width="40" :height="40" />
+            <image-preview v-if="scope.row.avatarUrl || scope.row.avatar" :src="scope.row.avatarUrl || scope.row.avatar" :width="40" :height="40" />
             <span v-else>-</span>
           </template>
         </el-table-column>
