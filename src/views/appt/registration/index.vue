@@ -123,7 +123,7 @@
           </template>
         </el-table-column>
         <el-table-column label="挂号费" align="center" prop="fee" />
-        <el-table-column label="有效标记" align="center" prop="activeFlag" />
+        <el-table-column label="有效标记" align="center" prop="activeFlag"  :formatter="(r) => labelOf(REG_ACTIVE_FLAG_OPTIONS, r.activeFlag)" />
         <el-table-column label="结算状态" align="center" prop="settleStatus" :formatter="(r) => labelOf(SETTLE_STATUS_OPTIONS, r.settleStatus)" />
         <el-table-column label="挂号状态" align="center" prop="status" :formatter="(r) => labelOf(REG_STATUS_OPTIONS, r.status)" />
         <el-table-column label="签到时间" align="center" prop="signTime" width="180">
@@ -153,7 +153,7 @@ import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { parseTime } from '@/utils/ruoyi';
 import { download as requestDownload } from '@/utils/request';
 import { useApptOptions } from '@/views/appt/useApptOptions';
-import { PERIOD_OPTIONS, SETTLE_STATUS_OPTIONS, REG_STATUS_OPTIONS, SIGN_TYPE_OPTIONS, CANCEL_TYPE_OPTIONS, labelOf } from '@/views/appt/options';
+import { PERIOD_OPTIONS, SETTLE_STATUS_OPTIONS, REG_STATUS_OPTIONS, SIGN_TYPE_OPTIONS, CANCEL_TYPE_OPTIONS, labelOf, REG_ACTIVE_FLAG_OPTIONS } from '@/views/appt/options';
 
 
 

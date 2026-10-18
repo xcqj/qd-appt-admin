@@ -65,7 +65,7 @@
         <el-table-column label="渠道流水号" align="center" prop="tradeNo" />
         <el-table-column label="通知ID" align="center" prop="notifyId" />
         <el-table-column label="渠道" align="center" prop="channel" :formatter="(r) => labelOf(PAY_CHANNEL_OPTIONS, r.channel)" />
-        <el-table-column label="验签结果" align="center" prop="signFlag" />
+        <el-table-column label="验签结果" align="center" prop="signFlag"  :formatter="(r) => labelOf(SIGN_FLAG_OPTIONS, r.signFlag)" />
         <el-table-column label="处理状态" align="center" prop="processStatus" :formatter="(r) => labelOf(CALLBACK_STATUS_OPTIONS, r.processStatus)" />
       </el-table>
 
@@ -84,7 +84,7 @@ import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { download as requestDownload } from '@/utils/request';
-import { PAY_CHANNEL_OPTIONS, CALLBACK_STATUS_OPTIONS, labelOf } from '@/views/appt/options';
+import { PAY_CHANNEL_OPTIONS, CALLBACK_STATUS_OPTIONS, labelOf, SIGN_FLAG_OPTIONS } from '@/views/appt/options';
 
 
 

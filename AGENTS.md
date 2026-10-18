@@ -77,7 +77,7 @@
 
 ## 9. 已知待办（当前差距，勿当 bug）
 
-- **枚举副本有三处**：`docs/database-design.md` §2（权威）、本仓 `src/views/appt/options.ts`（筛选/表单/列表）、后端 VO 的 `@ExcelDictFormat(readConverterExp=...)`（导出）。改枚举必须三处同步（未采用 sys_dict，避免第四份副本）
+- **枚举副本有三处**：`docs/database-design.md` §2 + 契约 §2.7（权威）、本仓 `src/views/appt/options.ts`（筛选/表单/列表）、后端 VO 的 `@ExcelDictFormat(readConverterExp=...)`（导出）。改枚举必须三处同步，改完跑 `python3 backend/script/enum_sync_audit.py` 验证（未采用 sys_dict，避免第四份副本）
 
 ## 10. 提交纪律
 

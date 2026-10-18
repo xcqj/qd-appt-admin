@@ -64,7 +64,7 @@
         <el-table-column label="账号" align="center" prop="userId" />
         <el-table-column label="姓名" align="center" prop="name" />
         <el-table-column label="证件类型" align="center" prop="idType" :formatter="(r) => labelOf(ID_TYPE_OPTIONS, r.idType)" />
-        <el-table-column label="默认就诊人" align="center" prop="isDefault" />
+        <el-table-column label="默认就诊人" align="center" prop="isDefault"  :formatter="(r) => labelOf(IS_DEFAULT_OPTIONS, r.isDefault)" />
         <el-table-column label="状态" align="center" prop="status" width="100">
           <template #default="scope">
             <el-tag :type="scope.row.status === true ? 'danger' : 'success'">{{ scope.row.status === true ? '停用' : '正常' }}</el-tag>
@@ -140,7 +140,7 @@ import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { useTableSelection } from '@/hooks/table/useTableSelection';
 import modal from '@/plugins/modal';
 import { download as requestDownload } from '@/utils/request';
-import { ID_TYPE_OPTIONS, STATUS_OPTIONS, labelOf } from '@/views/appt/options';
+import { ID_TYPE_OPTIONS, STATUS_OPTIONS, labelOf, IS_DEFAULT_OPTIONS } from '@/views/appt/options';
 
 
 

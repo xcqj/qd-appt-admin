@@ -4,7 +4,7 @@
  */
 export interface ApptOption {
   label: string;
-  value: string | number | boolean;
+  value: string | number | boolean | null;
 }
 
 /** 科室层级 */
@@ -41,6 +41,24 @@ export const TITLE_OPTIONS: ApptOption[] = [
 export const STAFF_TYPE_OPTIONS: ApptOption[] = [
   { label: '医生', value: 'DOCTOR' },
   { label: '护士', value: 'NURSE' }
+];
+
+/** 有效标记（1 = 有效 / NULL = 终态） */
+export const REG_ACTIVE_FLAG_OPTIONS: ApptOption[] = [
+  { label: '有效', value: 1 },
+  { label: '终态', value: null }
+];
+
+/** 默认就诊人（1 = 是 / NULL = 否） */
+export const IS_DEFAULT_OPTIONS: ApptOption[] = [
+  { label: '是', value: 1 },
+  { label: '否', value: null }
+];
+
+/** 回调验签结果（0 = 通过 / 1 = 失败） */
+export const SIGN_FLAG_OPTIONS: ApptOption[] = [
+  { label: '通过', value: '0' },
+  { label: '失败', value: '1' }
 ];
 
 /** 证件类型 */
@@ -139,7 +157,8 @@ export const PAY_STATUS_OPTIONS: ApptOption[] = [
 
 /** 支付渠道 */
 export const PAY_CHANNEL_OPTIONS: ApptOption[] = [
-  { label: 'Mock', value: 'MOCK' }
+  { label: 'Mock', value: 'MOCK' },
+  { label: '支付宝', value: 'alipay' }
 ];
 
 /** 退款状态 */
@@ -160,12 +179,12 @@ export const CALLBACK_STATUS_OPTIONS: ApptOption[] = [
 /** 对账检查项 */
 export const CHECK_TYPE_OPTIONS: ApptOption[] = [
   { label: 'R1 幽灵占号', value: 'R1' },
-  { label: 'R2 占号无单', value: 'R2' },
-  { label: 'R3 回调缺口', value: 'R3' },
-  { label: 'R4 给号未收钱', value: 'R4' },
-  { label: 'R5 退款未回写', value: 'R5' },
-  { label: 'R6 余量偏差', value: 'R6' },
-  { label: 'R7 缓存无源', value: 'R7' }
+  { label: 'R2 号源未占用', value: 'R2' },
+  { label: 'R3 应退未退', value: 'R3' },
+  { label: 'R4 给了号没收钱', value: 'R4' },
+  { label: 'R5 退款卡住', value: 'R5' },
+  { label: 'R6 停诊漏处理', value: 'R6' },
+  { label: 'R7 余量缓存漂移', value: 'R7' }
 ];
 
 /** 对账动作 */
