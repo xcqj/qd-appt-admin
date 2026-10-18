@@ -14,7 +14,7 @@ export interface FeeStandardVO {
   /**
    * 挂号费
    */
-  fee: number;
+  fee: string;
   /**
    * 状态：0正常 1停用（2026-10-18 补）
    */
@@ -25,7 +25,7 @@ export interface FeeStandardForm extends BaseEntity {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 职称线值
    */
@@ -48,7 +48,7 @@ export interface FeeStandardQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 职称线值
    */

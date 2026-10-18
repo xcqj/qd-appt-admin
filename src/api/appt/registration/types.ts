@@ -46,7 +46,7 @@ export interface RegistrationVO {
   /**
    * 挂号费金额快照（I2）
    */
-  fee: number;
+  fee: string;
   /**
    * 1=有效 / NULL=终态；三条联合唯一索引的列（M1）。默认 1——漏写时朝「仍然设防」而非「静默失效」的方向偏
    */
@@ -84,7 +84,7 @@ export interface RegistrationQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 挂号单号：R + yyyyMMdd + 6位当日序列（D-S1-4）
    */
@@ -92,27 +92,27 @@ export interface RegistrationQuery extends PageQuery {
   /**
    * 账号id（sys_user）；限购与黑名单均按 user_id 统计（M13）
    */
-  userId?: string | number;
+  userId?: number;
   /**
    * 就诊人id
    */
-  patientId?: string | number;
+  patientId?: number;
   /**
    * 号源id
    */
-  slotId?: string | number;
+  slotId?: number;
   /**
    * 医务人员id（冗余快照）
    */
-  staffId?: string | number;
+  staffId?: number;
   /**
    * 科室id（冗余快照）
    */
-  deptId?: string | number;
+  deptId?: number;
   /**
    * 院区id（冗余快照）
    */
-  campusId?: string | number;
+  campusId?: number;
   /**
    * 就诊日期（冗余快照）
    */

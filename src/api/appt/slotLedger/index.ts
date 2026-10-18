@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listSlotLedger = (query?: SlotLedgerQuery): AxiosPromise<PageResult<SlotLedgerVO>> => {
   return request({
-    url: '/appt/slotLedger/list',
+    url: '/appt/admin/slotLedger/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listSlotLedger = (query?: SlotLedgerQuery): AxiosPromise<PageResult
  */
 export const getSlotLedger = (id: string | number): AxiosPromise<SlotLedgerVO> => {
   return request({
-    url: '/appt/slotLedger/' + id,
+    url: '/appt/admin/slotLedger/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getSlotLedger = (id: string | number): AxiosPromise<SlotLedgerVO> =
  */
 export const addSlotLedger = (data: SlotLedgerForm) => {
   return request({
-    url: '/appt/slotLedger',
+    url: '/appt/admin/slotLedger',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addSlotLedger = (data: SlotLedgerForm) => {
  */
 export const updateSlotLedger = (data: SlotLedgerForm) => {
   return request({
-    url: '/appt/slotLedger',
+    url: '/appt/admin/slotLedger',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateSlotLedger = (data: SlotLedgerForm) => {
  */
 export const delSlotLedger = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/slotLedger/' + id,
+    url: '/appt/admin/slotLedger/' + id,
     method: 'delete'
   });
 };

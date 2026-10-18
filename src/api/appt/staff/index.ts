@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listStaff = (query?: StaffQuery): AxiosPromise<PageResult<StaffVO>> => {
   return request({
-    url: '/appt/staff/list',
+    url: '/appt/admin/staff/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listStaff = (query?: StaffQuery): AxiosPromise<PageResult<StaffVO>>
  */
 export const getStaff = (id: string | number): AxiosPromise<StaffVO> => {
   return request({
-    url: '/appt/staff/' + id,
+    url: '/appt/admin/staff/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getStaff = (id: string | number): AxiosPromise<StaffVO> => {
  */
 export const addStaff = (data: StaffForm) => {
   return request({
-    url: '/appt/staff',
+    url: '/appt/admin/staff',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addStaff = (data: StaffForm) => {
  */
 export const updateStaff = (data: StaffForm) => {
   return request({
-    url: '/appt/staff',
+    url: '/appt/admin/staff',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateStaff = (data: StaffForm) => {
  */
 export const delStaff = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/staff/' + id,
+    url: '/appt/admin/staff/' + id,
     method: 'delete'
   });
 };

@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listSchedule = (query?: ScheduleQuery): AxiosPromise<PageResult<ScheduleVO>> => {
   return request({
-    url: '/appt/schedule/list',
+    url: '/appt/admin/schedule/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listSchedule = (query?: ScheduleQuery): AxiosPromise<PageResult<Sch
  */
 export const getSchedule = (id: string | number): AxiosPromise<ScheduleVO> => {
   return request({
-    url: '/appt/schedule/' + id,
+    url: '/appt/admin/schedule/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getSchedule = (id: string | number): AxiosPromise<ScheduleVO> => {
  */
 export const addSchedule = (data: ScheduleForm) => {
   return request({
-    url: '/appt/schedule',
+    url: '/appt/admin/schedule',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addSchedule = (data: ScheduleForm) => {
  */
 export const updateSchedule = (data: ScheduleForm) => {
   return request({
-    url: '/appt/schedule',
+    url: '/appt/admin/schedule',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateSchedule = (data: ScheduleForm) => {
  */
 export const delSchedule = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/schedule/' + id,
+    url: '/appt/admin/schedule/' + id,
     method: 'delete'
   });
 };

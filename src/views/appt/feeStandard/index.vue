@@ -287,7 +287,7 @@ const handleDelete = async (row?: Partial<FeeStandardVO>) => {
 /** 导出按钮操作 */
 const handleExport = () => {
   requestDownload(
-    'appt/feeStandard/export',
+    'appt/admin/feeStandard/export',
     {
       ...queryParams.value
     },

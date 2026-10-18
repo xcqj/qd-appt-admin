@@ -286,7 +286,7 @@ const handleDelete = async (row?: Partial<CampusVO>) => {
 /** 导出按钮操作 */
 const handleExport = () => {
   requestDownload(
-    'appt/campus/export',
+    'appt/admin/campus/export',
     {
       ...queryParams.value
     },

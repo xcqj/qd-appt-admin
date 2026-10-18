@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listClinicType = (query?: ClinicTypeQuery): AxiosPromise<PageResult<ClinicTypeVO>> => {
   return request({
-    url: '/appt/clinicType/list',
+    url: '/appt/admin/clinicType/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listClinicType = (query?: ClinicTypeQuery): AxiosPromise<PageResult
  */
 export const getClinicType = (id: string | number): AxiosPromise<ClinicTypeVO> => {
   return request({
-    url: '/appt/clinicType/' + id,
+    url: '/appt/admin/clinicType/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getClinicType = (id: string | number): AxiosPromise<ClinicTypeVO> =
  */
 export const addClinicType = (data: ClinicTypeForm) => {
   return request({
-    url: '/appt/clinicType',
+    url: '/appt/admin/clinicType',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addClinicType = (data: ClinicTypeForm) => {
  */
 export const updateClinicType = (data: ClinicTypeForm) => {
   return request({
-    url: '/appt/clinicType',
+    url: '/appt/admin/clinicType',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateClinicType = (data: ClinicTypeForm) => {
  */
 export const delClinicType = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/clinicType/' + id,
+    url: '/appt/admin/clinicType/' + id,
     method: 'delete'
   });
 };

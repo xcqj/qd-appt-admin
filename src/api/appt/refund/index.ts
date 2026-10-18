@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listRefund = (query?: RefundQuery): AxiosPromise<PageResult<RefundVO>> => {
   return request({
-    url: '/appt/refund/list',
+    url: '/appt/admin/refund/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listRefund = (query?: RefundQuery): AxiosPromise<PageResult<RefundV
  */
 export const getRefund = (id: string | number): AxiosPromise<RefundVO> => {
   return request({
-    url: '/appt/refund/' + id,
+    url: '/appt/admin/refund/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getRefund = (id: string | number): AxiosPromise<RefundVO> => {
  */
 export const addRefund = (data: RefundForm) => {
   return request({
-    url: '/appt/refund',
+    url: '/appt/admin/refund',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addRefund = (data: RefundForm) => {
  */
 export const updateRefund = (data: RefundForm) => {
   return request({
-    url: '/appt/refund',
+    url: '/appt/admin/refund',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateRefund = (data: RefundForm) => {
  */
 export const delRefund = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/refund/' + id,
+    url: '/appt/admin/refund/' + id,
     method: 'delete'
   });
 };

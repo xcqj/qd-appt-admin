@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listDept = (query?: DeptQuery): AxiosPromise<PageResult<DeptVO>> => {
   return request({
-    url: '/appt/dept/list',
+    url: '/appt/admin/dept/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listDept = (query?: DeptQuery): AxiosPromise<PageResult<DeptVO>> =>
  */
 export const getDept = (id: string | number): AxiosPromise<DeptVO> => {
   return request({
-    url: '/appt/dept/' + id,
+    url: '/appt/admin/dept/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getDept = (id: string | number): AxiosPromise<DeptVO> => {
  */
 export const addDept = (data: DeptForm) => {
   return request({
-    url: '/appt/dept',
+    url: '/appt/admin/dept',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addDept = (data: DeptForm) => {
  */
 export const updateDept = (data: DeptForm) => {
   return request({
-    url: '/appt/dept',
+    url: '/appt/admin/dept',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateDept = (data: DeptForm) => {
  */
 export const delDept = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/dept/' + id,
+    url: '/appt/admin/dept/' + id,
     method: 'delete'
   });
 };

@@ -18,7 +18,7 @@ export interface RefundVO {
   /**
    * 退款金额
    */
-  amount: number;
+  amount: string;
   /**
    * WAIT_REFUND待退款 REFUNDED已退款 FAILED退款失败（退避重试耗尽，终态；再退由人工另建单）
    */
@@ -40,7 +40,7 @@ export interface RefundQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 退款单号：F + yyyyMMdd + 6位当日序列
    */
@@ -48,11 +48,11 @@ export interface RefundQuery extends PageQuery {
   /**
    * 支付单id
    */
-  paymentId?: string | number;
+  paymentId?: number;
   /**
    * 挂号单id
    */
-  registrationId?: string | number;
+  registrationId?: number;
   /**
    * 退款金额
    */

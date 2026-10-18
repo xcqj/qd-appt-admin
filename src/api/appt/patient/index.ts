@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listPatient = (query?: PatientQuery): AxiosPromise<PageResult<PatientVO>> => {
   return request({
-    url: '/appt/patient/list',
+    url: '/appt/admin/patient/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listPatient = (query?: PatientQuery): AxiosPromise<PageResult<Patie
  */
 export const getPatient = (id: string | number): AxiosPromise<PatientVO> => {
   return request({
-    url: '/appt/patient/' + id,
+    url: '/appt/admin/patient/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getPatient = (id: string | number): AxiosPromise<PatientVO> => {
  */
 export const addPatient = (data: PatientForm) => {
   return request({
-    url: '/appt/patient',
+    url: '/appt/admin/patient',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addPatient = (data: PatientForm) => {
  */
 export const updatePatient = (data: PatientForm) => {
   return request({
-    url: '/appt/patient',
+    url: '/appt/admin/patient',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updatePatient = (data: PatientForm) => {
  */
 export const delPatient = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/patient/' + id,
+    url: '/appt/admin/patient/' + id,
     method: 'delete'
   });
 };

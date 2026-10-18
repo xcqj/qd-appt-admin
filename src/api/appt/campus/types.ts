@@ -29,7 +29,7 @@ export interface CampusForm extends BaseEntity {
   /**
    * 主键（雪花）
    */
-  id?: string | number;
+  id?: number;
   /**
    * 院区名（虚构，PRD §11 红线）
    */
@@ -56,7 +56,7 @@ export interface CampusQuery extends PageQuery {
   /**
    * 主键（雪花）
    */
-  id?: string | number;
+  id?: number;
   /**
    * 院区名（虚构，PRD §11 红线）
    */

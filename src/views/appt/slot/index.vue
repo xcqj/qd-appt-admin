@@ -78,8 +78,6 @@
             <h3>号源列表</h3>
           </div>
           <div class="toolbar-actions">
-            <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['appt:slot:add']">新增</el-button>
-            <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()" v-hasPermi="['appt:slot:edit']">修改</el-button>
             <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['appt:slot:remove']">删除</el-button>
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['appt:slot:export']">导出</el-button>
             <right-toolbar v-model:show-search="showSearch" :search="false" @query-table="getList"></right-toolbar>
@@ -107,9 +105,6 @@
         <el-table-column label="占用挂号单id" align="center" prop="registrationId" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
-            <el-tooltip content="修改" placement="top">
-              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['appt:slot:edit']"></el-button>
-            </el-tooltip>
             <el-tooltip content="删除" placement="top">
               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['appt:slot:remove']"></el-button>
             </el-tooltip>
@@ -119,31 +114,16 @@
 
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
     </el-card>
-    <!-- 添加或修改号源对话框 -->
-    <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
-      <el-form ref="slotFormRef" :model="form" :rules="rules" label-width="80px">
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
-        </div>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
 <script setup name="Slot" lang="ts">
 import {
-  addSlot,
   delSlot,
-  getSlot,
   listSlot,
-  updateSlot
 } from '@/api/appt/slot';
-import { SlotForm, SlotQuery, SlotVO } from '@/api/appt/slot/types';
+import { SlotQuery, SlotVO } from '@/api/appt/slot/types';
 import { useLoading } from '@/hooks/async/useLoading';
-import { useFormDialog } from '@/hooks/dialog/useFormDialog';
 import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
@@ -155,7 +135,6 @@ import { download as requestDownload } from '@/utils/request';
 
 
 const slotList = ref<SlotVO[]>([]);
-const buttonLoading = ref(false);
 const { loading, withLoading } = useLoading(true);
 const { showSearch } = useSearchToggle();
 const total = ref(0);
@@ -173,11 +152,7 @@ const {
 const queryFormRef = ref<ElFormInstance>();
 const slotFormRef = ref<ElFormInstance>();
 
-const initFormData: SlotForm = {
-}
-const data = reactive<PageData<SlotForm, SlotQuery>>({
-  form: { ...initFormData },
-  queryParams: {
+const queryParams = ref<SlotQuery>({
     pageNum: 1,
     pageSize: 10,
     id: undefined,
@@ -195,18 +170,9 @@ const data = reactive<PageData<SlotForm, SlotQuery>>({
       timePoint: undefined,
       createTime: undefined,
     }
-  },
-  rules: {
-  }
 });
 
-const { queryParams, form, rules } = toRefs(data);
 const { ids, single, multiple, handleSelectionChange } = useTableSelection<SlotVO>(item => item.id);
-const { dialog, resetForm: reset, openDialog, showDialog, closeDialog } = useFormDialog({
-  form,
-  formRef: slotFormRef,
-  initialFormData: initFormData
-});
 
 /** 查询号源列表 */
 const getList = async () => {
@@ -220,11 +186,6 @@ params = applyCreateTimeDateRange(params);
   });
 };
 
-/** 取消按钮 */
-const cancel = () => {
-  reset();
-  closeDialog();
-};
 
 /** 搜索按钮操作 */
 const handleQuery = () => {
@@ -247,36 +208,8 @@ resetCreateTimeDateRange();
   }
 });
 
-/** 新增按钮操作 */
-const handleAdd = () => {
-  openDialog('添加号源');
-};
 
-/** 修改按钮操作 */
-const handleUpdate = async (row?: Partial<SlotVO>) => {
-  reset();
-  const _id = row?.id || ids.value[0];
-  const res = await getSlot(_id);
-  Object.assign(form.value, res.data);
-  showDialog('修改号源');
-};
 
-/** 提交按钮 */
-const submitForm = () => {
-  slotFormRef.value?.validate(async (valid: boolean) => {
-    if (valid) {
-      buttonLoading.value = true;
-      if (form.value.id) {
-        await updateSlot(form.value).finally(() => (buttonLoading.value = false));
-      } else {
-        await addSlot(form.value).finally(() => (buttonLoading.value = false));
-      }
-      modal.msgSuccess('操作成功');
-      closeDialog();
-      await getList();
-    }
-  });
-};
 
 /** 删除按钮操作 */
 const handleDelete = async (row?: Partial<SlotVO>) => {
@@ -290,7 +223,7 @@ const handleDelete = async (row?: Partial<SlotVO>) => {
 /** 导出按钮操作 */
 const handleExport = () => {
   requestDownload(
-    'appt/slot/export',
+    'appt/admin/slot/export',
     {
       ...queryParams.value
     },

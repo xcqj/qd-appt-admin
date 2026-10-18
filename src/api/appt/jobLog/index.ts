@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listJobLog = (query?: JobLogQuery): AxiosPromise<PageResult<JobLogVO>> => {
   return request({
-    url: '/appt/jobLog/list',
+    url: '/appt/admin/jobLog/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listJobLog = (query?: JobLogQuery): AxiosPromise<PageResult<JobLogV
  */
 export const getJobLog = (id: string | number): AxiosPromise<JobLogVO> => {
   return request({
-    url: '/appt/jobLog/' + id,
+    url: '/appt/admin/jobLog/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getJobLog = (id: string | number): AxiosPromise<JobLogVO> => {
  */
 export const addJobLog = (data: JobLogForm) => {
   return request({
-    url: '/appt/jobLog',
+    url: '/appt/admin/jobLog',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addJobLog = (data: JobLogForm) => {
  */
 export const updateJobLog = (data: JobLogForm) => {
   return request({
-    url: '/appt/jobLog',
+    url: '/appt/admin/jobLog',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateJobLog = (data: JobLogForm) => {
  */
 export const delJobLog = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/jobLog/' + id,
+    url: '/appt/admin/jobLog/' + id,
     method: 'delete'
   });
 };

@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listBlacklist = (query?: BlacklistQuery): AxiosPromise<PageResult<BlacklistVO>> => {
   return request({
-    url: '/appt/blacklist/list',
+    url: '/appt/admin/blacklist/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listBlacklist = (query?: BlacklistQuery): AxiosPromise<PageResult<B
  */
 export const getBlacklist = (id: string | number): AxiosPromise<BlacklistVO> => {
   return request({
-    url: '/appt/blacklist/' + id,
+    url: '/appt/admin/blacklist/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getBlacklist = (id: string | number): AxiosPromise<BlacklistVO> => 
  */
 export const addBlacklist = (data: BlacklistForm) => {
   return request({
-    url: '/appt/blacklist',
+    url: '/appt/admin/blacklist',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addBlacklist = (data: BlacklistForm) => {
  */
 export const updateBlacklist = (data: BlacklistForm) => {
   return request({
-    url: '/appt/blacklist',
+    url: '/appt/admin/blacklist',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateBlacklist = (data: BlacklistForm) => {
  */
 export const delBlacklist = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/blacklist/' + id,
+    url: '/appt/admin/blacklist/' + id,
     method: 'delete'
   });
 };

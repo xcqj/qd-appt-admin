@@ -36,7 +36,7 @@ export interface JobLogQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 任务名
    */

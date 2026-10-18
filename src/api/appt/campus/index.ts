@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listCampus = (query?: CampusQuery): AxiosPromise<PageResult<CampusVO>> => {
   return request({
-    url: '/appt/campus/list',
+    url: '/appt/admin/campus/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listCampus = (query?: CampusQuery): AxiosPromise<PageResult<CampusV
  */
 export const getCampus = (id: string | number): AxiosPromise<CampusVO> => {
   return request({
-    url: '/appt/campus/' + id,
+    url: '/appt/admin/campus/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getCampus = (id: string | number): AxiosPromise<CampusVO> => {
  */
 export const addCampus = (data: CampusForm) => {
   return request({
-    url: '/appt/campus',
+    url: '/appt/admin/campus',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addCampus = (data: CampusForm) => {
  */
 export const updateCampus = (data: CampusForm) => {
   return request({
-    url: '/appt/campus',
+    url: '/appt/admin/campus',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateCampus = (data: CampusForm) => {
  */
 export const delCampus = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/campus/' + id,
+    url: '/appt/admin/campus/' + id,
     method: 'delete'
   });
 };

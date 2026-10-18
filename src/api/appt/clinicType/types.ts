@@ -25,7 +25,7 @@ export interface ClinicTypeForm extends BaseEntity {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 类型码：NORMAL普通 NIGHT夜间延时 EXPERT知名专家
    */
@@ -48,7 +48,7 @@ export interface ClinicTypeQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 类型码：NORMAL普通 NIGHT夜间延时 EXPERT知名专家
    */

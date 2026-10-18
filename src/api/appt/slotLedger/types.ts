@@ -36,11 +36,11 @@ export interface SlotLedgerQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 号源id
    */
-  slotId?: string | number;
+  slotId?: number;
   /**
    * GENERATE生成 OCCUPY占用 RELEASE释放 REFILL回补 SUSPEND停诊 EXPIRE过期
    */
@@ -56,7 +56,7 @@ export interface SlotLedgerQuery extends PageQuery {
   /**
    * 关联挂号单id
    */
-  registrationId?: string | number;
+  registrationId?: number;
   /**
    * 任务批号（批量操作倒查）
    */

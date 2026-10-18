@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listSlotTemplate = (query?: SlotTemplateQuery): AxiosPromise<PageResult<SlotTemplateVO>> => {
   return request({
-    url: '/appt/slotTemplate/list',
+    url: '/appt/admin/slotTemplate/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listSlotTemplate = (query?: SlotTemplateQuery): AxiosPromise<PageRe
  */
 export const getSlotTemplate = (id: string | number): AxiosPromise<SlotTemplateVO> => {
   return request({
-    url: '/appt/slotTemplate/' + id,
+    url: '/appt/admin/slotTemplate/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getSlotTemplate = (id: string | number): AxiosPromise<SlotTemplateV
  */
 export const addSlotTemplate = (data: SlotTemplateForm) => {
   return request({
-    url: '/appt/slotTemplate',
+    url: '/appt/admin/slotTemplate',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addSlotTemplate = (data: SlotTemplateForm) => {
  */
 export const updateSlotTemplate = (data: SlotTemplateForm) => {
   return request({
-    url: '/appt/slotTemplate',
+    url: '/appt/admin/slotTemplate',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateSlotTemplate = (data: SlotTemplateForm) => {
  */
 export const delSlotTemplate = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/slotTemplate/' + id,
+    url: '/appt/admin/slotTemplate/' + id,
     method: 'delete'
   });
 };

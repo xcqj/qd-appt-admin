@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listPayment = (query?: PaymentQuery): AxiosPromise<PageResult<PaymentVO>> => {
   return request({
-    url: '/appt/payment/list',
+    url: '/appt/admin/payment/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listPayment = (query?: PaymentQuery): AxiosPromise<PageResult<Payme
  */
 export const getPayment = (id: string | number): AxiosPromise<PaymentVO> => {
   return request({
-    url: '/appt/payment/' + id,
+    url: '/appt/admin/payment/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getPayment = (id: string | number): AxiosPromise<PaymentVO> => {
  */
 export const addPayment = (data: PaymentForm) => {
   return request({
-    url: '/appt/payment',
+    url: '/appt/admin/payment',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addPayment = (data: PaymentForm) => {
  */
 export const updatePayment = (data: PaymentForm) => {
   return request({
-    url: '/appt/payment',
+    url: '/appt/admin/payment',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updatePayment = (data: PaymentForm) => {
  */
 export const delPayment = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/payment/' + id,
+    url: '/appt/admin/payment/' + id,
     method: 'delete'
   });
 };

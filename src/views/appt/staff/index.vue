@@ -358,7 +358,7 @@ const handleDelete = async (row?: Partial<StaffVO>) => {
 /** 导出按钮操作 */
 const handleExport = () => {
   requestDownload(
-    'appt/staff/export',
+    'appt/admin/staff/export',
     {
       ...queryParams.value
     },

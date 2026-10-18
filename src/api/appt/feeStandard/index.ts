@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listFeeStandard = (query?: FeeStandardQuery): AxiosPromise<PageResult<FeeStandardVO>> => {
   return request({
-    url: '/appt/feeStandard/list',
+    url: '/appt/admin/feeStandard/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listFeeStandard = (query?: FeeStandardQuery): AxiosPromise<PageResu
  */
 export const getFeeStandard = (id: string | number): AxiosPromise<FeeStandardVO> => {
   return request({
-    url: '/appt/feeStandard/' + id,
+    url: '/appt/admin/feeStandard/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getFeeStandard = (id: string | number): AxiosPromise<FeeStandardVO>
  */
 export const addFeeStandard = (data: FeeStandardForm) => {
   return request({
-    url: '/appt/feeStandard',
+    url: '/appt/admin/feeStandard',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addFeeStandard = (data: FeeStandardForm) => {
  */
 export const updateFeeStandard = (data: FeeStandardForm) => {
   return request({
-    url: '/appt/feeStandard',
+    url: '/appt/admin/feeStandard',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateFeeStandard = (data: FeeStandardForm) => {
  */
 export const delFeeStandard = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/feeStandard/' + id,
+    url: '/appt/admin/feeStandard/' + id,
     method: 'delete'
   });
 };

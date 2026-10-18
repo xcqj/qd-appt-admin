@@ -37,15 +37,15 @@ export interface BlacklistForm extends BaseEntity {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 账号id（账号级统计，M13）
    */
-  userId?: string | number;
+  userId?: number;
   /**
    * 关联就诊人id（可空）
    */
-  patientId?: string | number;
+  patientId?: number;
   /**
    * 列入原因
    */
@@ -72,15 +72,15 @@ export interface BlacklistQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 账号id（账号级统计，M13）
    */
-  userId?: string | number;
+  userId?: number;
   /**
    * 关联就诊人id（可空）
    */
-  patientId?: string | number;
+  patientId?: number;
   /**
    * 列入原因
    */

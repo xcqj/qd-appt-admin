@@ -292,7 +292,7 @@ const handleDelete = async (row?: Partial<DeptVO>) => {
 /** 导出按钮操作 */
 const handleExport = () => {
   requestDownload(
-    'appt/dept/export',
+    'appt/admin/dept/export',
     {
       ...queryParams.value
     },

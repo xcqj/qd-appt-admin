@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listPaymentCallback = (query?: PaymentCallbackQuery): AxiosPromise<PageResult<PaymentCallbackVO>> => {
   return request({
-    url: '/appt/paymentCallback/list',
+    url: '/appt/admin/paymentCallback/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listPaymentCallback = (query?: PaymentCallbackQuery): AxiosPromise<
  */
 export const getPaymentCallback = (id: string | number): AxiosPromise<PaymentCallbackVO> => {
   return request({
-    url: '/appt/paymentCallback/' + id,
+    url: '/appt/admin/paymentCallback/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getPaymentCallback = (id: string | number): AxiosPromise<PaymentCal
  */
 export const addPaymentCallback = (data: PaymentCallbackForm) => {
   return request({
-    url: '/appt/paymentCallback',
+    url: '/appt/admin/paymentCallback',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addPaymentCallback = (data: PaymentCallbackForm) => {
  */
 export const updatePaymentCallback = (data: PaymentCallbackForm) => {
   return request({
-    url: '/appt/paymentCallback',
+    url: '/appt/admin/paymentCallback',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updatePaymentCallback = (data: PaymentCallbackForm) => {
  */
 export const delPaymentCallback = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/paymentCallback/' + id,
+    url: '/appt/admin/paymentCallback/' + id,
     method: 'delete'
   });
 };

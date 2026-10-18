@@ -29,11 +29,11 @@ export interface DeptForm extends BaseEntity {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 父级id（根节点为0）
    */
-  parentId?: string | number;
+  parentId?: number;
   /**
    * 科室名（虚构，PRD §11 红线）
    */
@@ -56,11 +56,11 @@ export interface DeptQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 父级id（根节点为0）
    */
-  parentId?: string | number;
+  parentId?: number;
   /**
    * 科室名（虚构，PRD §11 红线）
    */

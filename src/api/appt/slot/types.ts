@@ -34,7 +34,7 @@ export interface SlotVO {
   /**
    * 挂号费（生成时快照 I2，fee_standard 变更不追溯）
    */
-  fee: number;
+  fee: string;
   /**
    * AVAILABLE可约 TAKEN已占 SUSPENDED已停诊 EXPIRED已过期
    */
@@ -56,23 +56,23 @@ export interface SlotQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 排班id
    */
-  scheduleId?: string | number;
+  scheduleId?: number;
   /**
    * 医务人员id（冗余 D-S1-2，服务余量聚合 §3.2）
    */
-  staffId?: string | number;
+  staffId?: number;
   /**
    * 科室id（冗余）
    */
-  deptId?: string | number;
+  deptId?: number;
   /**
    * 院区id（冗余）
    */
-  campusId?: string | number;
+  campusId?: number;
   /**
    * 就诊日期（冗余，与 time_point 日期部分一致）
    */
@@ -100,7 +100,7 @@ export interface SlotQuery extends PageQuery {
   /**
    * 占用挂号单id（占用回写、回池置 NULL；I1 CAS 目标列）
    */
-  registrationId?: string | number;
+  registrationId?: number;
   /**
    * 创建时间
    */

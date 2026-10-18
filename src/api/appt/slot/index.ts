@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listSlot = (query?: SlotQuery): AxiosPromise<PageResult<SlotVO>> => {
   return request({
-    url: '/appt/slot/list',
+    url: '/appt/admin/slot/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listSlot = (query?: SlotQuery): AxiosPromise<PageResult<SlotVO>> =>
  */
 export const getSlot = (id: string | number): AxiosPromise<SlotVO> => {
   return request({
-    url: '/appt/slot/' + id,
+    url: '/appt/admin/slot/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getSlot = (id: string | number): AxiosPromise<SlotVO> => {
  */
 export const addSlot = (data: SlotForm) => {
   return request({
-    url: '/appt/slot',
+    url: '/appt/admin/slot',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addSlot = (data: SlotForm) => {
  */
 export const updateSlot = (data: SlotForm) => {
   return request({
-    url: '/appt/slot',
+    url: '/appt/admin/slot',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateSlot = (data: SlotForm) => {
  */
 export const delSlot = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/slot/' + id,
+    url: '/appt/admin/slot/' + id,
     method: 'delete'
   });
 };

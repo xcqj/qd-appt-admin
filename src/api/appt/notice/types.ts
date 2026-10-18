@@ -28,11 +28,11 @@ export interface NoticeQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 接收账号id
    */
-  userId?: string | number;
+  userId?: number;
   /**
    * 通知场景（PRD §6.12）
    */

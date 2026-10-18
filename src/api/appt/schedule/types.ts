@@ -40,19 +40,19 @@ export interface ScheduleQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 医务人员id
    */
-  staffId?: string | number;
+  staffId?: number;
   /**
    * 科室id
    */
-  deptId?: string | number;
+  deptId?: number;
   /**
    * 院区id（冗余自 staff，供停诊按院区筛选）
    */
-  campusId?: string | number;
+  campusId?: number;
   /**
    * 门诊类型码
    */

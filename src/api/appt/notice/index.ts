@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listNotice = (query?: NoticeQuery): AxiosPromise<PageResult<NoticeVO>> => {
   return request({
-    url: '/appt/notice/list',
+    url: '/appt/admin/notice/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listNotice = (query?: NoticeQuery): AxiosPromise<PageResult<NoticeV
  */
 export const getNotice = (id: string | number): AxiosPromise<NoticeVO> => {
   return request({
-    url: '/appt/notice/' + id,
+    url: '/appt/admin/notice/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getNotice = (id: string | number): AxiosPromise<NoticeVO> => {
  */
 export const addNotice = (data: NoticeForm) => {
   return request({
-    url: '/appt/notice',
+    url: '/appt/admin/notice',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addNotice = (data: NoticeForm) => {
  */
 export const updateNotice = (data: NoticeForm) => {
   return request({
-    url: '/appt/notice',
+    url: '/appt/admin/notice',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateNotice = (data: NoticeForm) => {
  */
 export const delNotice = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/notice/' + id,
+    url: '/appt/admin/notice/' + id,
     method: 'delete'
   });
 };

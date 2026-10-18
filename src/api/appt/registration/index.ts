@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listRegistration = (query?: RegistrationQuery): AxiosPromise<PageResult<RegistrationVO>> => {
   return request({
-    url: '/appt/registration/list',
+    url: '/appt/admin/registration/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listRegistration = (query?: RegistrationQuery): AxiosPromise<PageRe
  */
 export const getRegistration = (id: string | number): AxiosPromise<RegistrationVO> => {
   return request({
-    url: '/appt/registration/' + id,
+    url: '/appt/admin/registration/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getRegistration = (id: string | number): AxiosPromise<RegistrationV
  */
 export const addRegistration = (data: RegistrationForm) => {
   return request({
-    url: '/appt/registration',
+    url: '/appt/admin/registration',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addRegistration = (data: RegistrationForm) => {
  */
 export const updateRegistration = (data: RegistrationForm) => {
   return request({
-    url: '/appt/registration',
+    url: '/appt/admin/registration',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateRegistration = (data: RegistrationForm) => {
  */
 export const delRegistration = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/registration/' + id,
+    url: '/appt/admin/registration/' + id,
     method: 'delete'
   });
 };

@@ -280,7 +280,7 @@ const handleDelete = async (row?: Partial<ClinicTypeVO>) => {
 /** 导出按钮操作 */
 const handleExport = () => {
   requestDownload(
-    'appt/clinicType/export',
+    'appt/admin/clinicType/export',
     {
       ...queryParams.value
     },

@@ -40,7 +40,7 @@ export interface SuspendQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 批号（停诊幂等锚点 I7）
    */
@@ -56,7 +56,7 @@ export interface SuspendQuery extends PageQuery {
   /**
    * 医务人员id（D-S1-5；SCHEDULE/STAFF_DATE 必填，CAMPUS_DATE 为空）
    */
-  staffId?: string | number;
+  staffId?: number;
   /**
    * 停诊原因（契约 §7.5 E5；用于向受影响患者发站内信）
    */

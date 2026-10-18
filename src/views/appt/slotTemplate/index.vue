@@ -323,7 +323,7 @@ const handleDelete = async (row?: Partial<SlotTemplateVO>) => {
 /** 导出按钮操作 */
 const handleExport = () => {
   requestDownload(
-    'appt/slotTemplate/export',
+    'appt/admin/slotTemplate/export',
     {
       ...queryParams.value
     },

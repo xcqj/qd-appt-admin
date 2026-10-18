@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listReconcileResult = (query?: ReconcileResultQuery): AxiosPromise<PageResult<ReconcileResultVO>> => {
   return request({
-    url: '/appt/reconcileResult/list',
+    url: '/appt/admin/reconcileResult/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listReconcileResult = (query?: ReconcileResultQuery): AxiosPromise<
  */
 export const getReconcileResult = (id: string | number): AxiosPromise<ReconcileResultVO> => {
   return request({
-    url: '/appt/reconcileResult/' + id,
+    url: '/appt/admin/reconcileResult/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getReconcileResult = (id: string | number): AxiosPromise<ReconcileR
  */
 export const addReconcileResult = (data: ReconcileResultForm) => {
   return request({
-    url: '/appt/reconcileResult',
+    url: '/appt/admin/reconcileResult',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addReconcileResult = (data: ReconcileResultForm) => {
  */
 export const updateReconcileResult = (data: ReconcileResultForm) => {
   return request({
-    url: '/appt/reconcileResult',
+    url: '/appt/admin/reconcileResult',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateReconcileResult = (data: ReconcileResultForm) => {
  */
 export const delReconcileResult = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/reconcileResult/' + id,
+    url: '/appt/admin/reconcileResult/' + id,
     method: 'delete'
   });
 };

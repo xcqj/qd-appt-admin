@@ -359,7 +359,7 @@ const handleDelete = async (row?: Partial<BlacklistVO>) => {
 /** 导出按钮操作 */
 const handleExport = () => {
   requestDownload(
-    'appt/blacklist/export',
+    'appt/admin/blacklist/export',
     {
       ...queryParams.value
     },

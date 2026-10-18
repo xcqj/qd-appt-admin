@@ -10,7 +10,7 @@ import request from '@/utils/request';
  */
 export const listSuspend = (query?: SuspendQuery): AxiosPromise<PageResult<SuspendVO>> => {
   return request({
-    url: '/appt/suspend/list',
+    url: '/appt/admin/suspend/list',
     method: 'get',
     params: query
   });
@@ -22,7 +22,7 @@ export const listSuspend = (query?: SuspendQuery): AxiosPromise<PageResult<Suspe
  */
 export const getSuspend = (id: string | number): AxiosPromise<SuspendVO> => {
   return request({
-    url: '/appt/suspend/' + id,
+    url: '/appt/admin/suspend/' + id,
     method: 'get'
   });
 };
@@ -33,7 +33,7 @@ export const getSuspend = (id: string | number): AxiosPromise<SuspendVO> => {
  */
 export const addSuspend = (data: SuspendForm) => {
   return request({
-    url: '/appt/suspend',
+    url: '/appt/admin/suspend',
     method: 'post',
     data: data
   });
@@ -45,7 +45,7 @@ export const addSuspend = (data: SuspendForm) => {
  */
 export const updateSuspend = (data: SuspendForm) => {
   return request({
-    url: '/appt/suspend',
+    url: '/appt/admin/suspend',
     method: 'put',
     data: data
   });
@@ -59,7 +59,7 @@ export const updateSuspend = (data: SuspendForm) => {
  */
 export const delSuspend = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/appt/suspend/' + id,
+    url: '/appt/admin/suspend/' + id,
     method: 'delete'
   });
 };

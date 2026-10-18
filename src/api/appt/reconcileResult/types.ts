@@ -32,7 +32,7 @@ export interface ReconcileResultQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 对账批次号
    */
@@ -44,7 +44,7 @@ export interface ReconcileResultQuery extends PageQuery {
   /**
    * 目标id（slot / registration / payment）
    */
-  targetId?: string | number;
+  targetId?: number;
   /**
    * AUTO_FIX自动修复 ALERT告警
    */

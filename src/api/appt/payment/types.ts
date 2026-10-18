@@ -14,7 +14,7 @@ export interface PaymentVO {
   /**
    * 支付金额（= registration.fee，I2）
    */
-  amount: number;
+  amount: string;
   /**
    * 渠道：本期仅 MOCK（PRD §12）
    */
@@ -44,7 +44,7 @@ export interface PaymentQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 支付单号：P + yyyyMMdd + 6位当日序列
    */
@@ -52,7 +52,7 @@ export interface PaymentQuery extends PageQuery {
   /**
    * 挂号单id
    */
-  registrationId?: string | number;
+  registrationId?: number;
   /**
    * 支付金额（= registration.fee，I2）
    */

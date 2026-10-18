@@ -29,11 +29,11 @@ export interface PatientForm extends BaseEntity {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 归属账号id（sys_user）
    */
-  userId?: string | number;
+  userId?: number;
   /**
    * 就诊人姓名
    */
@@ -41,11 +41,11 @@ export interface PatientForm extends BaseEntity {
   /**
    * 证件类型：IDCARD身份证 CARD就诊卡
    */
-  idType?: string | number;
+  idType?: number;
   /**
    * 证件号：生产 AES 密文，演示期明文（M11）；日志禁止打印
    */
-  idNo?: string | number;
+  idNo?: number;
   /**
    * 状态：0正常 1停用
    */
@@ -56,11 +56,11 @@ export interface PatientQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 归属账号id（sys_user）
    */
-  userId?: string | number;
+  userId?: number;
   /**
    * 就诊人姓名
    */
@@ -68,7 +68,7 @@ export interface PatientQuery extends PageQuery {
   /**
    * 证件类型：IDCARD身份证 CARD就诊卡
    */
-  idType?: string | number;
+  idType?: number;
   /**
    * 状态：0正常 1停用
    */

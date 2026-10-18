@@ -36,7 +36,7 @@ export interface PaymentCallbackQuery extends PageQuery {
   /**
    * 主键
    */
-  id?: string | number;
+  id?: number;
   /**
    * 支付单号
    */
@@ -48,7 +48,7 @@ export interface PaymentCallbackQuery extends PageQuery {
   /**
    * 渠道通知唯一id
    */
-  notifyId?: string | number;
+  notifyId?: number;
   /**
    * 渠道
    */
