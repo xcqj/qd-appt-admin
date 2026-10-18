@@ -168,7 +168,7 @@ const initFormData: DeptForm = {
   name: undefined,
   level: undefined,
   sort: undefined,
-  status: undefined,
+  status: false,
 }
 const data = reactive<PageData<DeptForm, DeptQuery>>({
   form: { ...initFormData },

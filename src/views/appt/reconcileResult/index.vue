@@ -15,9 +15,7 @@
               <el-input v-model="queryParams.batchNo" placeholder="请输入对账批次号" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="检查项 R1~R7" prop="checkType">
-              <el-select v-model="queryParams.checkType" placeholder="请选择检查项 R1~R7" clearable >
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
+              <el-input v-model="queryParams.checkType" placeholder="请输入检查项 R1~R7" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="目标id" prop="targetId">
               <el-input-number v-model="queryParams.targetId" controls-position="right" />

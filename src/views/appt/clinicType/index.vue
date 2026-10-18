@@ -160,7 +160,7 @@ const initFormData: ClinicTypeForm = {
   code: undefined,
   name: undefined,
   sort: undefined,
-  status: undefined,
+  status: false,
 }
 const data = reactive<PageData<ClinicTypeForm, ClinicTypeQuery>>({
   form: { ...initFormData },

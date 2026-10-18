@@ -15,9 +15,7 @@
               <el-input v-model="queryParams.batchNo" placeholder="请输入批号" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="范围：SCHEDULE单排班 STAFF_DATE某医生某日 CAMPUS_DATE院区某日" prop="scopeType">
-              <el-select v-model="queryParams.scopeType" placeholder="请选择范围：SCHEDULE单排班 STAFF_DATE某医生某日 CAMPUS_DATE院区某日" clearable >
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
+              <el-input v-model="queryParams.scopeType" placeholder="请输入范围：SCHEDULE单排班 STAFF_DATE某医生某日 CAMPUS_DATE院区某日" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="范围值：SCHEDULE 存 scheduleId；STAFF_DATE 存 visitDate；CAMPUS_DATE 存 campusId:date" prop="scopeValue">
               <el-input v-model="queryParams.scopeValue" placeholder="请输入范围值：SCHEDULE 存 scheduleId；STAFF_DATE 存 visitDate；CAMPUS_DATE 存 campusId:date" clearable @keyup.enter="handleQuery" />

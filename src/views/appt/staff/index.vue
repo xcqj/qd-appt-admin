@@ -27,14 +27,10 @@
               <el-input v-model="queryParams.degree" placeholder="请输入学位" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="类型：DOCTOR医生 NURSE护士" prop="type">
-              <el-select v-model="queryParams.type" placeholder="请选择类型：DOCTOR医生 NURSE护士" clearable >
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
+              <el-input v-model="queryParams.type" placeholder="请输入类型：DOCTOR医生 NURSE护士" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="门诊类型码" prop="clinicType">
-              <el-select v-model="queryParams.clinicType" placeholder="请选择门诊类型码" clearable >
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
+              <el-input v-model="queryParams.clinicType" placeholder="请输入门诊类型码" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="简介" prop="intro">
               <el-input v-model="queryParams.intro" placeholder="请输入简介" clearable @keyup.enter="handleQuery" />
@@ -141,14 +137,10 @@
           <el-input v-model="form.degree" placeholder="请输入学位" />
         </el-form-item>
         <el-form-item label="类型：DOCTOR医生 NURSE护士" prop="type">
-          <el-select v-model="form.type" placeholder="请选择类型：DOCTOR医生 NURSE护士">
-            <el-option label="请选择字典生成" value="" />
-          </el-select>
+          <el-input v-model="form.type" placeholder="请输入类型：DOCTOR医生 NURSE护士" />
         </el-form-item>
         <el-form-item label="门诊类型码" prop="clinicType">
-          <el-select v-model="form.clinicType" placeholder="请选择门诊类型码">
-            <el-option label="请选择字典生成" value="" />
-          </el-select>
+          <el-input v-model="form.clinicType" placeholder="请输入门诊类型码" />
         </el-form-item>
         <el-form-item label="简介" prop="intro">
             <el-input v-model="form.intro" type="textarea" placeholder="请输入内容" />
@@ -220,7 +212,7 @@ const initFormData: StaffForm = {
   clinicType: undefined,
   intro: undefined,
   sort: undefined,
-  status: undefined,
+  status: false,
 }
 const data = reactive<PageData<StaffForm, StaffQuery>>({
   form: { ...initFormData },

@@ -18,9 +18,7 @@
               <el-input v-model="queryParams.name" placeholder="请输入就诊人姓名" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="证件类型：IDCARD身份证 CARD就诊卡" prop="idType">
-              <el-select v-model="queryParams.idType" placeholder="请选择证件类型：IDCARD身份证 CARD就诊卡" clearable >
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
+              <el-input v-model="queryParams.idType" placeholder="请输入证件类型：IDCARD身份证 CARD就诊卡" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="状态：0正常 1停用" prop="status">
               <el-select v-model="queryParams.status" placeholder="请选择状态：0正常 1停用" clearable >
@@ -104,9 +102,7 @@
           <el-input v-model="form.name" placeholder="请输入就诊人姓名" />
         </el-form-item>
         <el-form-item label="证件类型：IDCARD身份证 CARD就诊卡" prop="idType">
-          <el-select v-model="form.idType" placeholder="请选择证件类型：IDCARD身份证 CARD就诊卡">
-            <el-option label="请选择字典生成" value="" />
-          </el-select>
+          <el-input v-model="form.idType" placeholder="请输入证件类型：IDCARD身份证 CARD就诊卡" />
         </el-form-item>
         <el-form-item label="证件号：生产 AES 密文，演示期明文" prop="idNo">
           <el-input v-model="form.idNo" placeholder="请输入证件号：生产 AES 密文，演示期明文" />
@@ -169,7 +165,7 @@ const initFormData: PatientForm = {
   name: undefined,
   idType: undefined,
   idNo: undefined,
-  status: undefined,
+  status: false,
 }
 const data = reactive<PageData<PatientForm, PatientQuery>>({
   form: { ...initFormData },

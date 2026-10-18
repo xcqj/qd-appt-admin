@@ -15,9 +15,7 @@
               <el-input v-model="queryParams.title" placeholder="请输入职称线值" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="门诊类型码" prop="clinicType">
-              <el-select v-model="queryParams.clinicType" placeholder="请选择门诊类型码" clearable >
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
+              <el-input v-model="queryParams.clinicType" placeholder="请输入门诊类型码" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="挂号费" prop="fee">
               <el-input-number v-model="queryParams.fee" controls-position="right" />
@@ -100,9 +98,7 @@
           <el-input v-model="form.title" placeholder="请输入职称线值" />
         </el-form-item>
         <el-form-item label="门诊类型码" prop="clinicType">
-          <el-select v-model="form.clinicType" placeholder="请选择门诊类型码">
-            <el-option label="请选择字典生成" value="" />
-          </el-select>
+          <el-input v-model="form.clinicType" placeholder="请输入门诊类型码" />
         </el-form-item>
         <el-form-item label="挂号费" prop="fee">
           <el-input-number v-model="form.fee" controls-position="right" />
@@ -164,7 +160,7 @@ const initFormData: FeeStandardForm = {
   title: undefined,
   clinicType: undefined,
   fee: undefined,
-  status: undefined,
+  status: false,
 }
 const data = reactive<PageData<FeeStandardForm, FeeStandardQuery>>({
   form: { ...initFormData },

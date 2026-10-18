@@ -18,9 +18,7 @@
               <el-input v-model="queryParams.period" placeholder="请输入午别：AM上午 PM下午 NIGHT夜间" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="门诊类型码" prop="clinicType">
-              <el-select v-model="queryParams.clinicType" placeholder="请选择门诊类型码" clearable >
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
+              <el-input v-model="queryParams.clinicType" placeholder="请输入门诊类型码" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="起始时刻" prop="startTime">
               <el-input v-model="queryParams.startTime" placeholder="请输入起始时刻" clearable @keyup.enter="handleQuery" />
@@ -115,9 +113,7 @@
           <el-input v-model="form.period" placeholder="请输入午别：AM上午 PM下午 NIGHT夜间" />
         </el-form-item>
         <el-form-item label="门诊类型码" prop="clinicType">
-          <el-select v-model="form.clinicType" placeholder="请选择门诊类型码">
-            <el-option label="请选择字典生成" value="" />
-          </el-select>
+          <el-input v-model="form.clinicType" placeholder="请输入门诊类型码" />
         </el-form-item>
         <el-form-item label="起始时刻" prop="startTime">
           <el-input v-model="form.startTime" placeholder="请输入起始时刻" />
@@ -188,7 +184,7 @@ const initFormData: SlotTemplateForm = {
   startTime: undefined,
   endTime: undefined,
   stepMinutes: undefined,
-  status: undefined,
+  status: false,
 }
 const data = reactive<PageData<SlotTemplateForm, SlotTemplateQuery>>({
   form: { ...initFormData },

@@ -229,7 +229,7 @@ const initFormData: BlacklistForm = {
   startTime: undefined,
   endTime: undefined,
   operator: undefined,
-  status: undefined,
+  status: false,
 }
 const data = reactive<PageData<BlacklistForm, BlacklistQuery>>({
   form: { ...initFormData },

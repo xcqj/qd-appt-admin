@@ -168,7 +168,7 @@ const initFormData: CampusForm = {
   address: undefined,
   coverUrl: undefined,
   sort: undefined,
-  status: undefined,
+  status: false,
 }
 const data = reactive<PageData<CampusForm, CampusQuery>>({
   form: { ...initFormData },

@@ -70,14 +70,10 @@
               />
             </el-form-item>
             <el-form-item label="签到方式：SCAN扫码 MANUAL手动补签" prop="signType">
-              <el-select v-model="queryParams.signType" placeholder="请选择签到方式：SCAN扫码 MANUAL手动补签" clearable >
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
+              <el-input v-model="queryParams.signType" placeholder="请输入签到方式：SCAN扫码 MANUAL手动补签" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="ACTIVE主动 PASSIVE被动" prop="cancelType">
-              <el-select v-model="queryParams.cancelType" placeholder="请选择ACTIVE主动 PASSIVE被动" clearable >
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
+              <el-input v-model="queryParams.cancelType" placeholder="请输入ACTIVE主动 PASSIVE被动" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="停诊批号" prop="suspendBatchNo">
               <el-input v-model="queryParams.suspendBatchNo" placeholder="请输入停诊批号" clearable @keyup.enter="handleQuery" />

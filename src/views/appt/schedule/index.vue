@@ -21,9 +21,7 @@
               <el-input-number v-model="queryParams.campusId" controls-position="right" />
             </el-form-item>
             <el-form-item label="门诊类型码" prop="clinicType">
-              <el-select v-model="queryParams.clinicType" placeholder="请选择门诊类型码" clearable >
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
+              <el-input v-model="queryParams.clinicType" placeholder="请输入门诊类型码" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="就诊日期" prop="visitDate">
               <el-input v-model="queryParams.visitDate" placeholder="请输入就诊日期" clearable @keyup.enter="handleQuery" />

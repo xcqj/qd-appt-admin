@@ -15,9 +15,7 @@
               <el-input-number v-model="queryParams.userId" controls-position="right" />
             </el-form-item>
             <el-form-item label="通知场景" prop="type">
-              <el-select v-model="queryParams.type" placeholder="请选择通知场景" clearable >
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
+              <el-input v-model="queryParams.type" placeholder="请输入通知场景" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="标题" prop="title">
               <el-input v-model="queryParams.title" placeholder="请输入标题" clearable @keyup.enter="handleQuery" />
