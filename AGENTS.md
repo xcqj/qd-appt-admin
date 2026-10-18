@@ -75,11 +75,11 @@
 
 ## 9. 已知待办（当前差距，勿当 bug）
 
-- 导出仍输出 `TRUE/FALSE` 与线值（待翻译）；菜单 `order_num` 全 1；`timePoint` 列表显示为日期（契约要求 `HH:mm`）
 - 引用下拉未过滤停用项（服务端有存在性校验兜底）
 - 头像/封面图为 URL 文本框（契约 §2.6 占位图过渡）；`blacklist` 表单的用户/就诊人仍是 id 输入（S6 黑名单管理时一并做下拉）
 - `patient` 新增依赖 `id_no_hash`，待 `IdNoEncryptor`（S6）具备后可用
-- `options.ts` 的线值与 `docs/database-design.md` §2 是两份副本：改枚举时两处同步（未采用框架字典表，避免 sys_dict 第三份副本）
+- `notice.type` 线值未在文档枚举（PRD §6.12 只有场景描述），导出/筛选暂显示原值
+- **枚举副本有三处**：`docs/database-design.md` §2（权威）、本仓 `src/views/appt/options.ts`（筛选/表单/列表）、后端 VO 的 `@ExcelDictFormat(readConverterExp=...)`（导出）。改枚举必须三处同步（未采用 sys_dict，避免第四份副本）
 
 ## 10. 提交纪律
 
