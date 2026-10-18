@@ -60,8 +60,9 @@
 ## 7. 验证门槛（按顺序，全过才算完）
 
 1. `pnpm exec vue-tsc --noEmit` —— **必须 0 错**（`vite build` **不做类型检查**，不能替代）
-2. `pnpm build` —— 构建通过
-3. 改动页面手测：列表 / 新增 / 编辑 / 删除 / 导出；F12 确认请求路径是 `/dev-api/appt/admin/...`
+2. `pnpm lint`（oxlint src）—— **必须 0 错**；本项目已按 `no-underscore-dangle` 把生成器的 `_id`/`_ids` 统一改为 `rowId`/`rowIds`，新代码不要再用下划线前缀局部变量
+3. `pnpm build` —— 构建通过
+4. 改动页面手测：列表 / 新增 / 编辑 / 删除 / 导出；F12 确认请求路径是 `/dev-api/appt/admin/...`
 - `vite build` 报 `SAFE_DELETE_BULK_CONFIRM_REQUIRED` 是 IDE 安全删除护栏拦截清空 `dist`，先 `rm -rf dist` 再构建。
 - 提交前 `git status --short` 确认没有 `.codebuddy/`、`*.code-workspace` 等 IDE 数据被带上。
 

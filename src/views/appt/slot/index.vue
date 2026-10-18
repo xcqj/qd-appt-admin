@@ -213,9 +213,9 @@ resetCreateTimeDateRange();
 
 /** 删除按钮操作 */
 const handleDelete = async (row?: Partial<SlotVO>) => {
-  const _ids = row?.id || ids.value;
-  await modal.confirm('是否确认删除号源编号为"' + _ids + '"的数据项？');
-  await delSlot(_ids);
+  const rowIds = row?.id || ids.value;
+  await modal.confirm('是否确认删除号源编号为"' + rowIds + '"的数据项？');
+  await delSlot(rowIds);
   modal.msgSuccess('删除成功');
   await getList();
 };

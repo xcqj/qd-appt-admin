@@ -324,8 +324,8 @@ const handleAdd = () => {
 /** 修改按钮操作 */
 const handleUpdate = async (row?: Partial<BlacklistVO>) => {
   reset();
-  const _id = row?.id || ids.value[0];
-  const res = await getBlacklist(_id);
+  const rowId = row?.id || ids.value[0];
+  const res = await getBlacklist(rowId);
   Object.assign(form.value, res.data);
   showDialog('修改黑名单');
 };
@@ -349,9 +349,9 @@ const submitForm = () => {
 
 /** 删除按钮操作 */
 const handleDelete = async (row?: Partial<BlacklistVO>) => {
-  const _ids = row?.id || ids.value;
-  await modal.confirm('是否确认删除黑名单编号为"' + _ids + '"的数据项？');
-  await delBlacklist(_ids);
+  const rowIds = row?.id || ids.value;
+  await modal.confirm('是否确认删除黑名单编号为"' + rowIds + '"的数据项？');
+  await delBlacklist(rowIds);
   modal.msgSuccess('删除成功');
   await getList();
 };

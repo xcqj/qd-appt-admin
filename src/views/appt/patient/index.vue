@@ -256,8 +256,8 @@ const handleAdd = () => {
 /** 修改按钮操作 */
 const handleUpdate = async (row?: Partial<PatientVO>) => {
   reset();
-  const _id = row?.id || ids.value[0];
-  const res = await getPatient(_id);
+  const rowId = row?.id || ids.value[0];
+  const res = await getPatient(rowId);
   Object.assign(form.value, res.data);
   showDialog('修改就诊人');
 };
@@ -281,9 +281,9 @@ const submitForm = () => {
 
 /** 删除按钮操作 */
 const handleDelete = async (row?: Partial<PatientVO>) => {
-  const _ids = row?.id || ids.value;
-  await modal.confirm('是否确认删除就诊人编号为"' + _ids + '"的数据项？');
-  await delPatient(_ids);
+  const rowIds = row?.id || ids.value;
+  await modal.confirm('是否确认删除就诊人编号为"' + rowIds + '"的数据项？');
+  await delPatient(rowIds);
   modal.msgSuccess('删除成功');
   await getList();
 };

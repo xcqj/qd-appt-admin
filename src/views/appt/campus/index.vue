@@ -251,8 +251,8 @@ const handleAdd = () => {
 /** 修改按钮操作 */
 const handleUpdate = async (row?: Partial<CampusVO>) => {
   reset();
-  const _id = row?.id || ids.value[0];
-  const res = await getCampus(_id);
+  const rowId = row?.id || ids.value[0];
+  const res = await getCampus(rowId);
   Object.assign(form.value, res.data);
   showDialog('修改院区管理');
 };
@@ -276,9 +276,9 @@ const submitForm = () => {
 
 /** 删除按钮操作 */
 const handleDelete = async (row?: Partial<CampusVO>) => {
-  const _ids = row?.id || ids.value;
-  await modal.confirm('是否确认删除院区管理编号为"' + _ids + '"的数据项？');
-  await delCampus(_ids);
+  const rowIds = row?.id || ids.value;
+  await modal.confirm('是否确认删除院区管理编号为"' + rowIds + '"的数据项？');
+  await delCampus(rowIds);
   modal.msgSuccess('删除成功');
   await getList();
 };
