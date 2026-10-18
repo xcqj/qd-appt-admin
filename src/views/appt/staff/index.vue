@@ -87,7 +87,12 @@
         <el-table-column label="所属院区" align="center" prop="campusId" />
         <el-table-column label="所属科室" align="center" prop="deptId" />
         <el-table-column label="姓名" align="center" prop="name" />
-        <el-table-column label="头像 URL" align="center" prop="avatar" />
+        <el-table-column label="头像" align="center" prop="avatar" width="90">
+          <template #default="scope">
+            <image-preview v-if="scope.row.avatar" :src="scope.row.avatar" :width="40" :height="40" />
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
         <el-table-column label="职称" align="center" prop="title" :formatter="(r) => labelOf(TITLE_OPTIONS, r.title)" />
         <el-table-column label="学位" align="center" prop="degree" />
         <el-table-column label="人员类型" align="center" prop="type" :formatter="(r) => labelOf(STAFF_TYPE_OPTIONS, r.type)" />
@@ -128,8 +133,8 @@
         <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name" placeholder="请输入姓名" />
         </el-form-item>
-        <el-form-item label="头像 URL" prop="avatar">
-          <el-input v-model="form.avatar" placeholder="请输入头像" />
+        <el-form-item label="头像" prop="avatar">
+          <image-upload v-model="form.avatar" :limit="1" />
         </el-form-item>
         <el-form-item label="职称" prop="title">
           <el-select v-model="form.title" placeholder="请选择职称" clearable filterable style="width: 100%">

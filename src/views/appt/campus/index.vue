@@ -61,7 +61,12 @@
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="院区名称" align="center" prop="name" />
         <el-table-column label="地址" align="center" prop="address" />
-        <el-table-column label="封面图 URL" align="center" prop="coverUrl" />
+        <el-table-column label="封面图" align="center" prop="coverUrl" width="100">
+          <template #default="scope">
+            <image-preview v-if="scope.row.coverUrl" :src="scope.row.coverUrl" :width="60" :height="40" />
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
         <el-table-column label="排序" align="center" prop="sort" />
         <el-table-column label="状态" align="center" prop="status" width="100">
           <template #default="scope">
@@ -91,8 +96,8 @@
         <el-form-item label="地址" prop="address">
           <el-input v-model="form.address" placeholder="请输入地址" />
         </el-form-item>
-        <el-form-item label="封面图 URL" prop="coverUrl">
-          <el-input v-model="form.coverUrl" placeholder="请输入封面图" />
+        <el-form-item label="封面图" prop="coverUrl">
+          <image-upload v-model="form.coverUrl" :limit="1" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="form.sort" controls-position="right" />
