@@ -117,10 +117,14 @@
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
       <el-form ref="blacklistFormRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="账号" prop="userId">
-          <el-input-number v-model="form.userId" controls-position="right" />
+          <el-select v-model="form.userId" placeholder="请选择账号" clearable filterable style="width: 100%">
+            <el-option v-for="item in userOptions" :key="item.userId" :label="item.nickName || item.userName" :value="item.userId" />
+          </el-select>
         </el-form-item>
         <el-form-item label="就诊人" prop="patientId">
-          <el-input-number v-model="form.patientId" controls-position="right" />
+          <el-select v-model="form.patientId" placeholder="请选择就诊人" clearable filterable style="width: 100%">
+            <el-option v-for="item in patientOptions" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
         </el-form-item>
         <el-form-item label="原因" prop="reason">
           <el-input v-model="form.reason" placeholder="请输入列入原因" />
@@ -171,6 +175,10 @@ import {
   updateBlacklist
 } from '@/api/appt/blacklist';
 import { BlacklistForm, BlacklistQuery, BlacklistVO } from '@/api/appt/blacklist/types';
+import { listUser } from '@/api/system/user';
+import { UserVO } from '@/api/system/user/types';
+import { listPatient } from '@/api/appt/patient';
+import { PatientVO } from '@/api/appt/patient/types';
 import { useLoading } from '@/hooks/async/useLoading';
 import { useFormDialog } from '@/hooks/dialog/useFormDialog';
 import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
@@ -185,6 +193,9 @@ import { BLACKLIST_STATUS_OPTIONS } from '@/views/appt/options';
 
 
 const blacklistList = ref<BlacklistVO[]>([]);
+/** 账号 / 就诊人下拉选项 */
+const userOptions = ref<UserVO[]>([]);
+const patientOptions = ref<PatientVO[]>([]);
 const buttonLoading = ref(false);
 const { loading, withLoading } = useLoading(true);
 const { showSearch } = useSearchToggle();
@@ -240,7 +251,7 @@ id: [
       { required: true, message: "主键不能为空", trigger: "change" }
     ],
 userId: [
-      { required: true, message: "账号id不能为空", trigger: "change" }
+      { required: true, message: "账号不能为空", trigger: "change" }
     ],
 startTime: [
       { required: true, message: "生效时间不能为空", trigger: "blur" }
@@ -249,7 +260,7 @@ endTime: [
       { required: true, message: "失效时间不能为空", trigger: "blur" }
     ],
 status: [
-      { required: true, message: "状态：0生效 1已解除不能为空", trigger: "change" }
+      { required: true, message: "状态不能为空", trigger: "change" }
     ],
   }
 });
@@ -356,8 +367,19 @@ const handleExport = () => {
 
 
 
+/** 加载账号 / 就诊人下拉选项 */
+const loadOptions = async () => {
+  const [userRes, patientRes] = await Promise.all([
+    listUser({ pageNum: 1, pageSize: 500 }),
+    listPatient({ pageNum: 1, pageSize: 500 })
+  ]);
+  userOptions.value = userRes.data?.rows ?? [];
+  patientOptions.value = patientRes.data?.rows ?? [];
+};
+
 onMounted(() => {
   getList();
+  loadOptions();
 });
 </script>
 

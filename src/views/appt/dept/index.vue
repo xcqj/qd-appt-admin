@@ -299,7 +299,7 @@ const loadOptions = async () => {
   const res = await listDept({ pageNum: 1, pageSize: 500 });
   const rows: DeptVO[] = res.data?.rows ?? [];
   const map = new Map<any, any>();
-  rows.forEach((row) => map.set(row.id, { ...row, children: [] }));
+  rows.forEach((row) => map.set(row.id, { ...row, children: [], disabled: row.status === true }));
   const roots: any[] = [];
   map.forEach((node) => {
     const parent = map.get(node.parentId);

@@ -152,8 +152,7 @@ import {
   updateSlotTemplate
 } from '@/api/appt/slotTemplate';
 import { SlotTemplateForm, SlotTemplateQuery, SlotTemplateVO } from '@/api/appt/slotTemplate/types';
-import { listStaff } from '@/api/appt/staff';
-import { StaffVO } from '@/api/appt/staff/types';
+import { useApptOptions } from '@/views/appt/useApptOptions';
 import { useLoading } from '@/hooks/async/useLoading';
 import { useFormDialog } from '@/hooks/dialog/useFormDialog';
 import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
@@ -167,8 +166,7 @@ import { CLINIC_TYPE_OPTIONS, PERIOD_OPTIONS, labelOf } from '@/views/appt/optio
 
 
 const slotTemplateList = ref<SlotTemplateVO[]>([]);
-/** 医务人员下拉选项（接口返回雪花 id 为字符串，避免 JS 精度丢失） */
-const staffOptions = ref<StaffVO[]>([]);
+const { staffOptions, loadApptOptions } = useApptOptions();
 const buttonLoading = ref(false);
 const { loading, withLoading } = useLoading(true);
 const { showSearch } = useSearchToggle();
@@ -335,15 +333,9 @@ const handleExport = () => {
 
 
 
-/** 加载医务人员下拉选项 */
-const loadOptions = async () => {
-  const res = await listStaff({ pageNum: 1, pageSize: 200 });
-  staffOptions.value = res.data?.rows ?? [];
-};
-
 onMounted(() => {
   getList();
-  loadOptions();
+  loadApptOptions();
 });
 </script>
 

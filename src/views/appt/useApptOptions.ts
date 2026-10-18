@@ -17,9 +17,11 @@ export const useApptOptions = () => {
       listDept({ pageNum: 1, pageSize: 500 }),
       listStaff({ pageNum: 1, pageSize: 500 })
     ]);
-    campusOptions.value = campusRes.data?.rows ?? [];
-    deptOptions.value = deptRes.data?.rows ?? [];
-    staffOptions.value = staffRes.data?.rows ?? [];
+    // 只保留正常项（status === true 表示停用），停用数据不可被新引用
+    const onlyNormal = (rows: any[]) => rows.filter((row) => row.status !== true);
+    campusOptions.value = onlyNormal(campusRes.data?.rows ?? []);
+    deptOptions.value = onlyNormal(deptRes.data?.rows ?? []);
+    staffOptions.value = onlyNormal(staffRes.data?.rows ?? []);
   };
 
   return { campusOptions, deptOptions, staffOptions, loadApptOptions };

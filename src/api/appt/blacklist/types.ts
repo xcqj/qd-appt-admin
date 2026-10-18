@@ -41,11 +41,11 @@ export interface BlacklistForm extends BaseEntity {
   /**
    * 账号id（账号级统计，M13）
    */
-  userId?: number;
+  userId?: string | number;
   /**
    * 关联就诊人id（可空）
    */
-  patientId?: number;
+  patientId?: string | number;
   /**
    * 列入原因
    */
@@ -76,11 +76,11 @@ export interface BlacklistQuery extends PageQuery {
   /**
    * 账号id（账号级统计，M13）
    */
-  userId?: number;
+  userId?: string | number;
   /**
    * 关联就诊人id（可空）
    */
-  patientId?: number;
+  patientId?: string | number;
   /**
    * 列入原因
    */

@@ -182,10 +182,7 @@ import {
   updateStaff
 } from '@/api/appt/staff';
 import { StaffForm, StaffQuery, StaffVO } from '@/api/appt/staff/types';
-import { listCampus } from '@/api/appt/campus';
-import { CampusVO } from '@/api/appt/campus/types';
-import { listDept } from '@/api/appt/dept';
-import { DeptVO } from '@/api/appt/dept/types';
+import { useApptOptions } from '@/views/appt/useApptOptions';
 import { useLoading } from '@/hooks/async/useLoading';
 import { useFormDialog } from '@/hooks/dialog/useFormDialog';
 import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
@@ -199,9 +196,7 @@ import { CLINIC_TYPE_OPTIONS, TITLE_OPTIONS, STAFF_TYPE_OPTIONS, labelOf } from 
 
 
 const staffList = ref<StaffVO[]>([]);
-/** 所属院区/科室下拉选项（接口返回的雪花 id 是字符串，前端原样保存避免 JS 精度丢失） */
-const campusOptions = ref<CampusVO[]>([]);
-const deptOptions = ref<DeptVO[]>([]);
+const { campusOptions, deptOptions, loadApptOptions } = useApptOptions();
 const buttonLoading = ref(false);
 const { loading, withLoading } = useLoading(true);
 const { showSearch } = useSearchToggle();
@@ -375,19 +370,9 @@ const handleExport = () => {
 
 
 
-/** 加载院区/科室下拉选项 */
-const loadOptions = async () => {
-  const [campusRes, deptRes] = await Promise.all([
-    listCampus({ pageNum: 1, pageSize: 200 }),
-    listDept({ pageNum: 1, pageSize: 200 })
-  ]);
-  campusOptions.value = campusRes.data?.rows ?? [];
-  deptOptions.value = deptRes.data?.rows ?? [];
-};
-
 onMounted(() => {
   getList();
-  loadOptions();
+  loadApptOptions();
 });
 </script>
 
