@@ -11,6 +11,11 @@
             
             
             
+            <el-form-item label="通知场景" prop="type">
+              <el-select v-model="queryParams.type" placeholder="请选择通知场景" clearable filterable style="width: 180px">
+                <el-option v-for="opt in NOTICE_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
+            </el-form-item>
             <el-form-item label="标题" prop="title">
               <el-input v-model="queryParams.title" placeholder="请输入标题" clearable @keyup.enter="handleQuery" />
             </el-form-item>
@@ -54,7 +59,7 @@
       <el-table v-loading="loading" border class="data-table" :data="noticeList">
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="账号" align="center" prop="userId" />
-        <el-table-column label="通知场景" align="center" prop="type" />
+        <el-table-column label="通知场景" align="center" prop="type" :formatter="(r) => labelOf(NOTICE_TYPE_OPTIONS, r.type)" />
         <el-table-column label="标题" align="center" prop="title" />
         <el-table-column label="读取状态" align="center" prop="readFlag" width="120">
           <template #default="scope">
@@ -83,7 +88,7 @@ import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { download as requestDownload } from '@/utils/request';
-import { READ_FLAG_OPTIONS, labelOf } from '@/views/appt/options';
+import { NOTICE_TYPE_OPTIONS, READ_FLAG_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 

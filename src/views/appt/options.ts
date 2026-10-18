@@ -49,6 +49,17 @@ export const ID_TYPE_OPTIONS: ApptOption[] = [
   { label: '就诊卡', value: 'CARD' }
 ];
 
+/** 站内信通知场景（PRD §6.12 的 7 个场景） */
+export const NOTICE_TYPE_OPTIONS: ApptOption[] = [
+  { label: '挂号成功', value: 'BOOK_SUCCESS' },
+  { label: '支付成功', value: 'PAY_SUCCESS' },
+  { label: '支付超时关单', value: 'PAY_TIMEOUT' },
+  { label: '退号成功', value: 'CANCEL_SUCCESS' },
+  { label: '停诊取消', value: 'SUSPEND_CANCEL' },
+  { label: '爽约记录', value: 'NOSHOW_RECORD' },
+  { label: '黑名单生效', value: 'BLACKLIST_HIT' }
+];
+
 /** 站内信已读标记 */
 export const READ_FLAG_OPTIONS: ApptOption[] = [
   { label: '未读', value: false },
