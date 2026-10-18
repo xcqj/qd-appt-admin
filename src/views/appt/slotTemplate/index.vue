@@ -11,8 +11,10 @@
             <el-form-item label="主键" prop="id">
               <el-input-number v-model="queryParams.id" controls-position="right" />
             </el-form-item>
-            <el-form-item label="医务人员id" prop="staffId">
-              <el-input-number v-model="queryParams.staffId" controls-position="right" />
+            <el-form-item label="医务人员" prop="staffId">
+              <el-select v-model="queryParams.staffId" placeholder="请选择医务人员" clearable filterable style="width: 180px">
+                <el-option v-for="item in staffOptions" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
             </el-form-item>
             <el-form-item label="午别：AM上午 PM下午 NIGHT夜间" prop="period">
               <el-input v-model="queryParams.period" placeholder="请输入午别：AM上午 PM下午 NIGHT夜间" clearable @keyup.enter="handleQuery" />
@@ -106,8 +108,10 @@
     <!-- 添加或修改时段模板对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
       <el-form ref="slotTemplateFormRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="医务人员id" prop="staffId">
-          <el-input-number v-model="form.staffId" controls-position="right" />
+        <el-form-item label="医务人员" prop="staffId">
+          <el-select v-model="form.staffId" placeholder="请选择医务人员" clearable filterable style="width: 100%">
+            <el-option v-for="item in staffOptions" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
         </el-form-item>
         <el-form-item label="午别：AM上午 PM下午 NIGHT夜间" prop="period">
           <el-input v-model="form.period" placeholder="请输入午别：AM上午 PM下午 NIGHT夜间" />
@@ -151,6 +155,8 @@ import {
   updateSlotTemplate
 } from '@/api/appt/slotTemplate';
 import { SlotTemplateForm, SlotTemplateQuery, SlotTemplateVO } from '@/api/appt/slotTemplate/types';
+import { listStaff } from '@/api/appt/staff';
+import { StaffVO } from '@/api/appt/staff/types';
 import { useLoading } from '@/hooks/async/useLoading';
 import { useFormDialog } from '@/hooks/dialog/useFormDialog';
 import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
@@ -163,6 +169,8 @@ import { download as requestDownload } from '@/utils/request';
 
 
 const slotTemplateList = ref<SlotTemplateVO[]>([]);
+/** 医务人员下拉选项（接口返回雪花 id 为字符串，避免 JS 精度丢失） */
+const staffOptions = ref<StaffVO[]>([]);
 const buttonLoading = ref(false);
 const { loading, withLoading } = useLoading(true);
 const { showSearch } = useSearchToggle();
@@ -329,8 +337,15 @@ const handleExport = () => {
 
 
 
+/** 加载医务人员下拉选项 */
+const loadOptions = async () => {
+  const res = await listStaff({ pageNum: 1, pageSize: 200 });
+  staffOptions.value = res.data?.rows ?? [];
+};
+
 onMounted(() => {
   getList();
+  loadOptions();
 });
 </script>
 

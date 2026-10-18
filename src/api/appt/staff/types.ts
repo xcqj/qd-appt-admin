@@ -53,11 +53,11 @@ export interface StaffForm extends BaseEntity {
   /**
    * 所属院区（单值；跨院区出诊为已知边界 PRD §14.3 / M7）
    */
-  campusId?: number;
+  campusId?: string | number;
   /**
    * 所属科室（叶子节点）
    */
-  deptId?: number;
+  deptId?: string | number;
   /**
    * 姓名（虚构）
    */
@@ -104,11 +104,11 @@ export interface StaffQuery extends PageQuery {
   /**
    * 所属院区（单值；跨院区出诊为已知边界 PRD §14.3 / M7）
    */
-  campusId?: number;
+  campusId?: string | number;
   /**
    * 所属科室（叶子节点）
    */
-  deptId?: number;
+  deptId?: string | number;
   /**
    * 姓名（虚构）
    */

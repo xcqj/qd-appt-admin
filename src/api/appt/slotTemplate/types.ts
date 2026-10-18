@@ -41,7 +41,7 @@ export interface SlotTemplateForm extends BaseEntity {
   /**
    * 医务人员id
    */
-  staffId?: number;
+  staffId?: string | number;
   /**
    * 午别：AM上午 PM下午 NIGHT夜间
    */
@@ -76,7 +76,7 @@ export interface SlotTemplateQuery extends PageQuery {
   /**
    * 医务人员id
    */
-  staffId?: number;
+  staffId?: string | number;
   /**
    * 午别：AM上午 PM下午 NIGHT夜间
    */
