@@ -119,7 +119,7 @@
         <el-table-column label="午别" align="center" prop="period" :formatter="(r) => labelOf(PERIOD_OPTIONS, r.period)" />
         <el-table-column label="就诊时刻" align="center" prop="timePoint" width="180">
           <template #default="scope">
-            <span>{{ parseTime(scope.row.timePoint, '{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.timePoint, '{h}:{i}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="挂号费" align="center" prop="fee" />
