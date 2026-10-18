@@ -8,19 +8,15 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="类型码：NORMAL普通 NIGHT夜间延时 EXPERT知名专家" prop="code">
+            
+            <el-form-item label="类型编码" prop="code">
               <el-input v-model="queryParams.code" placeholder="请输入类型码：NORMAL普通 NIGHT夜间延时 EXPERT知名专家" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="类型名" prop="name">
+            <el-form-item label="类型名称" prop="name">
               <el-input v-model="queryParams.name" placeholder="请输入类型名" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="排序" prop="sort">
-              <el-input-number v-model="queryParams.sort" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="状态：0正常 1停用" prop="status">
+            
+            <el-form-item label="状态" prop="status">
               <el-select v-model="queryParams.status" placeholder="请选择状态：0正常 1停用" clearable >
                 <el-option label="是" :value="true" />
                 <el-option label="否" :value="false" />
@@ -64,17 +60,12 @@
       <el-table v-loading="loading" border class="data-table" :data="clinicTypeList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="类型码：NORMAL普通 NIGHT夜间延时 EXPERT知名专家" align="center" prop="code" />
-        <el-table-column label="类型名" align="center" prop="name" />
+        <el-table-column label="类型编码" align="center" prop="code" />
+        <el-table-column label="类型名称" align="center" prop="name" />
         <el-table-column label="排序" align="center" prop="sort" />
-        <el-table-column label="状态：0正常 1停用" align="center" prop="status" width="120">
+        <el-table-column label="状态" align="center" prop="status" width="100">
           <template #default="scope">
-            <el-switch
-              v-model="scope.row.status"
-              :active-value="true"
-              :inactive-value="false"
-              disabled
-            />
+            <el-tag :type="scope.row.status === true ? 'danger' : 'success'">{{ scope.row.status === true ? '停用' : '正常' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -94,16 +85,16 @@
     <!-- 添加或修改门诊类型对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
       <el-form ref="clinicTypeFormRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="类型码：NORMAL普通 NIGHT夜间延时 EXPERT知名专家" prop="code">
+        <el-form-item label="类型编码" prop="code">
           <el-input v-model="form.code" placeholder="请输入类型码：NORMAL普通 NIGHT夜间延时 EXPERT知名专家" />
         </el-form-item>
-        <el-form-item label="类型名" prop="name">
+        <el-form-item label="类型名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入类型名" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="form.sort" controls-position="right" />
         </el-form-item>
-        <el-form-item label="状态：0正常 1停用" prop="status">
+        <el-form-item label="状态" prop="status">
           <el-switch
             v-model="form.status"
             :active-value="true"

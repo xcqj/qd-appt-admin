@@ -8,30 +8,28 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
+            
             <el-form-item label="医务人员" prop="staffId">
               <el-select v-model="queryParams.staffId" placeholder="请选择医务人员" clearable filterable style="width: 180px">
                 <el-option v-for="item in staffOptions" :key="item.id" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>
-            <el-form-item label="午别：AM上午 PM下午 NIGHT夜间" prop="period">
-              <el-input v-model="queryParams.period" placeholder="请输入午别：AM上午 PM下午 NIGHT夜间" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="午别" prop="period">
+              <el-select v-model="queryParams.period" placeholder="请选择午别" clearable filterable style="width: 180px">
+                <el-option v-for="opt in PERIOD_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="门诊类型码" prop="clinicType">
-              <el-input v-model="queryParams.clinicType" placeholder="请输入门诊类型码" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="门诊类型" prop="clinicType">
+              <el-select v-model="queryParams.clinicType" placeholder="请选择门诊类型" clearable filterable style="width: 180px">
+                <el-option v-for="opt in CLINIC_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="起始时刻" prop="startTime">
-              <el-input v-model="queryParams.startTime" placeholder="请输入起始时刻（HH:mm）" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="结束时刻" prop="endTime">
-              <el-input v-model="queryParams.endTime" placeholder="请输入结束时刻（HH:mm）" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="步长" prop="stepMinutes">
+            
+            
+            <el-form-item label="步长（分钟）" prop="stepMinutes">
               <el-input-number v-model="queryParams.stepMinutes" controls-position="right" />
             </el-form-item>
-            <el-form-item label="状态：0正常 1停用" prop="status">
+            <el-form-item label="状态" prop="status">
               <el-select v-model="queryParams.status" placeholder="请选择状态：0正常 1停用" clearable >
                 <el-option label="是" :value="true" />
                 <el-option label="否" :value="false" />
@@ -75,20 +73,15 @@
       <el-table v-loading="loading" border class="data-table" :data="slotTemplateList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="医务人员id" align="center" prop="staffId" />
-        <el-table-column label="午别：AM上午 PM下午 NIGHT夜间" align="center" prop="period" />
-        <el-table-column label="门诊类型码" align="center" prop="clinicType" />
+        <el-table-column label="医务人员" align="center" prop="staffId" />
+        <el-table-column label="午别" align="center" prop="period" :formatter="(r) => labelOf(PERIOD_OPTIONS, r.period)" />
+        <el-table-column label="门诊类型" align="center" prop="clinicType" :formatter="(r) => labelOf(CLINIC_TYPE_OPTIONS, r.clinicType)" />
         <el-table-column label="起始时刻" align="center" prop="startTime" />
         <el-table-column label="结束时刻" align="center" prop="endTime" />
-        <el-table-column label="步长" align="center" prop="stepMinutes" />
-        <el-table-column label="状态：0正常 1停用" align="center" prop="status" width="120">
+        <el-table-column label="步长（分钟）" align="center" prop="stepMinutes" />
+        <el-table-column label="状态" align="center" prop="status" width="100">
           <template #default="scope">
-            <el-switch
-              v-model="scope.row.status"
-              :active-value="true"
-              :inactive-value="false"
-              disabled
-            />
+            <el-tag :type="scope.row.status === true ? 'danger' : 'success'">{{ scope.row.status === true ? '停用' : '正常' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -113,22 +106,26 @@
             <el-option v-for="item in staffOptions" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="午别：AM上午 PM下午 NIGHT夜间" prop="period">
-          <el-input v-model="form.period" placeholder="请输入午别：AM上午 PM下午 NIGHT夜间" />
+        <el-form-item label="午别" prop="period">
+          <el-select v-model="form.period" placeholder="请选择午别" clearable filterable style="width: 100%">
+            <el-option v-for="opt in PERIOD_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="门诊类型码" prop="clinicType">
-          <el-input v-model="form.clinicType" placeholder="请输入门诊类型码" />
+        <el-form-item label="门诊类型" prop="clinicType">
+          <el-select v-model="form.clinicType" placeholder="请选择门诊类型" clearable filterable style="width: 100%">
+            <el-option v-for="opt in CLINIC_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+          </el-select>
         </el-form-item>
         <el-form-item label="起始时刻" prop="startTime">
-          <el-input v-model="form.startTime" placeholder="请输入起始时刻（HH:mm）" />
+          <el-time-picker v-model="form.startTime" value-format="HH:mm:ss" format="HH:mm" placeholder="请选择起始时刻" style="width: 100%" />
         </el-form-item>
         <el-form-item label="结束时刻" prop="endTime">
-          <el-input v-model="form.endTime" placeholder="请输入结束时刻（HH:mm）" />
+          <el-time-picker v-model="form.endTime" value-format="HH:mm:ss" format="HH:mm" placeholder="请选择结束时刻" style="width: 100%" />
         </el-form-item>
-        <el-form-item label="步长" prop="stepMinutes">
-          <el-input-number v-model="form.stepMinutes" controls-position="right" />
+        <el-form-item label="步长（分钟）" prop="stepMinutes">
+          <el-input-number v-model="form.stepMinutes" controls-position="right" style="width: 100%" />
         </el-form-item>
-        <el-form-item label="状态：0正常 1停用" prop="status">
+        <el-form-item label="状态" prop="status">
           <el-switch
             v-model="form.status"
             :active-value="true"
@@ -165,6 +162,7 @@ import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { useTableSelection } from '@/hooks/table/useTableSelection';
 import modal from '@/plugins/modal';
 import { download as requestDownload } from '@/utils/request';
+import { CLINIC_TYPE_OPTIONS, PERIOD_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 

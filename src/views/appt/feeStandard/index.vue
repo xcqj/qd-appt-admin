@@ -8,19 +8,19 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
+            
+            <el-form-item label="职称" prop="title">
+              <el-select v-model="queryParams.title" placeholder="请选择职称" clearable filterable style="width: 180px">
+                <el-option v-for="opt in TITLE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="职称线值" prop="title">
-              <el-input v-model="queryParams.title" placeholder="请输入职称线值" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="门诊类型" prop="clinicType">
+              <el-select v-model="queryParams.clinicType" placeholder="请选择门诊类型" clearable filterable style="width: 180px">
+                <el-option v-for="opt in CLINIC_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="门诊类型码" prop="clinicType">
-              <el-input v-model="queryParams.clinicType" placeholder="请输入门诊类型码" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="挂号费" prop="fee">
-              <el-input-number v-model="queryParams.fee" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="状态：0正常 1停用" prop="status">
+            
+            <el-form-item label="状态" prop="status">
               <el-select v-model="queryParams.status" placeholder="请选择状态：0正常 1停用" clearable >
                 <el-option label="是" :value="true" />
                 <el-option label="否" :value="false" />
@@ -64,17 +64,12 @@
       <el-table v-loading="loading" border class="data-table" :data="feeStandardList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="职称线值" align="center" prop="title" />
-        <el-table-column label="门诊类型码" align="center" prop="clinicType" />
+        <el-table-column label="职称" align="center" prop="title" :formatter="(r) => labelOf(TITLE_OPTIONS, r.title)" />
+        <el-table-column label="门诊类型" align="center" prop="clinicType" :formatter="(r) => labelOf(CLINIC_TYPE_OPTIONS, r.clinicType)" />
         <el-table-column label="挂号费" align="center" prop="fee" />
-        <el-table-column label="状态：0正常 1停用" align="center" prop="status" width="120">
+        <el-table-column label="状态" align="center" prop="status" width="100">
           <template #default="scope">
-            <el-switch
-              v-model="scope.row.status"
-              :active-value="true"
-              :inactive-value="false"
-              disabled
-            />
+            <el-tag :type="scope.row.status === true ? 'danger' : 'success'">{{ scope.row.status === true ? '停用' : '正常' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -94,16 +89,20 @@
     <!-- 添加或修改收费标准对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
       <el-form ref="feeStandardFormRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="职称线值" prop="title">
-          <el-input v-model="form.title" placeholder="请输入职称线值" />
+        <el-form-item label="职称" prop="title">
+          <el-select v-model="form.title" placeholder="请选择职称" clearable filterable style="width: 100%">
+            <el-option v-for="opt in TITLE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="门诊类型码" prop="clinicType">
-          <el-input v-model="form.clinicType" placeholder="请输入门诊类型码" />
+        <el-form-item label="门诊类型" prop="clinicType">
+          <el-select v-model="form.clinicType" placeholder="请选择门诊类型" clearable filterable style="width: 100%">
+            <el-option v-for="opt in CLINIC_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+          </el-select>
         </el-form-item>
         <el-form-item label="挂号费" prop="fee">
-          <el-input-number v-model="form.fee" controls-position="right" />
+          <el-input-number v-model="form.fee" controls-position="right" style="width: 100%" />
         </el-form-item>
-        <el-form-item label="状态：0正常 1停用" prop="status">
+        <el-form-item label="状态" prop="status">
           <el-switch
             v-model="form.status"
             :active-value="true"
@@ -138,6 +137,7 @@ import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { useTableSelection } from '@/hooks/table/useTableSelection';
 import modal from '@/plugins/modal';
 import { download as requestDownload } from '@/utils/request';
+import { CLINIC_TYPE_OPTIONS, TITLE_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 

@@ -8,9 +8,7 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
+            
             <el-form-item label="所属院区" prop="campusId">
               <el-select v-model="queryParams.campusId" placeholder="请选择所属院区" clearable filterable style="width: 180px">
                 <el-option v-for="item in campusOptions" :key="item.id" :label="item.name" :value="item.id" />
@@ -24,25 +22,25 @@
             <el-form-item label="姓名" prop="name">
               <el-input v-model="queryParams.name" placeholder="请输入姓名" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="职称：CHIEF主任医师 ASSOC_CHIEF副主任医师 ATTENDING主治医师 PHYSICIAN医师 ASSOC_CHIEF_NURSE副主任护师" prop="title">
-              <el-input v-model="queryParams.title" placeholder="请输入职称：CHIEF主任医师 ASSOC_CHIEF副主任医师 ATTENDING主治医师 PHYSICIAN医师 ASSOC_CHIEF_NURSE副主任护师" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="职称" prop="title">
+              <el-select v-model="queryParams.title" placeholder="请选择职称" clearable filterable style="width: 180px">
+                <el-option v-for="opt in TITLE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="学位" prop="degree">
-              <el-input v-model="queryParams.degree" placeholder="请输入学位" clearable @keyup.enter="handleQuery" />
+            
+            <el-form-item label="人员类型" prop="type">
+              <el-select v-model="queryParams.type" placeholder="请选择人员类型" clearable filterable style="width: 180px">
+                <el-option v-for="opt in STAFF_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="类型：DOCTOR医生 NURSE护士" prop="type">
-              <el-input v-model="queryParams.type" placeholder="请输入类型：DOCTOR医生 NURSE护士" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="门诊类型" prop="clinicType">
+              <el-select v-model="queryParams.clinicType" placeholder="请选择门诊类型" clearable filterable style="width: 180px">
+                <el-option v-for="opt in CLINIC_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="门诊类型码" prop="clinicType">
-              <el-input v-model="queryParams.clinicType" placeholder="请输入门诊类型码" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="简介" prop="intro">
-              <el-input v-model="queryParams.intro" placeholder="请输入简介" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="排序" prop="sort">
-              <el-input-number v-model="queryParams.sort" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="状态：0正常 1停用" prop="status">
+            
+            
+            <el-form-item label="状态" prop="status">
               <el-select v-model="queryParams.status" placeholder="请选择状态：0正常 1停用" clearable >
                 <el-option label="是" :value="true" />
                 <el-option label="否" :value="false" />
@@ -89,20 +87,15 @@
         <el-table-column label="所属院区" align="center" prop="campusId" />
         <el-table-column label="所属科室" align="center" prop="deptId" />
         <el-table-column label="姓名" align="center" prop="name" />
-        <el-table-column label="头像" align="center" prop="avatar" />
-        <el-table-column label="职称：CHIEF主任医师 ASSOC_CHIEF副主任医师 ATTENDING主治医师 PHYSICIAN医师 ASSOC_CHIEF_NURSE副主任护师" align="center" prop="title" />
+        <el-table-column label="头像 URL" align="center" prop="avatar" />
+        <el-table-column label="职称" align="center" prop="title" :formatter="(r) => labelOf(TITLE_OPTIONS, r.title)" />
         <el-table-column label="学位" align="center" prop="degree" />
-        <el-table-column label="类型：DOCTOR医生 NURSE护士" align="center" prop="type" />
-        <el-table-column label="门诊类型码" align="center" prop="clinicType" />
+        <el-table-column label="人员类型" align="center" prop="type" :formatter="(r) => labelOf(STAFF_TYPE_OPTIONS, r.type)" />
+        <el-table-column label="门诊类型" align="center" prop="clinicType" :formatter="(r) => labelOf(CLINIC_TYPE_OPTIONS, r.clinicType)" />
         <el-table-column label="排序" align="center" prop="sort" />
-        <el-table-column label="状态：0正常 1停用" align="center" prop="status" width="120">
+        <el-table-column label="状态" align="center" prop="status" width="100">
           <template #default="scope">
-            <el-switch
-              v-model="scope.row.status"
-              :active-value="true"
-              :inactive-value="false"
-              disabled
-            />
+            <el-tag :type="scope.row.status === true ? 'danger' : 'success'">{{ scope.row.status === true ? '停用' : '正常' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -135,28 +128,34 @@
         <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name" placeholder="请输入姓名" />
         </el-form-item>
-        <el-form-item label="头像" prop="avatar">
+        <el-form-item label="头像 URL" prop="avatar">
           <el-input v-model="form.avatar" placeholder="请输入头像" />
         </el-form-item>
-        <el-form-item label="职称：CHIEF主任医师 ASSOC_CHIEF副主任医师 ATTENDING主治医师 PHYSICIAN医师 ASSOC_CHIEF_NURSE副主任护师" prop="title">
-          <el-input v-model="form.title" placeholder="请输入职称：CHIEF主任医师 ASSOC_CHIEF副主任医师 ATTENDING主治医师 PHYSICIAN医师 ASSOC_CHIEF_NURSE副主任护师" />
+        <el-form-item label="职称" prop="title">
+          <el-select v-model="form.title" placeholder="请选择职称" clearable filterable style="width: 100%">
+            <el-option v-for="opt in TITLE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+          </el-select>
         </el-form-item>
         <el-form-item label="学位" prop="degree">
           <el-input v-model="form.degree" placeholder="请输入学位" />
         </el-form-item>
-        <el-form-item label="类型：DOCTOR医生 NURSE护士" prop="type">
-          <el-input v-model="form.type" placeholder="请输入类型：DOCTOR医生 NURSE护士" />
+        <el-form-item label="人员类型" prop="type">
+          <el-select v-model="form.type" placeholder="请选择人员类型" clearable filterable style="width: 100%">
+            <el-option v-for="opt in STAFF_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="门诊类型码" prop="clinicType">
-          <el-input v-model="form.clinicType" placeholder="请输入门诊类型码" />
+        <el-form-item label="门诊类型" prop="clinicType">
+          <el-select v-model="form.clinicType" placeholder="请选择门诊类型" clearable filterable style="width: 100%">
+            <el-option v-for="opt in CLINIC_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+          </el-select>
         </el-form-item>
         <el-form-item label="简介" prop="intro">
-            <el-input v-model="form.intro" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.intro" type="textarea" :rows="3" placeholder="请输入简介" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="form.sort" controls-position="right" />
         </el-form-item>
-        <el-form-item label="状态：0正常 1停用" prop="status">
+        <el-form-item label="状态" prop="status">
           <el-switch
             v-model="form.status"
             :active-value="true"
@@ -195,6 +194,7 @@ import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { useTableSelection } from '@/hooks/table/useTableSelection';
 import modal from '@/plugins/modal';
 import { download as requestDownload } from '@/utils/request';
+import { CLINIC_TYPE_OPTIONS, TITLE_OPTIONS, STAFF_TYPE_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 
