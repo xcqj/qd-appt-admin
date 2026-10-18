@@ -21,10 +21,10 @@
               <el-input v-model="queryParams.clinicType" placeholder="请输入门诊类型码" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="起始时刻" prop="startTime">
-              <el-input v-model="queryParams.startTime" placeholder="请输入起始时刻" clearable @keyup.enter="handleQuery" />
+              <el-input v-model="queryParams.startTime" placeholder="请输入起始时刻（HH:mm）" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="结束时刻" prop="endTime">
-              <el-input v-model="queryParams.endTime" placeholder="请输入结束时刻" clearable @keyup.enter="handleQuery" />
+              <el-input v-model="queryParams.endTime" placeholder="请输入结束时刻（HH:mm）" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="步长" prop="stepMinutes">
               <el-input-number v-model="queryParams.stepMinutes" controls-position="right" />
@@ -116,10 +116,10 @@
           <el-input v-model="form.clinicType" placeholder="请输入门诊类型码" />
         </el-form-item>
         <el-form-item label="起始时刻" prop="startTime">
-          <el-input v-model="form.startTime" placeholder="请输入起始时刻" />
+          <el-input v-model="form.startTime" placeholder="请输入起始时刻（HH:mm）" />
         </el-form-item>
         <el-form-item label="结束时刻" prop="endTime">
-          <el-input v-model="form.endTime" placeholder="请输入结束时刻" />
+          <el-input v-model="form.endTime" placeholder="请输入结束时刻（HH:mm）" />
         </el-form-item>
         <el-form-item label="步长" prop="stepMinutes">
           <el-input-number v-model="form.stepMinutes" controls-position="right" />

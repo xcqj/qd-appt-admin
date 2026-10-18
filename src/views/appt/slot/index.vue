@@ -24,7 +24,7 @@
               <el-input-number v-model="queryParams.campusId" controls-position="right" />
             </el-form-item>
             <el-form-item label="就诊日期" prop="visitDate">
-              <el-input v-model="queryParams.visitDate" placeholder="请输入就诊日期" clearable @keyup.enter="handleQuery" />
+              <el-input v-model="queryParams.visitDate" placeholder="请输入就诊日期（yyyy-MM-dd）" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="午别" prop="period">
               <el-input v-model="queryParams.period" placeholder="请输入午别" clearable @keyup.enter="handleQuery" />
