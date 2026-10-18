@@ -8,26 +8,24 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
+            
             <el-form-item label="支付单号" prop="paymentNo">
               <el-input v-model="queryParams.paymentNo" placeholder="请输入支付单号" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="渠道流水号" prop="tradeNo">
               <el-input v-model="queryParams.tradeNo" placeholder="请输入渠道流水号" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="渠道通知唯一id" prop="notifyId">
-              <el-input v-model="queryParams.notifyId" placeholder="请输入渠道通知唯一id" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
+            
             <el-form-item label="渠道" prop="channel">
-              <el-input v-model="queryParams.channel" placeholder="请输入渠道" clearable @keyup.enter="handleQuery" />
+              <el-select v-model="queryParams.channel" placeholder="请选择渠道" clearable filterable style="width: 180px">
+                <el-option v-for="opt in PAY_CHANNEL_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="验签：0通过 1失败" prop="signFlag">
-              <el-input v-model="queryParams.signFlag" placeholder="请输入验签：0通过 1失败" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="PENDING SUCCESS IGNORED重复丢弃 FAILED" prop="processStatus">
-              <el-input v-model="queryParams.processStatus" placeholder="请输入PENDING SUCCESS IGNORED重复丢弃 FAILED" clearable @keyup.enter="handleQuery" />
+            
+            <el-form-item label="处理状态" prop="processStatus">
+              <el-select v-model="queryParams.processStatus" placeholder="请选择处理状态" clearable filterable style="width: 180px">
+                <el-option v-for="opt in CALLBACK_STATUS_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
             <el-form-item label="创建时间" style="width: 308px">
               <el-date-picker
@@ -65,10 +63,10 @@
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="支付单号" align="center" prop="paymentNo" />
         <el-table-column label="渠道流水号" align="center" prop="tradeNo" />
-        <el-table-column label="渠道通知唯一id" align="center" prop="notifyId" />
-        <el-table-column label="渠道" align="center" prop="channel" />
-        <el-table-column label="验签：0通过 1失败" align="center" prop="signFlag" />
-        <el-table-column label="PENDING SUCCESS IGNORED重复丢弃 FAILED" align="center" prop="processStatus" />
+        <el-table-column label="通知ID" align="center" prop="notifyId" />
+        <el-table-column label="渠道" align="center" prop="channel" :formatter="(r) => labelOf(PAY_CHANNEL_OPTIONS, r.channel)" />
+        <el-table-column label="验签结果" align="center" prop="signFlag" />
+        <el-table-column label="处理状态" align="center" prop="processStatus" :formatter="(r) => labelOf(CALLBACK_STATUS_OPTIONS, r.processStatus)" />
       </el-table>
 
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
@@ -86,6 +84,7 @@ import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { download as requestDownload } from '@/utils/request';
+import { PAY_CHANNEL_OPTIONS, CALLBACK_STATUS_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 

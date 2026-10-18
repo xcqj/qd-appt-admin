@@ -8,30 +8,28 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="批号" prop="batchNo">
+            
+            <el-form-item label="停诊批号" prop="batchNo">
               <el-input v-model="queryParams.batchNo" placeholder="请输入批号" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="范围：SCHEDULE单排班 STAFF_DATE某医生某日 CAMPUS_DATE院区某日" prop="scopeType">
-              <el-input v-model="queryParams.scopeType" placeholder="请输入范围：SCHEDULE单排班 STAFF_DATE某医生某日 CAMPUS_DATE院区某日" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="停诊范围" prop="scopeType">
+              <el-select v-model="queryParams.scopeType" placeholder="请选择停诊范围" clearable filterable style="width: 180px">
+                <el-option v-for="opt in SCOPE_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="范围值：SCHEDULE 存 scheduleId；STAFF_DATE 存 visitDate；CAMPUS_DATE 存 campusId:date" prop="scopeValue">
-              <el-input v-model="queryParams.scopeValue" placeholder="请输入范围值：SCHEDULE 存 scheduleId；STAFF_DATE 存 visitDate；CAMPUS_DATE 存 campusId:date" clearable @keyup.enter="handleQuery" />
+            
+            <el-form-item label="医务人员" prop="staffId">
+              <el-select v-model="queryParams.staffId" placeholder="请选择医务人员" clearable filterable style="width: 200px">
+                <el-option v-for="item in staffOptions" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="医务人员id" prop="staffId">
-              <el-input-number v-model="queryParams.staffId" controls-position="right" />
+            
+            <el-form-item label="处理状态" prop="status">
+              <el-select v-model="queryParams.status" placeholder="请选择处理状态" clearable filterable style="width: 180px">
+                <el-option v-for="opt in SUSPEND_STATUS_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="停诊原因" prop="reason">
-              <el-input v-model="queryParams.reason" placeholder="请输入停诊原因" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="PENDING待处理 HANDLED已处理" prop="status">
-              <el-input v-model="queryParams.status" placeholder="请输入PENDING待处理 HANDLED已处理" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="操作人" prop="operator">
-              <el-input v-model="queryParams.operator" placeholder="请输入操作人" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
+            
             <el-form-item label="创建时间" style="width: 308px">
               <el-date-picker
                 v-model="dateRangeCreateTime"
@@ -66,12 +64,12 @@
 
       <el-table v-loading="loading" border class="data-table" :data="suspendList">
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="批号" align="center" prop="batchNo" />
-        <el-table-column label="范围：SCHEDULE单排班 STAFF_DATE某医生某日 CAMPUS_DATE院区某日" align="center" prop="scopeType" />
-        <el-table-column label="范围值：SCHEDULE 存 scheduleId；STAFF_DATE 存 visitDate；CAMPUS_DATE 存 campusId:date" align="center" prop="scopeValue" />
-        <el-table-column label="医务人员id" align="center" prop="staffId" />
-        <el-table-column label="停诊原因" align="center" prop="reason" />
-        <el-table-column label="PENDING待处理 HANDLED已处理" align="center" prop="status" />
+        <el-table-column label="停诊批号" align="center" prop="batchNo" />
+        <el-table-column label="停诊范围" align="center" prop="scopeType" :formatter="(r) => labelOf(SCOPE_TYPE_OPTIONS, r.scopeType)" />
+        <el-table-column label="范围值" align="center" prop="scopeValue" />
+        <el-table-column label="医务人员" align="center" prop="staffId" />
+        <el-table-column label="原因" align="center" prop="reason" />
+        <el-table-column label="处理状态" align="center" prop="status" :formatter="(r) => labelOf(SUSPEND_STATUS_OPTIONS, r.status)" />
         <el-table-column label="操作人" align="center" prop="operator" />
       </el-table>
 
@@ -90,10 +88,13 @@ import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { download as requestDownload } from '@/utils/request';
+import { useApptOptions } from '@/views/appt/useApptOptions';
+import { SCOPE_TYPE_OPTIONS, SUSPEND_STATUS_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 
 const suspendList = ref<SuspendVO[]>([]);
+const { campusOptions, deptOptions, staffOptions, loadApptOptions } = useApptOptions();
 const { loading, withLoading } = useLoading(true);
 const { showSearch } = useSearchToggle();
 const total = ref(0);
@@ -174,6 +175,7 @@ const handleExport = () => {
 
 onMounted(() => {
   getList();
+  loadApptOptions();
 });
 </script>
 

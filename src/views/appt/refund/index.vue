@@ -8,27 +8,19 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="退款单号：F + yyyyMMdd + 6位当日序列" prop="refundNo">
+            
+            <el-form-item label="退款单号" prop="refundNo">
               <el-input v-model="queryParams.refundNo" placeholder="请输入退款单号：F + yyyyMMdd + 6位当日序列" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="支付单id" prop="paymentId">
-              <el-input-number v-model="queryParams.paymentId" controls-position="right" />
+            
+            
+            
+            <el-form-item label="退款状态" prop="status">
+              <el-select v-model="queryParams.status" placeholder="请选择退款状态" clearable filterable style="width: 180px">
+                <el-option v-for="opt in REFUND_STATUS_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="挂号单id" prop="registrationId">
-              <el-input-number v-model="queryParams.registrationId" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="退款金额" prop="amount">
-              <el-input-number v-model="queryParams.amount" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="WAIT_REFUND待退款 REFUNDED已退款 FAILED退款失败" prop="status">
-              <el-input v-model="queryParams.status" placeholder="请输入WAIT_REFUND待退款 REFUNDED已退款 FAILED退款失败" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="退款原因" prop="reason">
-              <el-input v-model="queryParams.reason" placeholder="请输入退款原因" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
+            
             <el-form-item label="退款完成时间" style="width: 308px">
               <el-date-picker
                 v-model="dateRangeRefundTime"
@@ -74,13 +66,13 @@
 
       <el-table v-loading="loading" border class="data-table" :data="refundList">
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="退款单号：F + yyyyMMdd + 6位当日序列" align="center" prop="refundNo" />
-        <el-table-column label="支付单id" align="center" prop="paymentId" />
-        <el-table-column label="挂号单id" align="center" prop="registrationId" />
+        <el-table-column label="退款单号" align="center" prop="refundNo" />
+        <el-table-column label="支付单" align="center" prop="paymentId" />
+        <el-table-column label="挂号单" align="center" prop="registrationId" />
         <el-table-column label="退款金额" align="center" prop="amount" />
-        <el-table-column label="WAIT_REFUND待退款 REFUNDED已退款 FAILED退款失败" align="center" prop="status" />
+        <el-table-column label="退款状态" align="center" prop="status" :formatter="(r) => labelOf(REFUND_STATUS_OPTIONS, r.status)" />
         <el-table-column label="退款原因" align="center" prop="reason" />
-        <el-table-column label="退款完成时间" align="center" prop="refundTime" width="180">
+        <el-table-column label="退款时间" align="center" prop="refundTime" width="180">
           <template #default="scope">
             <span>{{ parseTime(scope.row.refundTime, '{y}-{m}-{d}') }}</span>
           </template>
@@ -103,6 +95,7 @@ import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { parseTime } from '@/utils/ruoyi';
 import { download as requestDownload } from '@/utils/request';
+import { REFUND_STATUS_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 

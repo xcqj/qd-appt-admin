@@ -8,27 +8,27 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="对账批次号" prop="batchNo">
+            
+            <el-form-item label="批次号" prop="batchNo">
               <el-input v-model="queryParams.batchNo" placeholder="请输入对账批次号" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="检查项 R1~R7" prop="checkType">
-              <el-input v-model="queryParams.checkType" placeholder="请输入检查项 R1~R7" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="检查项" prop="checkType">
+              <el-select v-model="queryParams.checkType" placeholder="请选择检查项" clearable filterable style="width: 180px">
+                <el-option v-for="opt in CHECK_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="目标id" prop="targetId">
-              <el-input-number v-model="queryParams.targetId" controls-position="right" />
+            
+            <el-form-item label="处理动作" prop="action">
+              <el-select v-model="queryParams.action" placeholder="请选择处理动作" clearable filterable style="width: 180px">
+                <el-option v-for="opt in CHECK_ACTION_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="AUTO_FIX自动修复 ALERT告警" prop="action">
-              <el-input v-model="queryParams.action" placeholder="请输入AUTO_FIX自动修复 ALERT告警" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="结果状态" prop="status">
+              <el-select v-model="queryParams.status" placeholder="请选择结果状态" clearable filterable style="width: 180px">
+                <el-option v-for="opt in CHECK_STATUS_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="OK正常 FIXED已修复 ALERT待人工" prop="status">
-              <el-input v-model="queryParams.status" placeholder="请输入OK正常 FIXED已修复 ALERT待人工" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="详情" prop="detail">
-              <el-input v-model="queryParams.detail" placeholder="请输入详情" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
+            
             <el-form-item label="创建时间" style="width: 308px">
               <el-date-picker
                 v-model="dateRangeCreateTime"
@@ -63,11 +63,11 @@
 
       <el-table v-loading="loading" border class="data-table" :data="reconcileResultList">
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="对账批次号" align="center" prop="batchNo" />
-        <el-table-column label="检查项 R1~R7" align="center" prop="checkType" />
-        <el-table-column label="目标id" align="center" prop="targetId" />
-        <el-table-column label="AUTO_FIX自动修复 ALERT告警" align="center" prop="action" />
-        <el-table-column label="OK正常 FIXED已修复 ALERT待人工" align="center" prop="status" />
+        <el-table-column label="批次号" align="center" prop="batchNo" />
+        <el-table-column label="检查项" align="center" prop="checkType" :formatter="(r) => labelOf(CHECK_TYPE_OPTIONS, r.checkType)" />
+        <el-table-column label="目标ID" align="center" prop="targetId" />
+        <el-table-column label="处理动作" align="center" prop="action" :formatter="(r) => labelOf(CHECK_ACTION_OPTIONS, r.action)" />
+        <el-table-column label="结果状态" align="center" prop="status" :formatter="(r) => labelOf(CHECK_STATUS_OPTIONS, r.status)" />
       </el-table>
 
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
@@ -85,6 +85,7 @@ import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { download as requestDownload } from '@/utils/request';
+import { CHECK_TYPE_OPTIONS, CHECK_ACTION_OPTIONS, CHECK_STATUS_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 

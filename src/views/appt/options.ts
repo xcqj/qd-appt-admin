@@ -49,6 +49,12 @@ export const ID_TYPE_OPTIONS: ApptOption[] = [
   { label: '就诊卡', value: 'CARD' }
 ];
 
+/** 站内信已读标记 */
+export const READ_FLAG_OPTIONS: ApptOption[] = [
+  { label: '未读', value: false },
+  { label: '已读', value: true }
+];
+
 /** 启停（char(1) 0/1 → Boolean false/true） */
 export const STATUS_OPTIONS: ApptOption[] = [
   { label: '正常', value: false },

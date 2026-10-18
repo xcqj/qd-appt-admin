@@ -8,13 +8,11 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="任务名" prop="jobName">
+            
+            <el-form-item label="任务名称" prop="jobName">
               <el-input v-model="queryParams.jobName" placeholder="请输入任务名" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="批号" prop="batchNo">
+            <el-form-item label="批次号" prop="batchNo">
               <el-input v-model="queryParams.batchNo" placeholder="请输入批号" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="开始时间" style="width: 308px">
@@ -39,15 +37,13 @@
                 :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
               />
             </el-form-item>
-            <el-form-item label="RUNNING SUCCESS FAIL SKIPPED" prop="status">
-              <el-input v-model="queryParams.status" placeholder="请输入RUNNING SUCCESS FAIL SKIPPED" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="执行状态" prop="status">
+              <el-select v-model="queryParams.status" placeholder="请选择执行状态" clearable filterable style="width: 180px">
+                <el-option v-for="opt in JOB_STATUS_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="影响行数" prop="affectedRows">
-              <el-input-number v-model="queryParams.affectedRows" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="结果信息" prop="message">
-              <el-input v-model="queryParams.message" placeholder="请输入结果信息" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
+            
+            
             <el-form-item label="创建时间" style="width: 308px">
               <el-date-picker
                 v-model="dateRangeCreateTime"
@@ -82,8 +78,8 @@
 
       <el-table v-loading="loading" border class="data-table" :data="jobLogList">
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="任务名" align="center" prop="jobName" />
-        <el-table-column label="批号" align="center" prop="batchNo" />
+        <el-table-column label="任务名称" align="center" prop="jobName" />
+        <el-table-column label="批次号" align="center" prop="batchNo" />
         <el-table-column label="开始时间" align="center" prop="startTime" width="180">
           <template #default="scope">
             <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d}') }}</span>
@@ -94,7 +90,7 @@
             <span>{{ parseTime(scope.row.endTime, '{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="RUNNING SUCCESS FAIL SKIPPED" align="center" prop="status" />
+        <el-table-column label="执行状态" align="center" prop="status" :formatter="(r) => labelOf(JOB_STATUS_OPTIONS, r.status)" />
         <el-table-column label="影响行数" align="center" prop="affectedRows" />
       </el-table>
 
@@ -114,6 +110,7 @@ import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { parseTime } from '@/utils/ruoyi';
 import { download as requestDownload } from '@/utils/request';
+import { JOB_STATUS_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 

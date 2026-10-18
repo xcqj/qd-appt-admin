@@ -8,22 +8,15 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="接收账号id" prop="userId">
-              <el-input-number v-model="queryParams.userId" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="通知场景" prop="type">
-              <el-input v-model="queryParams.type" placeholder="请输入通知场景" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
+            
+            
+            
             <el-form-item label="标题" prop="title">
               <el-input v-model="queryParams.title" placeholder="请输入标题" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="已读：1是 0否" prop="readFlag">
-              <el-select v-model="queryParams.readFlag" placeholder="请选择已读：1是 0否" clearable >
-                <el-option label="是" :value="true" />
-                <el-option label="否" :value="false" />
+            <el-form-item label="读取状态" prop="readFlag">
+              <el-select v-model="queryParams.readFlag" placeholder="请选择读取状态" clearable filterable style="width: 180px">
+                <el-option v-for="opt in READ_FLAG_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
               </el-select>
             </el-form-item>
             <el-form-item label="创建时间" style="width: 308px">
@@ -60,10 +53,10 @@
 
       <el-table v-loading="loading" border class="data-table" :data="noticeList">
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="接收账号id" align="center" prop="userId" />
+        <el-table-column label="账号" align="center" prop="userId" />
         <el-table-column label="通知场景" align="center" prop="type" />
         <el-table-column label="标题" align="center" prop="title" />
-        <el-table-column label="已读：1是 0否" align="center" prop="readFlag" width="120">
+        <el-table-column label="读取状态" align="center" prop="readFlag" width="120">
           <template #default="scope">
             <el-switch
               v-model="scope.row.readFlag"
@@ -90,6 +83,7 @@ import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { download as requestDownload } from '@/utils/request';
+import { READ_FLAG_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 

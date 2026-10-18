@@ -8,26 +8,30 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
+            
+            
+            <el-form-item label="医务人员" prop="staffId">
+              <el-select v-model="queryParams.staffId" placeholder="请选择医务人员" clearable filterable style="width: 200px">
+                <el-option v-for="item in staffOptions" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="排班id" prop="scheduleId">
-              <el-input-number v-model="queryParams.scheduleId" controls-position="right" />
+            <el-form-item label="科室" prop="deptId">
+              <el-select v-model="queryParams.deptId" placeholder="请选择科室" clearable filterable style="width: 200px">
+                <el-option v-for="item in deptOptions" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="医务人员id" prop="staffId">
-              <el-input-number v-model="queryParams.staffId" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="科室id" prop="deptId">
-              <el-input-number v-model="queryParams.deptId" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="院区id" prop="campusId">
-              <el-input-number v-model="queryParams.campusId" controls-position="right" />
+            <el-form-item label="院区" prop="campusId">
+              <el-select v-model="queryParams.campusId" placeholder="请选择院区" clearable filterable style="width: 200px">
+                <el-option v-for="item in campusOptions" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
             </el-form-item>
             <el-form-item label="就诊日期" prop="visitDate">
-              <el-input v-model="queryParams.visitDate" placeholder="请输入就诊日期（yyyy-MM-dd）" clearable @keyup.enter="handleQuery" />
+              <el-date-picker v-model="queryParams.visitDate" value-format="YYYY-MM-DD" type="date" placeholder="请选择就诊日期" style="width: 180px" />
             </el-form-item>
             <el-form-item label="午别" prop="period">
-              <el-input v-model="queryParams.period" placeholder="请输入午别" clearable @keyup.enter="handleQuery" />
+              <el-select v-model="queryParams.period" placeholder="请选择午别" clearable filterable style="width: 180px">
+                <el-option v-for="opt in PERIOD_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
             <el-form-item label="就诊时刻" style="width: 308px">
               <el-date-picker
@@ -40,18 +44,18 @@
                 :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
               />
             </el-form-item>
-            <el-form-item label="挂号费" prop="fee">
-              <el-input-number v-model="queryParams.fee" controls-position="right" />
+            
+            <el-form-item label="号源状态" prop="status">
+              <el-select v-model="queryParams.status" placeholder="请选择号源状态" clearable filterable style="width: 180px">
+                <el-option v-for="opt in SLOT_STATUS_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="AVAILABLE可约 TAKEN已占 SUSPENDED已停诊 EXPIRED已过期" prop="status">
-              <el-input v-model="queryParams.status" placeholder="请输入AVAILABLE可约 TAKEN已占 SUSPENDED已停诊 EXPIRED已过期" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="来源" prop="source">
+              <el-select v-model="queryParams.source" placeholder="请选择来源" clearable filterable style="width: 180px">
+                <el-option v-for="opt in SLOT_SOURCE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="来源：NORMAL正常 EXTRA加号" prop="source">
-              <el-input v-model="queryParams.source" placeholder="请输入来源：NORMAL正常 EXTRA加号" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="占用挂号单id" prop="registrationId">
-              <el-input-number v-model="queryParams.registrationId" controls-position="right" />
-            </el-form-item>
+            
             <el-form-item label="创建时间" style="width: 308px">
               <el-date-picker
                 v-model="dateRangeCreateTime"
@@ -88,21 +92,21 @@
       <el-table v-loading="loading" border class="data-table" :data="slotList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="排班id" align="center" prop="scheduleId" />
-        <el-table-column label="医务人员id" align="center" prop="staffId" />
-        <el-table-column label="科室id" align="center" prop="deptId" />
-        <el-table-column label="院区id" align="center" prop="campusId" />
+        <el-table-column label="排班" align="center" prop="scheduleId" />
+        <el-table-column label="医务人员" align="center" prop="staffId" />
+        <el-table-column label="科室" align="center" prop="deptId" />
+        <el-table-column label="院区" align="center" prop="campusId" />
         <el-table-column label="就诊日期" align="center" prop="visitDate" />
-        <el-table-column label="午别" align="center" prop="period" />
+        <el-table-column label="午别" align="center" prop="period" :formatter="(r) => labelOf(PERIOD_OPTIONS, r.period)" />
         <el-table-column label="就诊时刻" align="center" prop="timePoint" width="180">
           <template #default="scope">
             <span>{{ parseTime(scope.row.timePoint, '{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="挂号费" align="center" prop="fee" />
-        <el-table-column label="AVAILABLE可约 TAKEN已占 SUSPENDED已停诊 EXPIRED已过期" align="center" prop="status" />
-        <el-table-column label="来源：NORMAL正常 EXTRA加号" align="center" prop="source" />
-        <el-table-column label="占用挂号单id" align="center" prop="registrationId" />
+        <el-table-column label="号源状态" align="center" prop="status" :formatter="(r) => labelOf(SLOT_STATUS_OPTIONS, r.status)" />
+        <el-table-column label="来源" align="center" prop="source" :formatter="(r) => labelOf(SLOT_SOURCE_OPTIONS, r.source)" />
+        <el-table-column label="挂号单" align="center" prop="registrationId" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="删除" placement="top">
@@ -131,10 +135,13 @@ import { useTableSelection } from '@/hooks/table/useTableSelection';
 import { parseTime } from '@/utils/ruoyi';
 import modal from '@/plugins/modal';
 import { download as requestDownload } from '@/utils/request';
+import { useApptOptions } from '@/views/appt/useApptOptions';
+import { PERIOD_OPTIONS, SLOT_STATUS_OPTIONS, SLOT_SOURCE_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 
 const slotList = ref<SlotVO[]>([]);
+const { campusOptions, deptOptions, staffOptions, loadApptOptions } = useApptOptions();
 const { loading, withLoading } = useLoading(true);
 const { showSearch } = useSearchToggle();
 const total = ref(0);
@@ -235,6 +242,7 @@ const handleExport = () => {
 
 onMounted(() => {
   getList();
+  loadApptOptions();
 });
 </script>
 

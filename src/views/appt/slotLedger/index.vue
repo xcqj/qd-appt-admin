@@ -8,25 +8,19 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="号源id" prop="slotId">
+            
+            <el-form-item label="号源" prop="slotId">
               <el-input-number v-model="queryParams.slotId" controls-position="right" />
             </el-form-item>
-            <el-form-item label="GENERATE生成 OCCUPY占用 RELEASE释放 REFILL回补 SUSPEND停诊 EXPIRE过期" prop="action">
-              <el-input v-model="queryParams.action" placeholder="请输入GENERATE生成 OCCUPY占用 RELEASE释放 REFILL回补 SUSPEND停诊 EXPIRE过期" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="动作" prop="action">
+              <el-select v-model="queryParams.action" placeholder="请选择动作" clearable filterable style="width: 180px">
+                <el-option v-for="opt in LEDGER_ACTION_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="变更前状态" prop="beforeStatus">
-              <el-input v-model="queryParams.beforeStatus" placeholder="请输入变更前状态" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="变更后状态" prop="afterStatus">
-              <el-input v-model="queryParams.afterStatus" placeholder="请输入变更后状态" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="关联挂号单id" prop="registrationId">
-              <el-input-number v-model="queryParams.registrationId" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="任务批号" prop="batchNo">
+            
+            
+            
+            <el-form-item label="批次号" prop="batchNo">
               <el-input v-model="queryParams.batchNo" placeholder="请输入任务批号" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="创建时间" style="width: 308px">
@@ -63,12 +57,12 @@
 
       <el-table v-loading="loading" border class="data-table" :data="slotLedgerList">
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="号源id" align="center" prop="slotId" />
-        <el-table-column label="GENERATE生成 OCCUPY占用 RELEASE释放 REFILL回补 SUSPEND停诊 EXPIRE过期" align="center" prop="action" />
+        <el-table-column label="号源" align="center" prop="slotId" />
+        <el-table-column label="动作" align="center" prop="action" :formatter="(r) => labelOf(LEDGER_ACTION_OPTIONS, r.action)" />
         <el-table-column label="变更前状态" align="center" prop="beforeStatus" />
         <el-table-column label="变更后状态" align="center" prop="afterStatus" />
-        <el-table-column label="关联挂号单id" align="center" prop="registrationId" />
-        <el-table-column label="任务批号" align="center" prop="batchNo" />
+        <el-table-column label="挂号单" align="center" prop="registrationId" />
+        <el-table-column label="批次号" align="center" prop="batchNo" />
       </el-table>
 
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
@@ -86,6 +80,7 @@ import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { download as requestDownload } from '@/utils/request';
+import { LEDGER_ACTION_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 

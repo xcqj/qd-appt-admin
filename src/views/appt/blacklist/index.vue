@@ -8,18 +8,10 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="账号id" prop="userId">
-              <el-input-number v-model="queryParams.userId" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="关联就诊人id" prop="patientId">
-              <el-input-number v-model="queryParams.patientId" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="列入原因" prop="reason">
-              <el-input v-model="queryParams.reason" placeholder="请输入列入原因" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
+            
+            
+            
+            
             <el-form-item label="生效时间" style="width: 308px">
               <el-date-picker
                 v-model="dateRangeStartTime"
@@ -45,10 +37,9 @@
             <el-form-item label="操作人" prop="operator">
               <el-input v-model="queryParams.operator" placeholder="请输入操作人" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="状态：0生效 1已解除" prop="status">
-              <el-select v-model="queryParams.status" placeholder="请选择状态：0生效 1已解除" clearable >
-                <el-option label="是" :value="true" />
-                <el-option label="否" :value="false" />
+            <el-form-item label="状态" prop="status">
+              <el-select v-model="queryParams.status" placeholder="请选择状态" clearable filterable style="width: 180px">
+                <el-option v-for="opt in BLACKLIST_STATUS_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
               </el-select>
             </el-form-item>
             <el-form-item label="创建时间" style="width: 308px">
@@ -89,9 +80,9 @@
       <el-table v-loading="loading" border class="data-table" :data="blacklistList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="账号id" align="center" prop="userId" />
-        <el-table-column label="关联就诊人id" align="center" prop="patientId" />
-        <el-table-column label="列入原因" align="center" prop="reason" />
+        <el-table-column label="账号" align="center" prop="userId" />
+        <el-table-column label="就诊人" align="center" prop="patientId" />
+        <el-table-column label="原因" align="center" prop="reason" />
         <el-table-column label="生效时间" align="center" prop="startTime" width="180">
           <template #default="scope">
             <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d}') }}</span>
@@ -103,14 +94,9 @@
           </template>
         </el-table-column>
         <el-table-column label="操作人" align="center" prop="operator" />
-        <el-table-column label="状态：0生效 1已解除" align="center" prop="status" width="120">
+        <el-table-column label="状态" align="center" prop="status" width="100">
           <template #default="scope">
-            <el-switch
-              v-model="scope.row.status"
-              :active-value="true"
-              :inactive-value="false"
-              disabled
-            />
+            <el-tag :type="scope.row.status === true ? 'danger' : 'success'">{{ scope.row.status === true ? '已解除' : '生效' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -130,13 +116,13 @@
     <!-- 添加或修改黑名单对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
       <el-form ref="blacklistFormRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="账号id" prop="userId">
+        <el-form-item label="账号" prop="userId">
           <el-input-number v-model="form.userId" controls-position="right" />
         </el-form-item>
-        <el-form-item label="关联就诊人id" prop="patientId">
+        <el-form-item label="就诊人" prop="patientId">
           <el-input-number v-model="form.patientId" controls-position="right" />
         </el-form-item>
-        <el-form-item label="列入原因" prop="reason">
+        <el-form-item label="原因" prop="reason">
           <el-input v-model="form.reason" placeholder="请输入列入原因" />
         </el-form-item>
         <el-form-item label="生效时间" prop="startTime">
@@ -158,7 +144,7 @@
         <el-form-item label="操作人" prop="operator">
           <el-input v-model="form.operator" placeholder="请输入操作人" />
         </el-form-item>
-        <el-form-item label="状态：0生效 1已解除" prop="status">
+        <el-form-item label="状态" prop="status">
           <el-switch
             v-model="form.status"
             :active-value="true"
@@ -194,6 +180,7 @@ import { useTableSelection } from '@/hooks/table/useTableSelection';
 import { parseTime } from '@/utils/ruoyi';
 import modal from '@/plugins/modal';
 import { download as requestDownload } from '@/utils/request';
+import { BLACKLIST_STATUS_OPTIONS } from '@/views/appt/options';
 
 
 

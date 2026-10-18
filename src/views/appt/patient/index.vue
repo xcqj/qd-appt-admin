@@ -8,22 +8,19 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="归属账号id" prop="userId">
-              <el-input-number v-model="queryParams.userId" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="就诊人姓名" prop="name">
+            
+            
+            <el-form-item label="姓名" prop="name">
               <el-input v-model="queryParams.name" placeholder="请输入就诊人姓名" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="证件类型：IDCARD身份证 CARD就诊卡" prop="idType">
-              <el-input v-model="queryParams.idType" placeholder="请输入证件类型：IDCARD身份证 CARD就诊卡" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="证件类型" prop="idType">
+              <el-select v-model="queryParams.idType" placeholder="请选择证件类型" clearable filterable style="width: 180px">
+                <el-option v-for="opt in ID_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="状态：0正常 1停用" prop="status">
-              <el-select v-model="queryParams.status" placeholder="请选择状态：0正常 1停用" clearable >
-                <el-option label="是" :value="true" />
-                <el-option label="否" :value="false" />
+            <el-form-item label="状态" prop="status">
+              <el-select v-model="queryParams.status" placeholder="请选择状态" clearable filterable style="width: 180px">
+                <el-option v-for="opt in STATUS_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
               </el-select>
             </el-form-item>
             <el-form-item label="创建时间" style="width: 308px">
@@ -64,18 +61,13 @@
       <el-table v-loading="loading" border class="data-table" :data="patientList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="归属账号id" align="center" prop="userId" />
-        <el-table-column label="就诊人姓名" align="center" prop="name" />
-        <el-table-column label="证件类型：IDCARD身份证 CARD就诊卡" align="center" prop="idType" />
-        <el-table-column label="是否默认就诊人：1=默认 / NULL=非默认" align="center" prop="isDefault" />
-        <el-table-column label="状态：0正常 1停用" align="center" prop="status" width="120">
+        <el-table-column label="账号" align="center" prop="userId" />
+        <el-table-column label="姓名" align="center" prop="name" />
+        <el-table-column label="证件类型" align="center" prop="idType" :formatter="(r) => labelOf(ID_TYPE_OPTIONS, r.idType)" />
+        <el-table-column label="默认就诊人" align="center" prop="isDefault" />
+        <el-table-column label="状态" align="center" prop="status" width="100">
           <template #default="scope">
-            <el-switch
-              v-model="scope.row.status"
-              :active-value="true"
-              :inactive-value="false"
-              disabled
-            />
+            <el-tag :type="scope.row.status === true ? 'danger' : 'success'">{{ scope.row.status === true ? '停用' : '正常' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -95,19 +87,21 @@
     <!-- 添加或修改就诊人对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
       <el-form ref="patientFormRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="归属账号id" prop="userId">
+        <el-form-item label="账号" prop="userId">
           <el-input-number v-model="form.userId" controls-position="right" />
         </el-form-item>
-        <el-form-item label="就诊人姓名" prop="name">
+        <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name" placeholder="请输入就诊人姓名" />
         </el-form-item>
-        <el-form-item label="证件类型：IDCARD身份证 CARD就诊卡" prop="idType">
-          <el-input v-model="form.idType" placeholder="请输入证件类型：IDCARD身份证 CARD就诊卡" />
+        <el-form-item label="证件类型" prop="idType">
+          <el-select v-model="form.idType" placeholder="请选择证件类型" clearable filterable style="width: 100%">
+            <el-option v-for="opt in ID_TYPE_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="证件号：生产 AES 密文，演示期明文" prop="idNo">
+        <el-form-item label="证件号" prop="idNo">
           <el-input v-model="form.idNo" placeholder="请输入证件号：生产 AES 密文，演示期明文" />
         </el-form-item>
-        <el-form-item label="状态：0正常 1停用" prop="status">
+        <el-form-item label="状态" prop="status">
           <el-switch
             v-model="form.status"
             :active-value="true"
@@ -142,6 +136,7 @@ import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { useTableSelection } from '@/hooks/table/useTableSelection';
 import modal from '@/plugins/modal';
 import { download as requestDownload } from '@/utils/request';
+import { ID_TYPE_OPTIONS, STATUS_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 

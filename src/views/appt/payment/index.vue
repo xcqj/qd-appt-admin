@@ -8,23 +8,21 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
-            <el-form-item label="主键" prop="id">
-              <el-input-number v-model="queryParams.id" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="支付单号：P + yyyyMMdd + 6位当日序列" prop="paymentNo">
+            
+            <el-form-item label="支付单号" prop="paymentNo">
               <el-input v-model="queryParams.paymentNo" placeholder="请输入支付单号：P + yyyyMMdd + 6位当日序列" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="挂号单id" prop="registrationId">
-              <el-input-number v-model="queryParams.registrationId" controls-position="right" />
+            
+            
+            <el-form-item label="支付渠道" prop="channel">
+              <el-select v-model="queryParams.channel" placeholder="请选择支付渠道" clearable filterable style="width: 180px">
+                <el-option v-for="opt in PAY_CHANNEL_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="支付金额" prop="amount">
-              <el-input-number v-model="queryParams.amount" controls-position="right" />
-            </el-form-item>
-            <el-form-item label="渠道：本期仅 MOCK" prop="channel">
-              <el-input v-model="queryParams.channel" placeholder="请输入渠道：本期仅 MOCK" clearable @keyup.enter="handleQuery" />
-            </el-form-item>
-            <el-form-item label="WAIT_PAY待支付 PAID已支付 CLOSED已关闭 REFUNDED已退款" prop="status">
-              <el-input v-model="queryParams.status" placeholder="请输入WAIT_PAY待支付 PAID已支付 CLOSED已关闭 REFUNDED已退款" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="支付状态" prop="status">
+              <el-select v-model="queryParams.status" placeholder="请选择支付状态" clearable filterable style="width: 180px">
+                <el-option v-for="opt in PAY_STATUS_OPTIONS" :key="String(opt.value)" :label="opt.label" :value="opt.value" />
+              </el-select>
             </el-form-item>
             <el-form-item label="渠道流水号" prop="tradeNo">
               <el-input v-model="queryParams.tradeNo" placeholder="请输入渠道流水号" clearable @keyup.enter="handleQuery" />
@@ -85,18 +83,18 @@
 
       <el-table v-loading="loading" border class="data-table" :data="paymentList">
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="支付单号：P + yyyyMMdd + 6位当日序列" align="center" prop="paymentNo" />
-        <el-table-column label="挂号单id" align="center" prop="registrationId" />
-        <el-table-column label="支付金额" align="center" prop="amount" />
-        <el-table-column label="渠道：本期仅 MOCK" align="center" prop="channel" />
-        <el-table-column label="WAIT_PAY待支付 PAID已支付 CLOSED已关闭 REFUNDED已退款" align="center" prop="status" />
+        <el-table-column label="支付单号" align="center" prop="paymentNo" />
+        <el-table-column label="挂号单" align="center" prop="registrationId" />
+        <el-table-column label="金额" align="center" prop="amount" />
+        <el-table-column label="支付渠道" align="center" prop="channel" :formatter="(r) => labelOf(PAY_CHANNEL_OPTIONS, r.channel)" />
+        <el-table-column label="支付状态" align="center" prop="status" :formatter="(r) => labelOf(PAY_STATUS_OPTIONS, r.status)" />
         <el-table-column label="渠道流水号" align="center" prop="tradeNo" />
-        <el-table-column label="支付截止时间" align="center" prop="expireTime" width="180">
+        <el-table-column label="过期时间" align="center" prop="expireTime" width="180">
           <template #default="scope">
             <span>{{ parseTime(scope.row.expireTime, '{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="支付完成时间" align="center" prop="payTime" width="180">
+        <el-table-column label="支付时间" align="center" prop="payTime" width="180">
           <template #default="scope">
             <span>{{ parseTime(scope.row.payTime, '{y}-{m}-{d}') }}</span>
           </template>
@@ -119,6 +117,7 @@ import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
 import { parseTime } from '@/utils/ruoyi';
 import { download as requestDownload } from '@/utils/request';
+import { PAY_CHANNEL_OPTIONS, PAY_STATUS_OPTIONS, labelOf } from '@/views/appt/options';
 
 
 
