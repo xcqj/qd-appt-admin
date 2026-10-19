@@ -12,9 +12,29 @@ export interface RefundVO {
    */
   paymentId: string | number;
   /**
+   * 支付单号（服务端回填）
+   */
+  paymentNo?: string;
+  /**
    * 挂号单id
    */
   registrationId: string | number;
+  /**
+   * 挂号单号（服务端回填）
+   */
+  registrationNo?: string;
+  /**
+   * 医务人员姓名（服务端回填）
+   */
+  staffName?: string;
+  /**
+   * 科室名（服务端回填）
+   */
+  deptName?: string;
+  /**
+   * 院区名（服务端回填）
+   */
+  campusName?: string;
   /**
    * 退款金额
    */

@@ -67,8 +67,11 @@
       <el-table v-loading="loading" border class="data-table" :data="refundList">
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="退款单号" align="center" prop="refundNo" />
-        <el-table-column label="支付单" align="center" prop="paymentId" />
-        <el-table-column label="挂号单" align="center" prop="registrationId" />
+        <el-table-column label="支付单号" align="center" prop="paymentNo" width="160" />
+        <el-table-column label="挂号单号" align="center" prop="registrationNo" width="160" />
+        <el-table-column label="医务人员" align="center" prop="staffName" min-width="110" />
+        <el-table-column label="科室" align="center" prop="deptName" min-width="110" />
+        <el-table-column label="院区" align="center" prop="campusName" min-width="100" />
         <el-table-column label="退款金额" align="center" prop="amount" />
         <el-table-column label="退款状态" align="center" prop="status" :formatter="(r) => labelOf(REFUND_STATUS_OPTIONS, r.status)" />
         <el-table-column label="退款原因" align="center" prop="reason" />
