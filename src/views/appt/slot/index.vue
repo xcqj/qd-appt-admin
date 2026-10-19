@@ -92,10 +92,9 @@
       <el-table v-loading="loading" border class="data-table" :data="slotList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="主键" align="center" prop="id" />
-        <el-table-column label="排班" align="center" prop="scheduleId" />
-        <el-table-column label="医务人员" align="center" prop="staffId" />
-        <el-table-column label="科室" align="center" prop="deptId" />
-        <el-table-column label="院区" align="center" prop="campusId" />
+        <el-table-column label="医务人员" align="center" prop="staffName" min-width="110" />
+        <el-table-column label="科室" align="center" prop="deptName" min-width="110" />
+        <el-table-column label="院区" align="center" prop="campusName" min-width="110" />
         <el-table-column label="就诊日期" align="center" prop="visitDate" />
         <el-table-column label="午别" align="center" prop="period" :formatter="(r) => labelOf(PERIOD_OPTIONS, r.period)" />
         <el-table-column label="就诊时刻" align="center" prop="timePoint" width="180">

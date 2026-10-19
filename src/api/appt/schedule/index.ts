@@ -1,4 +1,12 @@
-import type { ScheduleForm, ScheduleQuery, ScheduleVO } from '@/api/appt/schedule/types';
+import type {
+  ScheduleForm,
+  ScheduleGenerateForm,
+  ScheduleGenerateResultVO,
+  SchedulePreviewQuery,
+  SchedulePreviewVO,
+  ScheduleQuery,
+  ScheduleVO
+} from '@/api/appt/schedule/types';
 import type { PageResult } from '@/api/types';
 import type { AxiosPromise } from '@/utils/api-types';
 import request from '@/utils/request';
@@ -61,5 +69,29 @@ export const delSchedule = (id: string | number | Array<string | number>) => {
   return request({
     url: '/appt/admin/schedule/' + id,
     method: 'delete'
+  });
+};
+
+/**
+ * 排班生成预览（不落库、不占批号）
+ * @param query 医务人员 + 日期区间
+ */
+export const previewSchedule = (query: SchedulePreviewQuery): AxiosPromise<SchedulePreviewVO> => {
+  return request({
+    url: '/appt/admin/schedule/preview',
+    method: 'get',
+    params: query
+  });
+};
+
+/**
+ * 排班生成（模板 → 排班 → 号源 → 台账）
+ * @param data 医务人员 + 日期区间
+ */
+export const generateSchedule = (data: ScheduleGenerateForm): AxiosPromise<ScheduleGenerateResultVO> => {
+  return request({
+    url: '/appt/admin/schedule/generate',
+    method: 'post',
+    data: data
   });
 };
