@@ -16,6 +16,10 @@ export interface RegistrationVO {
    */
   patientId: string | number;
   /**
+   * 就诊人姓名（服务端回填，列表展示用）
+   */
+  patientName?: string;
+  /**
    * 号源id
    */
   slotId: string | number;
@@ -24,13 +28,25 @@ export interface RegistrationVO {
    */
   staffId: string | number;
   /**
+   * 医务人员姓名（服务端回填）
+   */
+  staffName?: string;
+  /**
    * 科室id（冗余快照）
    */
   deptId: string | number;
   /**
+   * 科室名（服务端回填）
+   */
+  deptName?: string;
+  /**
    * 院区id（冗余快照）
    */
   campusId: string | number;
+  /**
+   * 院区名（服务端回填）
+   */
+  campusName?: string;
   /**
    * 就诊日期（冗余快照）
    */

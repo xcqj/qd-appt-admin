@@ -110,11 +110,11 @@
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="挂号单号" align="center" prop="registrationNo" />
         <el-table-column label="账号" align="center" prop="userId" />
-        <el-table-column label="就诊人" align="center" prop="patientId" />
+        <el-table-column label="就诊人" align="center" prop="patientName" min-width="100" />
         <el-table-column label="号源" align="center" prop="slotId" />
-        <el-table-column label="医务人员" align="center" prop="staffId" />
-        <el-table-column label="科室" align="center" prop="deptId" />
-        <el-table-column label="院区" align="center" prop="campusId" />
+        <el-table-column label="医务人员" align="center" prop="staffName" min-width="110" />
+        <el-table-column label="科室" align="center" prop="deptName" min-width="110" />
+        <el-table-column label="院区" align="center" prop="campusName" min-width="110" />
         <el-table-column label="就诊日期" align="center" prop="visitDate" />
         <el-table-column label="午别" align="center" prop="period" :formatter="(r) => labelOf(PERIOD_OPTIONS, r.period)" />
         <el-table-column label="就诊时刻" align="center" prop="timePoint" width="180">
