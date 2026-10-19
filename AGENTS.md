@@ -6,6 +6,13 @@
 > - 后端约定与**生成器坑位**：`../backend/AGENTS.md` §6（必读）
 > - 前端通用技能包：`.codex/skills/frontend-crud-coding/SKILL.md` + `references/frontend.md`
 > - 跨仓技能包：`../backend/.codex/skills/ruoyi-plus-ai-coding/references/frontend.md`
+>
+> **会话启动摘要（完整协议见 `../docs/AGENTS.md`）**
+> - 切片须用户**显式开启**；一片做完即停，不自动进入下一片
+> - 开工前出「开场卡 + 阅读回执（≥3 条约束带出处）」，无回执不开工
+> - 本仓是会话根；`../docs/` 与 `../backend/` 在根外，按该文件 §4 清单显式读
+> - 红线速记：四层路径 / 金额 VO 用 string / 两套状态标签 / 证件号禁打印
+> - 验证：`vue-tsc --noEmit` → `oxlint src` → `build`（build 不做类型检查）
 
 ## 1. 仓库定位与运行
 
