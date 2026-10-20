@@ -43,6 +43,10 @@ export interface ScheduleVO {
    * NORMAL正常 SUSPENDED已停诊
    */
   status: string;
+  /**
+   * 该午别可约余量（S5 实时值，与患者端同一套 RemainService/缓存口径；不参与导出）
+   */
+  remain?: number;
 }
 
 export interface ScheduleForm extends BaseEntity {

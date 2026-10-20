@@ -81,6 +81,11 @@
         <el-table-column label="门诊类型" align="center" prop="clinicType" :formatter="(r) => labelOf(CLINIC_TYPE_OPTIONS, r.clinicType)" />
         <el-table-column label="就诊日期" align="center" prop="visitDate" />
         <el-table-column label="午别" align="center" prop="period" :formatter="(r) => labelOf(PERIOD_OPTIONS, r.period)" />
+        <el-table-column label="余量" align="center" prop="remain" width="90">
+          <template #default="{ row }">
+            <span :style="row.remain === 0 ? 'color: #a8abb2' : ''">{{ row.remain ?? '-' }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="状态" align="center" prop="status" :formatter="(r) => labelOf(SCHEDULE_STATUS_OPTIONS, r.status)" />
       </el-table>
 
