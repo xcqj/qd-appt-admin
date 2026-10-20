@@ -1,4 +1,4 @@
-import type { JobLogForm, JobLogQuery, JobLogVO } from '@/api/appt/jobLog/types';
+import type { JobLogForm, JobLogQuery, JobLogVO, JobRunVO } from '@/api/appt/jobLog/types';
 import type { PageResult } from '@/api/types';
 import type { AxiosPromise } from '@/utils/api-types';
 import request from '@/utils/request';
@@ -24,6 +24,17 @@ export const getJobLog = (id: string | number): AxiosPromise<JobLogVO> => {
   return request({
     url: '/appt/admin/jobLog/' + id,
     method: 'get'
+  });
+};
+
+/**
+ * 手动执行一轮定时任务（白名单任务名）
+ * @param jobName apptNoShowJob / apptCompleteJob / apptPaymentCloseJob / apptReleaseJob
+ */
+export const runJob = (jobName: string): AxiosPromise<JobRunVO> => {
+  return request({
+    url: '/appt/admin/job/' + jobName + '/run',
+    method: 'post'
   });
 };
 

@@ -32,6 +32,16 @@ export interface JobLogVO {
 export interface JobLogForm extends BaseEntity {
 }
 
+/** 手动执行一轮任务的结果（POST /appt/admin/job/{jobName}/run） */
+export interface JobRunVO {
+  jobName: string;
+  batchNo: string;
+  /** SUCCESS / FAIL / SKIPPED */
+  status: string;
+  affectedRows: number;
+  message: string;
+}
+
 export interface JobLogQuery extends PageQuery {
   /**
    * 主键

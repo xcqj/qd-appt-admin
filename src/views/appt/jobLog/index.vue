@@ -70,6 +70,16 @@
             <h3>任务日志列表</h3>
           </div>
           <div class="toolbar-actions">
+            <el-dropdown v-hasPermi="['appt:job:run']" trigger="click" @command="handleRunJob">
+              <el-button type="primary" plain icon="VideoPlay">手动执行</el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item v-for="opt in JOB_RUN_OPTIONS" :key="opt.value" :command="opt.value">
+                    {{ opt.label }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['appt:jobLog:export']">导出</el-button>
             <right-toolbar v-model:show-search="showSearch" :search="false" @query-table="getList"></right-toolbar>
           </div>
@@ -102,12 +112,14 @@
 <script setup name="JobLog" lang="ts">
 import {
   listJobLog,
+  runJob,
 } from '@/api/appt/jobLog';
 import { JobLogQuery, JobLogVO } from '@/api/appt/jobLog/types';
 import { useLoading } from '@/hooks/async/useLoading';
 import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
+import modal from '@/plugins/modal';
 import { parseTime } from '@/utils/ruoyi';
 import { download as requestDownload } from '@/utils/request';
 import { JOB_STATUS_OPTIONS, labelOf } from '@/views/appt/options';
@@ -193,6 +205,31 @@ resetCreateTimeDateRange();
 
 
 
+
+/** 可手动执行的任务（白名单与后端一致；重跑同样受 Redisson 互斥，上一轮未结束会返回 SKIPPED） */
+const JOB_RUN_OPTIONS = [
+  { label: '爽约 + 号源过期扫描', value: 'apptNoShowJob' },
+  { label: '置完成', value: 'apptCompleteJob' },
+  { label: '支付关单巡检', value: 'apptPaymentCloseJob' },
+  { label: '放号', value: 'apptReleaseJob' }
+];
+
+/** 手动执行一轮任务 */
+const handleRunJob = async (jobName: string) => {
+  const label = JOB_RUN_OPTIONS.find((opt) => opt.value === jobName)?.label ?? jobName;
+  try {
+    await modal.confirm(`确认立即执行一轮「${label}」？会真实改动业务数据。`);
+  } catch {
+    return;
+  }
+  const res: any = await runJob(jobName);
+  const data = res?.data ?? {};
+  modal.msgSuccess(`执行完成：${data.status}，影响 ${data.affectedRows ?? 0} 行`);
+  if (data.status === 'SKIPPED') {
+    modal.notifyWarning(data.message ?? '上一轮尚未结束，本轮已跳过');
+  }
+  getList();
+};
 
 /** 导出按钮操作 */
 const handleExport = () => {

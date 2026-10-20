@@ -28,6 +28,17 @@ export const getRegistration = (id: string | number): AxiosPromise<RegistrationV
 };
 
 /**
+ * 后台手动退号（F10）：不受「就诊前一日 23:00」限制，状态记已退号（主动）并计入黑名单统计
+ * @param id 挂号单主键
+ */
+export const cancelRegistration = (id: string | number) => {
+  return request({
+    url: '/appt/admin/registration/' + id + '/cancel',
+    method: 'post'
+  });
+};
+
+/**
  * 新增挂号单
  * @param data
  */

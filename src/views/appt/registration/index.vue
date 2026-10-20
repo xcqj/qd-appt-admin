@@ -134,6 +134,19 @@
         <el-table-column label="签到方式" align="center" prop="signType" :formatter="(r) => labelOf(SIGN_TYPE_OPTIONS, r.signType)" />
         <el-table-column label="退号类型" align="center" prop="cancelType" :formatter="(r) => labelOf(CANCEL_TYPE_OPTIONS, r.cancelType)" />
         <el-table-column label="停诊批号" align="center" prop="suspendBatchNo" />
+        <el-table-column label="操作" align="center" width="100" class-name="small-padding fixed-width">
+          <template #default="scope">
+            <el-button
+              v-if="scope.row.status === 'BOOKED'"
+              type="danger"
+              link
+              icon="Close"
+              @click="handleCancel(scope.row)"
+              v-hasPermi="['appt:registration:cancel']"
+            >退号</el-button>
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
       </el-table>
 
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
@@ -143,6 +156,7 @@
 
 <script setup name="Registration" lang="ts">
 import {
+  cancelRegistration,
   listRegistration,
 } from '@/api/appt/registration';
 import { RegistrationQuery, RegistrationVO } from '@/api/appt/registration/types';
@@ -150,6 +164,7 @@ import { useLoading } from '@/hooks/async/useLoading';
 import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
+import modal from '@/plugins/modal';
 import { parseTime } from '@/utils/ruoyi';
 import { download as requestDownload } from '@/utils/request';
 import { useApptOptions } from '@/views/appt/useApptOptions';
@@ -246,6 +261,21 @@ resetCreateTimeDateRange();
 
 
 
+
+/** 后台手动退号（F10）：人工兜底，不受退号截止时间限制，状态记「已退号(主动)」并计入黑名单统计 */
+const handleCancel = async (row: any) => {
+  try {
+    await modal.confirm(
+      `确认对挂号单「${row.registrationNo}」（${row.patientName ?? ''} / ${row.visitDate ?? ''}）执行退号？号源将回池，已支付会自动退款。`
+    );
+  } catch {
+    return;
+  }
+  const res: any = await cancelRegistration(row.id);
+  const data = res?.data ?? {};
+  modal.msgSuccess(`退号成功${data.settleStatus === 'WAIT_REFUND' ? '，退款单已生成' : ''}`);
+  getList();
+};
 
 /** 导出按钮操作 */
 const handleExport = () => {
