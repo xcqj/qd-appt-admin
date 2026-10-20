@@ -55,11 +55,26 @@
             <h3>对账结果列表</h3>
           </div>
           <div class="toolbar-actions">
+            <el-button type="primary" icon="Refresh" :loading="runningReconcile" @click="handleRunReconcile" v-hasPermi="['appt:reconcile:run']">立即对账</el-button>
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['appt:reconcileResult:export']">导出</el-button>
             <right-toolbar v-model:show-search="showSearch" :search="false" @query-table="getList"></right-toolbar>
           </div>
         </div>
       </template>
+
+      <el-alert
+        v-if="lastRun"
+        class="mb-2"
+        type="success"
+        show-icon
+        closable
+        :title="`对账批次 ${lastRun.batchNo} ｜ 耗时 ${lastRun.elapsedMs}ms ｜ ${lastRun.message}`"
+        @close="lastRun = null"
+      >
+        <template #default>
+          <span>{{ lastRun.detail }}</span>
+        </template>
+      </el-alert>
 
       <el-table v-loading="loading" border class="data-table" :data="reconcileResultList">
         <el-table-column label="主键" align="center" prop="id" />
@@ -78,12 +93,14 @@
 <script setup name="ReconcileResult" lang="ts">
 import {
   listReconcileResult,
+  runReconcile,
 } from '@/api/appt/reconcileResult';
 import { ReconcileResultQuery, ReconcileResultVO } from '@/api/appt/reconcileResult/types';
 import { useLoading } from '@/hooks/async/useLoading';
 import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
 import { useSearchToggle } from '@/hooks/form/useSearchToggle';
+import modal from '@/plugins/modal';
 import { download as requestDownload } from '@/utils/request';
 import { CHECK_TYPE_OPTIONS, CHECK_ACTION_OPTIONS, CHECK_STATUS_OPTIONS, labelOf } from '@/views/appt/options';
 
@@ -153,6 +170,40 @@ resetCreateTimeDateRange();
 
 
 
+
+const runningReconcile = ref(false);
+const lastRun = ref<{ batchNo: string; elapsedMs: number; message: string; detail: string } | null>(null);
+
+/**
+ * 立即对账（F3）：七查同步执行，自动修复号源占用 / 补退款 / 补停诊退号 / 重置余量缓存；
+ * R4「给了号没收钱」只告警，不改资金。
+ */
+const handleRunReconcile = async () => {
+  try {
+    await modal.confirm(
+      '确认立即执行一轮七查对账？\n会自动修复号源占用、补生成退款、补做停诊退号，并重置余量缓存（不影响其它 Redis 键）。'
+    );
+  } catch {
+    return;
+  }
+  runningReconcile.value = true;
+  try {
+    const res: any = await runReconcile();
+    const d = res?.data ?? {};
+    lastRun.value = {
+      batchNo: d.batchNo ?? '-',
+      elapsedMs: d.elapsedMs ?? 0,
+      message: d.message ?? '对账完成',
+      detail: (d.checks ?? [])
+        .map((c: any) => `${c.checkType}：发现 ${c.found} / 修复 ${c.fixed} / 告警 ${c.alerted} / 跳过 ${c.skipped}`)
+        .join('；')
+    };
+    modal.msgSuccess(d.message ?? '对账完成');
+    getList();
+  } finally {
+    runningReconcile.value = false;
+  }
+};
 
 /** 导出按钮操作 */
 const handleExport = () => {

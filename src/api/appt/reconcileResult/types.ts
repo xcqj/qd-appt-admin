@@ -66,3 +66,21 @@ export interface ReconcileResultQuery extends PageQuery {
    */
   params?: any;
 }
+
+/** 单项对账统计（F3 响应） */
+export interface ReconcileCheckStatVO {
+  checkType: string;
+  found: number;
+  fixed: number;
+  alerted: number;
+  skipped: number;
+  summary: string;
+}
+
+/** 一轮对账的摘要（F3 响应） */
+export interface ReconcileRunVO {
+  batchNo: string;
+  elapsedMs: number;
+  checks: ReconcileCheckStatVO[];
+  message: string;
+}

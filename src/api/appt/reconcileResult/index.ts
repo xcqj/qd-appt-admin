@@ -1,4 +1,4 @@
-import type { ReconcileResultForm, ReconcileResultQuery, ReconcileResultVO } from '@/api/appt/reconcileResult/types';
+import type { ReconcileResultForm, ReconcileResultQuery, ReconcileResultVO, ReconcileRunVO } from '@/api/appt/reconcileResult/types';
 import type { PageResult } from '@/api/types';
 import type { AxiosPromise } from '@/utils/api-types';
 import request from '@/utils/request';
@@ -61,5 +61,15 @@ export const delReconcileResult = (id: string | number | Array<string | number>)
   return request({
     url: '/appt/admin/reconcileResult/' + id,
     method: 'delete'
+  });
+};
+
+/**
+ * 立即对账（七查，同步返回各查摘要）
+ */
+export const runReconcile = (): AxiosPromise<ReconcileRunVO> => {
+  return request({
+    url: '/appt/admin/reconcile/run',
+    method: 'post'
   });
 };
