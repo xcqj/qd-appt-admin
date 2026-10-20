@@ -71,6 +71,19 @@
         <el-table-column label="原因" align="center" prop="reason" />
         <el-table-column label="处理状态" align="center" prop="status" :formatter="(r) => labelOf(SUSPEND_STATUS_OPTIONS, r.status)" />
         <el-table-column label="操作人" align="center" prop="operator" />
+        <el-table-column label="操作" align="center" width="100" class-name="small-padding fixed-width">
+          <template #default="scope">
+            <el-button
+              v-if="scope.row.status === 'PENDING'"
+              type="primary"
+              link
+              icon="VideoPlay"
+              @click="handleHandle(scope.row)"
+              v-hasPermi="['appt:suspend:handle']"
+            >处理</el-button>
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
       </el-table>
 
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
@@ -80,9 +93,11 @@
 
 <script setup name="Suspend" lang="ts">
 import {
+  handleSuspend,
   listSuspend,
 } from '@/api/appt/suspend';
 import { SuspendQuery, SuspendVO } from '@/api/appt/suspend/types';
+import modal from '@/plugins/modal';
 import { useLoading } from '@/hooks/async/useLoading';
 import { useDateRangeQuery } from '@/hooks/form/useDateRangeQuery';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
@@ -159,6 +174,23 @@ resetCreateTimeDateRange();
 
 
 
+
+/**
+ * F2 停诊处理：批量停诊号源 + 被动退号 + 退款 + 通知（重复点击幂等，不会重复退号/退款）
+ */
+const handleHandle = async (row: any) => {
+  try {
+    await modal.confirm(
+      `确认处理批号「${row.batchNo}」（${labelOf(SCOPE_TYPE_OPTIONS, row.scopeType)} / ${row.scopeValue}）？\n将置停诊该范围排班与号源、把待支付/已预约的单批量被动退号并自动退款，操作不可撤销。`
+    );
+  } catch {
+    return;
+  }
+  const res: any = await handleSuspend(row.id);
+  const data = res?.data ?? {};
+  modal.msgSuccess(`处理完成：${data.message ?? ''}`);
+  getList();
+};
 
 /** 导出按钮操作 */
 const handleExport = () => {

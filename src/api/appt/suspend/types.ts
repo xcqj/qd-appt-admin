@@ -36,6 +36,19 @@ export interface SuspendVO {
 export interface SuspendForm extends BaseEntity {
 }
 
+/** F2 停诊处理结果摘要 */
+export interface SuspendHandleVO {
+  batchNo: string;
+  /** false = 登记早已处理，幂等返回 */
+  handled: boolean;
+  scheduleCount: number;
+  slotCount: number;
+  cancelCount: number;
+  refundCount: number;
+  skippedSigned: number;
+  message: string;
+}
+
 export interface SuspendQuery extends PageQuery {
   /**
    * 主键

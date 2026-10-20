@@ -1,4 +1,4 @@
-import type { SuspendForm, SuspendQuery, SuspendVO } from '@/api/appt/suspend/types';
+import type { SuspendForm, SuspendHandleVO, SuspendQuery, SuspendVO } from '@/api/appt/suspend/types';
 import type { PageResult } from '@/api/types';
 import type { AxiosPromise } from '@/utils/api-types';
 import request from '@/utils/request';
@@ -24,6 +24,18 @@ export const getSuspend = (id: string | number): AxiosPromise<SuspendVO> => {
   return request({
     url: '/appt/admin/suspend/' + id,
     method: 'get'
+  });
+};
+
+/**
+ * F2 停诊处理（入参是登记行 id，不是批号）：批量停诊号源 + 被动退号 + 退款 + 通知
+ * @param suspendId 登记行主键
+ */
+export const handleSuspend = (suspendId: string | number): AxiosPromise<SuspendHandleVO> => {
+  return request({
+    url: '/appt/admin/suspend/handle',
+    method: 'post',
+    data: { suspendId }
   });
 };
 
