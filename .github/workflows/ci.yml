@@ -1,0 +1,37 @@
+# 号源 QueueDepth · 管理后台 CI（E3）
+#
+# 三关：类型检查（vue-tsc）→ lint（oxlint）→ 生产构建，与本地验收口径一致。
+# 构建产物写到临时目录，避免污染工作区。
+name: admin-ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm exec vue-tsc --noEmit
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm exec vite build --mode production --outDir dist-ci
