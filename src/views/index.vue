@@ -1,370 +1,469 @@
 <template>
-  <div class="home">
-    <section class="hero-panel">
-      <div class="hero-copy">
-        <h1>RuoYi-Vue-Plus 控制台</h1>
-        <p>
-          企业级后台管理系统 重写 RuoYi-Vue 所有功能 集成 Sa-Token、Mybatis-Plus、WarmFlow、SpringDoc、Hutool、OSS
-          等组件
+  <div class="p-2 home-page">
+    <section class="board-head">
+      <div class="board-head__text">
+        <h2 class="board-title">今日运营</h2>
+        <p class="board-sub">
+          统计口径：就诊日为今天 · 数据截至 <span class="num">{{ data?.date || '—' }}</span>
         </p>
-        <div class="hero-actions">
-          <el-button type="primary" @click="goTarget('https://gitee.com/dromara/RuoYi-Vue-Plus')">查看源码</el-button>
-          <el-button plain @click="goTarget('https://plus-doc.dromara.org/#/ruoyi-vue-plus/changlog')">
-            更新日志
-          </el-button>
-        </div>
       </div>
+      <el-button icon="Refresh" :loading="loading" @click="load">刷新</el-button>
     </section>
 
-    <div class="content-grid">
-      <section class="section-card">
-        <div class="section-head">
-          <div>
-            <h2>项目矩阵</h2>
+    <div v-if="error" class="board-error">
+      <span class="board-error__text">看板加载失败：{{ error }}</span>
+      <el-button link type="primary" @click="load">重新加载</el-button>
+    </div>
+
+    <el-row :gutter="16" class="metric-row">
+      <el-col v-for="item in metrics" :key="item.key" :xs="24" :sm="12" :lg="6">
+        <div class="metric-card">
+          <div class="metric-label">
+            {{ item.label }}
+            <i v-if="item.alert && !loading" class="metric-dot" />
           </div>
+          <div v-if="loading" class="metric-skeleton" />
+          <div v-else class="metric-value">
+            <span class="num">{{ item.value }}</span>
+            <span class="metric-unit">{{ item.unit }}</span>
+          </div>
+          <p class="metric-hint">{{ item.hint }}</p>
         </div>
-        <div class="product-list">
-          <article v-for="product in products" :key="product.name" class="product-card">
-            <div class="product-top">
-              <div>
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.summary }}</p>
-              </div>
-              <span class="product-version">{{ product.version }}</span>
-            </div>
-            <div class="product-tags">
-              <el-tag v-for="tag in product.tags" :key="tag" effect="plain">{{ tag }}</el-tag>
-            </div>
-            <div class="product-actions">
-              <el-button type="primary" plain @click="goTarget(product.primaryUrl)">
-                {{ product.primaryLabel }}
-              </el-button>
-              <el-button plain @click="goTarget(product.secondaryUrl)">{{ product.secondaryLabel }}</el-button>
-            </div>
-          </article>
+      </el-col>
+    </el-row>
+
+    <div class="board-grid">
+      <section class="board-card">
+        <header class="board-card__head">
+          <h3>科室预约排行</h3>
+          <span class="board-card__sub">按今日挂号单数倒序，最多 5 项</span>
+        </header>
+        <div v-if="loading" class="dept-skeleton">
+          <div v-for="row in 3" :key="row" class="dept-skeleton__row" />
+        </div>
+        <div v-else-if="!deptTop5.length" class="board-empty">
+          今日暂无预约数据
+          <span class="board-empty__desc">患者下单后此处按科室汇总</span>
+        </div>
+        <div v-else class="dept-list">
+          <div v-for="(dept, index) in deptTop5" :key="dept.deptId" class="dept-row">
+            <span class="dept-rank num">{{ index + 1 }}</span>
+            <span class="dept-name">{{ dept.deptName }}</span>
+            <span class="dept-bar"><i :style="{ width: barWidth(dept.count) }" /></span>
+            <span class="dept-count num">{{ dept.count }}</span>
+          </div>
         </div>
       </section>
 
-      <section class="section-card capability-card">
-        <div class="section-head">
-          <div>
-            <h2>能力地图</h2>
-          </div>
-        </div>
-        <div class="capability-groups">
-          <article v-for="group in capabilityGroups" :key="group.title" class="capability-group">
-            <h3>{{ group.title }}</h3>
-            <ul>
-              <li v-for="item in group.items" :key="item">{{ item }}</li>
-            </ul>
-          </article>
+      <section class="board-card">
+        <header class="board-card__head">
+          <h3>快捷入口</h3>
+          <span class="board-card__sub">日常运营四个高频页</span>
+        </header>
+        <div class="shortcut-grid">
+          <button v-for="item in shortcuts" :key="item.path" type="button" class="shortcut" @click="goShortcut(item.path)">
+            <el-icon class="shortcut__icon"><component :is="item.icon" /></el-icon>
+            <span class="shortcut__label">{{ item.label }}</span>
+          </button>
         </div>
       </section>
     </div>
+
+    <section class="about-card">
+      <h3 class="about-title">关于本项目</h3>
+      <p><b>技术栈</b>Vue 3 + Element Plus / Spring Boot / MySQL + Redis / uni-app</p>
+      <p class="about-strong"><b>数据声明</b>演示数据全部虚构，支付走模拟渠道，不提供真实医疗服务。</p>
+      <p><b>实现边界</b>后端沿用上游开源脚手架 6.0.0 的鉴权与租户基建，挂号 / 支付 / 分诊 / 对账等业务模块全部自研。</p>
+      <p><b>演示账号</b>管理端 admin / admin123；分诊台与患者端账号见移动端登录页提示。</p>
+    </section>
   </div>
 </template>
 
 <script setup name="Index" lang="ts">
-const products = [
+import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+import type { PageResult } from '@/api/types';
+import { getDashboard } from '@/api/appt/dashboard';
+import type { DashboardVO } from '@/api/appt/dashboard/types';
+import { listSuspend } from '@/api/appt/suspend';
+import type { SuspendVO } from '@/api/appt/suspend/types';
+
+const router = useRouter();
+
+const data = ref<DashboardVO>();
+const pendingSuspend = ref<number>();
+const loading = ref(false);
+const error = ref('');
+
+/** 空值统一显示破折号，不把 undefined 渲染成 "undefined" */
+const dash = (value: string | number | null | undefined) => (value === null || value === undefined ? '—' : String(value));
+
+const metrics = computed(() => [
   {
-    name: 'RuoYi-Vue-Plus',
-    version: 'v6.0.0',
-    summary: '面向分布式集群场景的后台管理系统，保持现有业务接口与权限逻辑，适合先完成前端壳升级。',
-    tags: ['Vue 3', 'Element Plus', 'Spring Boot', 'Sa-Token'],
-    primaryLabel: '访问 GitHub',
-    primaryUrl: 'https://github.com/dromara/RuoYi-Vue-Plus',
-    secondaryLabel: '查看更新日志',
-    secondaryUrl: 'https://plus-doc.dromara.org/#/ruoyi-vue-plus/changlog'
+    key: 'booked',
+    label: '今日预约',
+    value: dash(data.value?.todayBooked),
+    unit: '单',
+    hint: '就诊日为今天的已预约 / 已签到 / 已完成',
+    alert: false
   },
   {
-    name: 'RuoYi-Cloud-Plus',
-    version: 'v6.0.0',
-    summary: '微服务通用权限管理系统，适合更复杂的服务治理场景，也可以沿用同样的前端升级思路。',
-    tags: ['Spring Cloud', 'Gateway', 'Nacos', 'Dubbo'],
-    primaryLabel: '访问 GitHub',
-    primaryUrl: 'https://github.com/dromara/RuoYi-Cloud-Plus',
-    secondaryLabel: '查看更新日志',
-    secondaryUrl: 'https://plus-doc.dromara.org/#/ruoyi-cloud-plus/changlog'
+    key: 'signed',
+    label: '今日签到',
+    value: dash(data.value?.todaySigned),
+    unit: '单',
+    hint: '今日已完成签到的挂号单',
+    alert: false
+  },
+  {
+    key: 'pay',
+    label: '支付成功率',
+    value: dash(data.value?.paySuccessRate),
+    unit: '%',
+    hint: '今日创建的支付单中已支付 / 已退款占比',
+    alert: false
+  },
+  {
+    key: 'pending',
+    label: '待处理停诊',
+    value: dash(pendingSuspend.value),
+    unit: '条',
+    hint: '停诊登记中尚未处理的数量',
+    alert: (pendingSuspend.value ?? 0) > 0
   }
+]);
+
+const deptTop5 = computed(() => data.value?.deptTop5 ?? []);
+
+/** 条形宽度按最大值归一，最小 6% 保证可点可见 */
+function barWidth(count: number): string {
+  const max = Math.max(...deptTop5.value.map((item) => item.count), 0);
+  if (!max || !count) {
+    return '6%';
+  }
+  return `${Math.max(Math.round((count / max) * 100), 6)}%`;
+}
+
+const shortcuts = [
+  { label: '预约单', path: '/appt/registration', icon: 'Tickets' },
+  { label: '支付单', path: '/appt/payment', icon: 'Wallet' },
+  { label: '停诊处理', path: '/appt/suspend', icon: 'Bell' },
+  { label: '号源台账', path: '/appt/slot', icon: 'Calendar' }
 ];
 
-const capabilityGroups = [
-  {
-    title: '后端基建',
-    items: ['Spring Boot / Spring Cloud', 'Sa-Token 认证与权限', 'MySQL / Redis', '代码生成器']
-  },
-  {
-    title: '平台能力',
-    items: ['动态菜单与按钮权限', '监控、日志、在线用户', '任务调度与工作流', '文件存储与多云适配']
-  },
-  {
-    title: '前端方向',
-    items: ['UI 卡片化', '主题与布局统一', '通用页面容器规范化', '企业化布局']
+function goShortcut(path: string) {
+  if (router.currentRoute.value.path !== path) {
+    router.push(path);
   }
-];
+}
 
-const goTarget = (url: string) => {
-  window.open(url, '__blank');
-};
+/** 看板与停诊计数并行取，任一失败只在区块内提示，不整页报错 */
+async function load() {
+  loading.value = true;
+  error.value = '';
+  const [board, pending] = await Promise.allSettled([
+    getDashboard(),
+    listSuspend({ pageNum: 1, pageSize: 1, status: 'PENDING' })
+  ]);
+  if (board.status === 'fulfilled') {
+    data.value = board.value.data;
+  } else {
+    error.value = (board.reason as Error)?.message || '接口异常';
+  }
+  if (pending.status === 'fulfilled') {
+    pendingSuspend.value = (pending.value.data as PageResult<SuspendVO>)?.total ?? 0;
+  }
+  loading.value = false;
+}
+
+onMounted(load);
 </script>
 
 <style lang="scss" scoped>
-.home {
+.home-page {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
-.hero-panel,
-.section-card {
-  border-radius: 28px;
-  border: 1px solid var(--app-surface-border);
-  background: var(--app-surface-bg);
-  box-shadow: var(--app-shadow-sm);
-  backdrop-filter: blur(18px);
+.num {
+  font-variant-numeric: tabular-nums;
 }
 
-.hero-panel {
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
-  gap: 18px;
-  padding: 30px;
-  background: radial-gradient(circle at top left, rgba(53, 109, 255, 0.16), transparent 30%), var(--app-surface-bg);
-}
-
-.hero-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-
-  h1 {
-    margin: 0;
-    font-size: clamp(30px, 4vw, 46px);
-    line-height: 1.06;
-    letter-spacing: -0.04em;
-    color: var(--app-text-title);
-  }
-
-  p {
-    margin: 0;
-    max-width: 760px;
-    color: var(--app-text-muted);
-    font-size: 15px;
-    line-height: 1.8;
-  }
-}
-
-.hero-badge {
-  display: inline-flex;
-  width: fit-content;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(53, 109, 255, 0.12);
-  color: var(--app-accent-strong);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.hero-stats {
-  display: grid;
-  gap: 12px;
-}
-
-.stat-card {
-  padding: 18px 20px;
-  border-radius: 22px;
-  background: var(--app-elevated-soft-bg);
-  border: 1px solid var(--app-surface-border);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-
-  strong {
-    color: var(--app-text-title);
-    font-size: 24px;
-    letter-spacing: -0.03em;
-  }
-
-  span {
-    color: var(--app-text-muted);
-    font-size: 13px;
-  }
-}
-
-.content-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
-  gap: 20px;
-}
-
-.section-card {
-  padding: 24px;
-}
-
-.section-head {
+.board-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
+  gap: 16px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e6ebf2;
+}
 
-  h2 {
-    margin: 6px 0 0;
-    color: var(--app-text-title);
-    font-size: 26px;
-    letter-spacing: -0.03em;
+.board-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #1f2d3d;
+}
+
+.board-sub {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #5a667e;
+}
+
+.board-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: rgba(209, 67, 67, 0.08);
+  border: 1px solid rgba(209, 67, 67, 0.24);
+
+  &__text {
+    font-size: 13px;
+    color: #d14343;
   }
 }
 
-.section-kicker {
-  color: var(--app-text-muted);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.metric-row {
+  row-gap: 16px;
 }
 
-.product-list,
-.capability-groups {
+.metric-card {
+  height: 100%;
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e6ebf2;
+  box-shadow: 0 2px 8px rgba(31, 45, 61, 0.04);
+}
+
+.metric-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #5a667e;
+}
+
+.metric-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d98e04;
+}
+
+.metric-value {
+  margin-top: 10px;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #1f7a8c;
+}
+
+.metric-unit {
+  margin-left: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #8a94a6;
+}
+
+.metric-skeleton {
+  height: 34px;
+  margin-top: 10px;
+  width: 60%;
+  border-radius: 8px;
+  background: #eef2f6;
+}
+
+.metric-hint {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #8a94a6;
+}
+
+.board-grid {
   display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
   gap: 16px;
 }
 
-.product-card {
-  padding: 22px;
-  border-radius: 24px;
-  background: var(--app-elevated-soft-bg);
-  border: 1px solid var(--app-surface-border);
+.board-card {
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e6ebf2;
+}
+
+.board-card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2d3d;
+  }
+}
+
+.board-card__sub {
+  font-size: 12px;
+  color: #8a94a6;
+}
+
+.dept-list,
+.dept-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.dept-row {
+  display: grid;
+  grid-template-columns: 20px 96px minmax(0, 1fr) 40px;
+  align-items: center;
+  gap: 10px;
+}
+
+.dept-rank {
+  font-size: 12px;
+  color: #8a94a6;
+}
+
+.dept-name {
+  font-size: 13px;
+  color: #1f2d3d;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.dept-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(31, 122, 140, 0.12);
+  overflow: hidden;
+
+  i {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: #1f7a8c;
+  }
+}
+
+.dept-count {
+  font-size: 13px;
+  text-align: right;
+  color: #5a667e;
+}
+
+.dept-skeleton__row {
+  height: 12px;
+  border-radius: 8px;
+  background: #eef2f6;
+}
+
+.board-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 28px 0;
+  font-size: 14px;
+  color: #5a667e;
+
+  &__desc {
+    font-size: 12px;
+    color: #8a94a6;
+  }
+}
+
+.shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.shortcut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 12px;
+  border-radius: 12px;
+  border: 1px solid #e6ebf2;
+  background: #f5f7fa;
+  color: #1f2d3d;
+  cursor: pointer;
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease;
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: var(--app-shadow-sm);
-    border-color: rgba(53, 109, 255, 0.2);
+    border-color: rgba(31, 122, 140, 0.32);
+    background: #ffffff;
   }
 }
 
-.product-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
+.shortcut__icon {
+  font-size: 20px;
+  color: #1f7a8c;
+}
 
-  h3 {
-    margin: 0 0 8px;
-    color: var(--app-text-title);
-    font-size: 22px;
-    letter-spacing: -0.03em;
+.shortcut__label {
+  font-size: 13px;
+}
+
+.about-card {
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: #eef2f6;
+
+  b {
+    display: inline-block;
+    min-width: 72px;
+    margin-right: 8px;
+    font-weight: 600;
+    color: #1f2d3d;
   }
 
   p {
-    margin: 0;
-    color: var(--app-text-muted);
+    margin: 8px 0 0;
+    font-size: 13px;
     line-height: 1.8;
+    color: #5a667e;
   }
 }
 
-.product-version {
-  flex-shrink: 0;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(53, 109, 255, 0.12);
-  color: var(--app-accent-strong);
-  font-size: 12px;
-  font-weight: 700;
+.about-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2d3d;
 }
 
-.product-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 18px;
+.about-strong {
+  color: #16636f !important;
 }
 
-.product-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
-}
-
-.capability-card {
-  background: radial-gradient(circle at top right, rgba(14, 165, 233, 0.12), transparent 28%), var(--app-surface-bg);
-}
-
-.capability-group {
-  padding: 18px 18px 18px 20px;
-  border-radius: 22px;
-  background: var(--app-elevated-soft-bg);
-  border: 1px solid var(--app-surface-border);
-
-  h3 {
-    margin: 0 0 12px;
-    color: var(--app-text-title);
-    font-size: 18px;
-  }
-
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: grid;
-    gap: 10px;
-  }
-
-  li {
-    position: relative;
-    padding-left: 16px;
-    color: var(--app-text-muted);
-    line-height: 1.7;
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 10px;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--app-accent-strong);
-      box-shadow: 0 0 0 5px rgba(53, 109, 255, 0.12);
-    }
-  }
-}
-
-@media (max-width: 960px) {
-  .hero-panel,
-  .content-grid {
+@media (max-width: 1000px) {
+  .board-grid {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px) {
-  .hero-panel,
-  .section-card {
-    padding: 20px;
-    border-radius: 22px;
-  }
-
-  .product-top {
-    flex-direction: column;
-  }
-}
-
-html.dark {
-  .hero-panel {
-    background: radial-gradient(circle at top left, rgba(53, 109, 255, 0.18), transparent 30%), var(--app-surface-bg);
   }
 }
 </style>

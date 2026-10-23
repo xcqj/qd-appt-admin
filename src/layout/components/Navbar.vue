@@ -47,14 +47,6 @@
             </el-popover>
           </div>
         </el-tooltip>
-        <el-tooltip content="Github" effect="dark" placement="bottom">
-          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
-        <el-tooltip :content="$t('navbar.document')" effect="dark" placement="bottom">
-          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
         <el-tooltip :content="$t('navbar.full')" effect="dark" placement="bottom">
           <screenfull id="screenfull" class="right-menu-item hover-effect" />
         </el-tooltip>
@@ -99,7 +91,7 @@
 <script setup lang="ts">
 import type { ElMessageBoxOptions } from 'element-plus';
 import { CaretBottom } from '@element-plus/icons-vue';
-import appLogo from '@/assets/logo/logo.png';
+import appLogo from '@/assets/logo/logo-compact.png';
 import { NavTypeEnum } from '@/enums/NavTypeEnum';
 import tab from '@/plugins/tab';
 import router from '@/router';
@@ -172,28 +164,18 @@ const handleCommand = (command: string) => {
   }
 
   .navtop-logo-shell {
-    width: 48px;
+    width: 40px;
     height: 40px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     margin-right: 12px;
     flex-shrink: 0;
-    border-radius: 14px;
-    border: 1px solid var(--app-surface-border);
-    background: var(--app-surface-bg);
-    box-shadow: var(--app-shadow-sm);
-    transition:
-      transform 0.2s ease,
-      border-color 0.2s ease,
-      box-shadow 0.2s ease;
+    transition: transform 0.2s ease;
 
+    /* 母标自带牌形，外面不再套框（DESIGN §12.2「避免框套框」） */
     &:hover {
       transform: translateY(-1px);
-      border-color: rgba(64, 158, 255, 0.22);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.76),
-        0 10px 22px rgba(15, 23, 42, 0.08);
     }
   }
 
@@ -201,7 +183,7 @@ const handleCommand = (command: string) => {
     width: 32px;
     height: 32px;
     display: block;
-    border-radius: 11px;
+    border-radius: 0;
   }
 
   .topbar-container {

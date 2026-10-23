@@ -2,12 +2,13 @@
   <div class="login">
     <div class="login-shell">
       <section class="login-brand">
-        <span class="brand-pill">Plus UI Workspace</span>
-        <h1 class="brand-title">企业级后台管理系统</h1>
+        <img class="brand-logo" src="@/assets/logo/logo-white.png" alt="号源" />
+        <span class="brand-pill">门诊预约挂号 · 技术演示</span>
+        <h1 class="brand-title">号源 · 门诊预约挂号管理后台</h1>
         <p class="brand-desc">
-          真正面向企业级的应用框架 组件化 模块化 轻耦合 高扩展 针对企业痛点 业界一流技术栈
+          院区科室、排班号源、限购与黑名单、支付退款、分诊签到与停诊处理，全链路自研业务模块。
           <br />
-          重写 RuoYi-Vue 所有功能 集成 Sa-Token、Mybatis-Plus、WarmFlow、SpringDoc、Hutool、OSS 定期同步。
+          演示数据全部虚构，支付走模拟渠道，不提供真实医疗服务。
         </p>
         <div class="brand-highlights">
           <span v-for="item in highlights" :key="item" class="highlight-chip">{{ item }}</span>
@@ -23,9 +24,9 @@
       <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
         <div class="title-box">
           <div>
-            <p class="eyebrow">Workspace Sign In</p>
+            <p class="eyebrow">演示环境登录</p>
             <h3 class="title">{{ title }}</h3>
-            <p class="subtitle">使用当前账号体系登录到业务工作台。</p>
+            <p class="subtitle">使用演示账号登录运营工作台。</p>
           </div>
           <lang-select />
         </div>
@@ -125,11 +126,11 @@ import { useUserStore } from '@/store/modules/user';
 const title = import.meta.env.VITE_APP_TITLE;
 const currentYear = new Date().getFullYear();
 const quickStats = [
-  { label: '细粒度权限管理', value: '动态权限控制' },
-  { label: '主流技术栈', value: '全栈技术集成' },
-  { label: 'UI样式', value: '卡片式' }
+  { label: '预约挂号主链路', value: '患者端' },
+  { label: '签到与停诊', value: '分诊台' },
+  { label: '运营与对账', value: '管理端' }
 ];
-const highlights = ['技术栈全面升级', '动态菜单', '多主题布局', '深浅色主题'];
+const highlights = ['院区科室排班', '限购与黑名单', '支付与退款', '分诊签到与停诊'];
 const userStore = useUserStore();
 const router = useRouter();
 const { t } = useI18n();
@@ -286,6 +287,13 @@ onMounted(() => {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
     linear-gradient(135deg, rgba(53, 109, 255, 0.32), rgba(15, 23, 42, 0.24));
+}
+
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  display: block;
+  margin-bottom: 18px;
 }
 
 .brand-pill {

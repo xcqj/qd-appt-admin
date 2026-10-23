@@ -2,16 +2,11 @@
   <div class="sidebar-logo-container" :class="{ collapse: collapse }">
     <transition :enter-active-class="animateConfig.logoAnimate.enter" mode="out-in">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo" />
-        <h1 v-else class="sidebar-title">
-          {{ title }}
-        </h1>
+        <img :src="logoMark" class="sidebar-logo" alt="号源" />
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo" />
-        <h1 class="sidebar-title">
-          {{ title }}
-        </h1>
+        <img :src="logoMark" class="sidebar-logo" alt="号源" />
+        <h1 class="sidebar-title">{{ title }}</h1>
       </router-link>
     </transition>
   </div>
@@ -19,7 +14,8 @@
 
 <script setup lang="ts">
 import animateConfig from '@/animate';
-import logo from '@/assets/logo/logo.png';
+import logoCompact from '@/assets/logo/logo-compact.png';
+import logoCompactWhite from '@/assets/logo/logo-compact-white.png';
 import { NavTypeEnum } from '@/enums/NavTypeEnum';
 import { useSettingsStore } from '@/store/modules/settings';
 
@@ -35,8 +31,8 @@ const settingsStore = useSettingsStore();
 const sideTheme = computed(() => settingsStore.sideTheme);
 const isTopNav = computed(() => settingsStore.navType === NavTypeEnum.TOP);
 const isDarkSide = computed(() => !isTopNav.value && sideTheme.value === 'theme-dark');
-const logoSurface = computed(() => (isDarkSide.value ? 'rgba(255, 255, 255, 0.04)' : '#f8fafc'));
-const logoBorder = computed(() => (isDarkSide.value ? 'rgba(148, 163, 184, 0.12)' : '#e5e7eb'));
+/** 简化档母标：深色侧栏用反白版（DESIGN §12.2 / §12.3） */
+const logoMark = computed(() => (isDarkSide.value ? logoCompactWhite : logoCompact));
 const logoTextColor = computed(() => (isDarkSide.value ? '#f8fbff' : 'var(--app-text-title)'));
 </script>
 
@@ -70,16 +66,15 @@ const logoTextColor = computed(() => (isDarkSide.value ? '#f8fbff' : 'var(--app-
     justify-content: center;
     gap: 8px;
     border-radius: 14px;
-    background: v-bind(logoSurface);
-    border: 1px solid v-bind(logoBorder);
 
+    /* 母标自带牌形，外面不再套框（DESIGN §12.2「避免框套框」） */
     & .sidebar-logo {
       width: 28px;
       height: 28px;
       vertical-align: middle;
       margin-right: 0;
       margin-left: 0;
-      border-radius: 10px;
+      border-radius: 0;
       box-shadow: none;
     }
 
