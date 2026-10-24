@@ -30,7 +30,8 @@ export default defineConfig(({ mode, command }) => {
       open: true,
       proxy: {
         [env.VITE_APP_BASE_API]: {
-          target: 'http://localhost:8082',
+          // 可用 VITE_PROXY_TARGET 覆盖（截图脚本指向关验证码的 18082），默认仍是 8082
+          target: env.VITE_PROXY_TARGET || 'http://localhost:8082',
           changeOrigin: true,
           ws: true,
           rewrite: path => path.replace(new RegExp('^' + env.VITE_APP_BASE_API), '')
