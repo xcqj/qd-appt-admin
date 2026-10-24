@@ -102,7 +102,7 @@
     </div>
 
     <div class="el-register-footer">
-      <span>Copyright © 2018-{{ currentYear }} 疯狂的狮子Li All Rights Reserved.</span>
+      <span>Copyright © 2016-{{ currentYear }} 号源演示系统 · 数据全部虚构</span>
     </div>
   </div>
 </template>

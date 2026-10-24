@@ -83,25 +83,6 @@
               <span v-else>{{ $t('login.logging') }}</span>
             </el-button>
           </el-form-item>
-
-          <el-divider class="social-divider">第三方登录</el-divider>
-          <div class="social-actions">
-            <el-button circle :title="$t('login.social.wechat')" @click="doSocialLogin('wechat')">
-              <svg-icon icon-class="wechat" />
-            </el-button>
-            <el-button circle :title="$t('login.social.maxkey')" @click="doSocialLogin('maxkey')">
-              <svg-icon icon-class="maxkey" />
-            </el-button>
-            <el-button circle :title="$t('login.social.topiam')" @click="doSocialLogin('topiam')">
-              <svg-icon icon-class="topiam" />
-            </el-button>
-            <el-button circle :title="$t('login.social.gitee')" @click="doSocialLogin('gitee')">
-              <svg-icon icon-class="gitee" />
-            </el-button>
-            <el-button circle :title="$t('login.social.github')" @click="doSocialLogin('github')">
-              <svg-icon icon-class="github" />
-            </el-button>
-          </div>
         </el-form>
       </section>
     </div>
@@ -114,9 +95,7 @@
 import { to } from 'await-to-js';
 import { useI18n } from 'vue-i18n';
 import { getCodeImg } from '@/api/login';
-import { authRouterUrl } from '@/api/system/social/auth';
 import { LoginData } from '@/api/types';
-import { HttpStatus } from '@/enums/RespEnum';
 import { useUserStore } from '@/store/modules/user';
 
 const title = import.meta.env.VITE_APP_TITLE;
@@ -227,16 +206,6 @@ const getLoginData = () => {
     password: username === null ? String(loginForm.value.password) : '',
     rememberMe: rememberMe === 'true'
   } as LoginData;
-};
-
-const doSocialLogin = (type: string) => {
-  authRouterUrl(type).then((res: any) => {
-    if (res.code === HttpStatus.SUCCESS) {
-      window.location.href = res.data;
-    } else {
-      ElMessage.error(res.msg);
-    }
-  });
 };
 
 onMounted(() => {
@@ -456,21 +425,6 @@ onMounted(() => {
   width: 100%;
   height: 44px;
   border-radius: 8px;
-}
-
-.social-divider {
-  margin: 12px 0 16px;
-
-  :deep(.el-divider__text) {
-    font-size: 12px;
-    color: #8a94a6;
-  }
-}
-
-.social-actions {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
 }
 
 .login-footer {
