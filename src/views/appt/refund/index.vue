@@ -64,7 +64,7 @@
         </div>
       </template>
 
-      <el-table v-loading="loading" border class="data-table" :data="refundList">
+      <el-table v-loading="loading" border class="data-table" :data="refundList" empty-text="暂无退款单">
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="退款单号" align="center" prop="refundNo" />
         <el-table-column label="支付单号" align="center" prop="paymentNo" width="160" />
@@ -73,7 +73,11 @@
         <el-table-column label="科室" align="center" prop="deptName" min-width="110" />
         <el-table-column label="院区" align="center" prop="campusName" min-width="100" />
         <el-table-column label="退款金额" align="center" prop="amount" />
-        <el-table-column label="退款状态" align="center" prop="status" :formatter="(r) => labelOf(REFUND_STATUS_OPTIONS, r.status)" />
+        <el-table-column label="退款状态" align="center" prop="status">
+          <template #default="scope">
+            <appt-status-tag :options="REFUND_STATUS_OPTIONS" :value="scope.row.status" />
+          </template>
+        </el-table-column>
         <el-table-column label="退款原因" align="center" prop="reason" />
         <el-table-column label="退款时间" align="center" prop="refundTime" width="180">
           <template #default="scope">

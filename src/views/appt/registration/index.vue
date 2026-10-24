@@ -106,7 +106,7 @@
         </div>
       </template>
 
-      <el-table v-loading="loading" border class="data-table" :data="registrationList">
+      <el-table v-loading="loading" border class="data-table" :data="registrationList" empty-text="该条件下暂无挂号单">
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="挂号单号" align="center" prop="registrationNo" />
         <el-table-column label="账号" align="center" prop="userId" />
@@ -124,8 +124,16 @@
         </el-table-column>
         <el-table-column label="挂号费" align="center" prop="fee" />
         <el-table-column label="有效标记" align="center" prop="activeFlag"  :formatter="(r) => labelOf(REG_ACTIVE_FLAG_OPTIONS, r.activeFlag)" />
-        <el-table-column label="结算状态" align="center" prop="settleStatus" :formatter="(r) => labelOf(SETTLE_STATUS_OPTIONS, r.settleStatus)" />
-        <el-table-column label="挂号状态" align="center" prop="status" :formatter="(r) => labelOf(REG_STATUS_OPTIONS, r.status)" />
+        <el-table-column label="结算状态" align="center" prop="settleStatus">
+          <template #default="scope">
+            <appt-status-tag :options="SETTLE_STATUS_OPTIONS" :value="scope.row.settleStatus" />
+          </template>
+        </el-table-column>
+        <el-table-column label="挂号状态" align="center" prop="status">
+          <template #default="scope">
+            <appt-status-tag :options="REG_STATUS_OPTIONS" :value="scope.row.status" />
+          </template>
+        </el-table-column>
         <el-table-column label="签到时间" align="center" prop="signTime" width="180">
           <template #default="scope">
             <span>{{ parseTime(scope.row.signTime, '{y}-{m}-{d}') }}</span>

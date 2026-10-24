@@ -89,7 +89,7 @@ const renderChart = () => {
       {
         type: 'bar',
         barMaxWidth: 48,
-        itemStyle: { borderRadius: [6, 6, 0, 0], color: '#409EFF' },
+        itemStyle: { borderRadius: [6, 6, 0, 0], color: '#1F7A8C' },
         data: rows.map((r) => r.count)
       }
     ]

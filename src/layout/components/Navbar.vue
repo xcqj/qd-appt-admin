@@ -350,7 +350,7 @@ const handleCommand = (command: string) => {
         &:hover {
           background: var(--app-accent-soft);
           color: var(--app-accent-strong);
-          border-color: rgba(64, 158, 255, 0.16);
+          border-color: rgba(31, 122, 140, 0.16);
         }
       }
     }
@@ -389,7 +389,7 @@ const handleCommand = (command: string) => {
 
         &:hover {
           background: var(--app-accent-soft);
-          border-color: rgba(64, 158, 255, 0.16);
+          border-color: rgba(31, 122, 140, 0.16);
         }
 
         .user-avatar {

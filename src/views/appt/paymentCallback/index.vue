@@ -66,7 +66,11 @@
         <el-table-column label="通知ID" align="center" prop="notifyId" />
         <el-table-column label="渠道" align="center" prop="channel" :formatter="(r) => labelOf(PAY_CHANNEL_OPTIONS, r.channel)" />
         <el-table-column label="验签结果" align="center" prop="signFlag"  :formatter="(r) => labelOf(SIGN_FLAG_OPTIONS, r.signFlag)" />
-        <el-table-column label="处理状态" align="center" prop="processStatus" :formatter="(r) => labelOf(CALLBACK_STATUS_OPTIONS, r.processStatus)" />
+        <el-table-column label="处理状态" align="center" prop="processStatus">
+          <template #default="scope">
+            <appt-status-tag :options="CALLBACK_STATUS_OPTIONS" :value="scope.row.processStatus" />
+          </template>
+        </el-table-column>
       </el-table>
 
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />

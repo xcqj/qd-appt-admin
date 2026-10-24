@@ -98,3 +98,25 @@ html.dark {
     }
   }
 }
+
+// --- 表格密度与空态（S12.5，admin AGENTS §13.3） ---
+.el-table {
+  .el-table__cell {
+    padding: 12px 0;
+    font-size: 13px;
+  }
+
+  th.el-table__cell > .cell {
+    font-weight: 600;
+  }
+
+  .el-table__empty-block {
+    min-height: 160px;
+  }
+
+  .el-table__empty-text {
+    font-size: 13px;
+    color: var(--app-text-muted);
+    line-height: 1.6;
+  }
+}

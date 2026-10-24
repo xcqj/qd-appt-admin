@@ -55,7 +55,7 @@
         </div>
       </template>
 
-      <el-table v-loading="loading" border class="data-table" :data="slotLedgerList">
+      <el-table v-loading="loading" border class="data-table" :data="slotLedgerList" empty-text="暂无台账记录">
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="号源" align="center" prop="slotId" />
         <el-table-column label="动作" align="center" prop="action" :formatter="(r) => labelOf(LEDGER_ACTION_OPTIONS, r.action)" />

@@ -89,7 +89,7 @@
         </div>
       </template>
 
-      <el-table v-loading="loading" border class="data-table" :data="slotList" @selection-change="handleSelectionChange">
+      <el-table v-loading="loading" border class="data-table" :data="slotList" @selection-change="handleSelectionChange" empty-text="暂无号源">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="医务人员" align="center" prop="staffName" min-width="110" />

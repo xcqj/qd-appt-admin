@@ -165,7 +165,7 @@ watch(
 
   .active {
     border-color: var(--el-color-primary);
-    background: rgba(64, 158, 255, 0.12);
+    background: rgba(31, 122, 140, 0.12);
     color: var(--el-color-primary);
   }
 }

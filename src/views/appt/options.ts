@@ -2,9 +2,13 @@
  * appt 业务线值选项（线值权威：docs/database-design.md §2 / 契约 §2.7，取自 DDL 列注释）
  * 用途：筛选区/表单下拉的固定选项、列表值的中文映射。
  */
+export type StatusTagType = 'primary' | 'success' | 'info' | 'warning' | 'danger';
+
 export interface ApptOption {
   label: string;
   value: string | number | boolean | null;
+  /** 仅状态类选项需要：列表里用 el-tag 渲染时的语义类型（映射见 admin/AGENTS §13.2） */
+  type?: StatusTagType;
 }
 
 /** 科室层级 */
@@ -118,21 +122,21 @@ export const SCHEDULE_STATUS_OPTIONS: ApptOption[] = [
 
 /** 挂号单状态 */
 export const REG_STATUS_OPTIONS: ApptOption[] = [
-  { label: '待支付', value: 'WAIT_PAY' },
-  { label: '已预约', value: 'BOOKED' },
-  { label: '已签到', value: 'SIGNED' },
-  { label: '已完成', value: 'COMPLETED' },
-  { label: '已关闭', value: 'CLOSED' },
-  { label: '已退号（主动）', value: 'CANCELED_ACTIVE' },
-  { label: '已退号（被动）', value: 'CANCELED_PASSIVE' },
-  { label: '已爽约', value: 'NOSHOW' }
+  { label: '待支付', value: 'WAIT_PAY', type: 'warning' },
+  { label: '已预约', value: 'BOOKED', type: 'primary' },
+  { label: '已签到', value: 'SIGNED', type: 'success' },
+  { label: '已完成', value: 'COMPLETED', type: 'success' },
+  { label: '已关闭', value: 'CLOSED', type: 'info' },
+  { label: '已退号（主动）', value: 'CANCELED_ACTIVE', type: 'info' },
+  { label: '已退号（被动）', value: 'CANCELED_PASSIVE', type: 'info' },
+  { label: '已爽约', value: 'NOSHOW', type: 'danger' }
 ];
 
 /** 结算状态 */
 export const SETTLE_STATUS_OPTIONS: ApptOption[] = [
-  { label: '无结算', value: 'NONE' },
-  { label: '待退费', value: 'WAIT_REFUND' },
-  { label: '已退费', value: 'REFUNDED' }
+  { label: '无结算', value: 'NONE', type: 'info' },
+  { label: '待退费', value: 'WAIT_REFUND', type: 'warning' },
+  { label: '已退费', value: 'REFUNDED', type: 'success' }
 ];
 
 /** 签到方式 */
@@ -149,10 +153,10 @@ export const CANCEL_TYPE_OPTIONS: ApptOption[] = [
 
 /** 支付状态 */
 export const PAY_STATUS_OPTIONS: ApptOption[] = [
-  { label: '待支付', value: 'WAIT_PAY' },
-  { label: '已支付', value: 'PAID' },
-  { label: '已关闭', value: 'CLOSED' },
-  { label: '已退款', value: 'REFUNDED' }
+  { label: '待支付', value: 'WAIT_PAY', type: 'warning' },
+  { label: '已支付', value: 'PAID', type: 'success' },
+  { label: '已关闭', value: 'CLOSED', type: 'info' },
+  { label: '已退款', value: 'REFUNDED', type: 'info' }
 ];
 
 /** 支付渠道 */
@@ -163,17 +167,17 @@ export const PAY_CHANNEL_OPTIONS: ApptOption[] = [
 
 /** 退款状态 */
 export const REFUND_STATUS_OPTIONS: ApptOption[] = [
-  { label: '待退款', value: 'WAIT_REFUND' },
-  { label: '已退款', value: 'REFUNDED' },
-  { label: '退款失败', value: 'FAILED' }
+  { label: '待退款', value: 'WAIT_REFUND', type: 'warning' },
+  { label: '已退款', value: 'REFUNDED', type: 'success' },
+  { label: '退款失败', value: 'FAILED', type: 'danger' }
 ];
 
 /** 回调处理状态 */
 export const CALLBACK_STATUS_OPTIONS: ApptOption[] = [
-  { label: '待处理', value: 'PENDING' },
-  { label: '成功', value: 'SUCCESS' },
-  { label: '重复忽略', value: 'IGNORED' },
-  { label: '失败', value: 'FAILED' }
+  { label: '待处理', value: 'PENDING', type: 'warning' },
+  { label: '成功', value: 'SUCCESS', type: 'success' },
+  { label: '重复忽略', value: 'IGNORED', type: 'info' },
+  { label: '失败', value: 'FAILED', type: 'danger' }
 ];
 
 /** 对账检查项 */
@@ -217,8 +221,8 @@ export const SCOPE_TYPE_OPTIONS: ApptOption[] = [
 
 /** 停诊处理状态 */
 export const SUSPEND_STATUS_OPTIONS: ApptOption[] = [
-  { label: '待处理', value: 'PENDING' },
-  { label: '已处理', value: 'HANDLED' }
+  { label: '待处理', value: 'PENDING', type: 'warning' },
+  { label: '已处理', value: 'HANDLED', type: 'success' }
 ];
 
 /** 台账动作 */

@@ -113,3 +113,57 @@
 - 分层边界：Controller 接参校验权限 → Service 业务规则与事务 → Mapper；跨模块仅走 Service 接口。
 - 发现设计与实现冲突，先报告再动手；文档冲突先识别，由最新明确决定裁决。
 - CI：编译 + 单元测试（前端为 `vue-tsc` + `oxlint` + `build`）。
+## 13. 后台视觉基线（S12.5 定，2026-10-24）
+
+> 权威链：**移动端唯一视觉源是 `../app/DESIGN.md`**；后台没有独立 DESIGN 文档，本节是后台的对应物。
+> 冲突时：颜色/字号/间距/圆角一律回 DESIGN §2–§4 的取值，本节只做「后台怎么用」的补充，不新造色值。
+
+### 13.1 主题色（Element Plus 三层同源，缺一层就会一半蓝一半青）
+
+| 层 | 文件 | 作用 |
+|---|---|---|
+| 编译期 SCSS | `src/assets/styles/tokens/_sass-vars.scss` | `$color-primary` 等，供 `_exports.scss` 与 Element 覆盖使用 |
+| 运行前默认值 | `src/settings.ts` | `theme: '#1F7A8C'`，首屏渲染前注入，避免闪一下框架蓝 |
+| 运行时 CSS 变量 | `src/utils/theme.ts` | `--el-color-primary` 全阶 + 派生 light/dark 阶 |
+
+语义色（只取 `DESIGN §2.1`）：主色 `#1F7A8C`、主色暗 `#16636F`、成功 `#2E9E6B`、警告 `#D98E04`、危险 `#D14343`、信息 `#3B82C4`。
+中性色：画布 `#F5F7FA`、卡片 `#FFFFFF`、浅表面 `#EEF2F6`、描边 `#E6EBF2`、文字三级 `#1F2D3D / #5A667E / #8A94A6`。
+圆角：卡片 `16px`、输入与按钮 `8px`、标签 `4px`、胶囊 `999px`。阴影只两档：卡片 `0 2px 8px rgba(31,45,61,.04)`、浮层 `0 8px 32px rgba(31,45,61,.12)`。
+
+### 13.2 状态标签（唯一出处：`src/views/appt/options.ts` 的 options + `type` 字段）
+
+- 业务状态**不再以纯文本渲染**，统一走 `el-tag`（`size="small"`、`effect="light"`、`:type` 取映射），`type` 语义也只从下表派生：
+
+| 业务 | 线值 → type |
+|---|---|
+| 挂号 | `WAIT_PAY`→warning、`BOOKED`→primary、`SIGNED`→success、`COMPLETED`→success、`CLOSED`→info、`CANCELED_ACTIVE`→info、`CANCELED_PASSIVE`→info、`NOSHOW`→danger |
+| 支付 | `WAIT_PAY`→warning、`PAID`→success、`CLOSED`→info、`REFUNDED`→info |
+| 退款 | `WAIT_REFUND`→warning、`REFUNDED`→success、`FAILED`→danger |
+| 停诊登记 | `PENDING`→warning、`HANDLED`→success |
+| 支付回调 | `PENDING`→warning、`SUCCESS`→success、`IGNORED`→info |
+| 布尔状态 | `status === true`（停用/已解除）→ danger，`false`（正常/生效）→ success |
+
+- 新增业务状态时**先补 options 的 `type`，再改页面**；页面里禁止再出现 `:type="row.x === 'X' ? 'danger' : 'success'"` 这种内联三元。
+
+### 13.3 表格与空态
+
+- 列表统一 `el-table`：默认 `size`、行高约 `48px`、表头底色 `#F5F7FA` + `13px` 次色文字；金额列右对齐且沿用字符串渲染。
+- 空态写「业务主语 + 条件」：如「今日暂无预约数据」「该院区暂未开放科室」，不写裸「暂无数据」。
+- 分页靠右；工具栏按钮顺序沿用 `search-panel` / `toolbar-shell` 现有壳，不新增第三套布局类。
+
+### 13.4 表单与弹窗
+
+- `el-form` 统一 `label-width`，必填项由 `rules` 自动出红星；错误文案在控件下方 `12px` 危险色。
+- 弹窗（`el-dialog`）宽度按内容定但不超过 `720px`，标题 `16px`/600，底部按钮右侧对齐，主按钮在右。
+- 危险操作（删除、停诊处理、解除限制）必须二次确认，确认按钮 `type="danger"`。
+
+### 13.5 登录页与兜底页
+
+- 登录页：左 `46%` **平面** `#1F7A8C` 品牌区（母标 + 标语 + 四项能力 + 三端角色卡），右 `54%` 白卡表单；控件只用 `el-form` / `el-input` / `el-checkbox` / `el-button` / `el-divider`，不引第三方 UI 库；验证码保留后端 `codeUrl` 图片。
+- 404 页：与移动端同口径——母标水印（主色 20%）+「页面不存在」+ 一句说明 +「返回首页」；**禁止**卡通插画与框架默认蓝按钮。
+- 渐变只允许移动端首页品牌区一处；后台任何页面不用渐变（含按钮、卡片、背景光斑）。
+
+### 13.6 禁止
+
+上游框架色 `#409EFF` 与 `rgba(53,109,255,…)` 蓝调、紫色、霓虹/外发光、彩色投影、卡片套卡片、emoji、界面出现上游框架名称。
+

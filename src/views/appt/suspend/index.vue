@@ -62,14 +62,18 @@
         </div>
       </template>
 
-      <el-table v-loading="loading" border class="data-table" :data="suspendList">
+      <el-table v-loading="loading" border class="data-table" :data="suspendList" empty-text="暂无停诊登记">
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="停诊批号" align="center" prop="batchNo" />
         <el-table-column label="停诊范围" align="center" prop="scopeType" :formatter="(r) => labelOf(SCOPE_TYPE_OPTIONS, r.scopeType)" />
         <el-table-column label="范围值" align="center" prop="scopeValue" />
         <el-table-column label="医务人员" align="center" prop="staffId" />
         <el-table-column label="原因" align="center" prop="reason" />
-        <el-table-column label="处理状态" align="center" prop="status" :formatter="(r) => labelOf(SUSPEND_STATUS_OPTIONS, r.status)" />
+        <el-table-column label="处理状态" align="center" prop="status">
+          <template #default="scope">
+            <appt-status-tag :options="SUSPEND_STATUS_OPTIONS" :value="scope.row.status" />
+          </template>
+        </el-table-column>
         <el-table-column label="操作人" align="center" prop="operator" />
         <el-table-column label="操作" align="center" width="100" class-name="small-padding fixed-width">
           <template #default="scope">

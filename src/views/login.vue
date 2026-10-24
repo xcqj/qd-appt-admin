@@ -21,65 +21,70 @@
         </div>
       </section>
 
-      <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
-        <div class="title-box">
-          <div>
-            <p class="eyebrow">演示环境登录</p>
-            <h3 class="title">{{ title }}</h3>
-            <p class="subtitle">使用演示账号登录运营工作台。</p>
+      <section class="login-panel">
+        <lang-select class="panel-lang" />
+        <header class="panel-head">
+          <p class="eyebrow">演示环境登录</p>
+          <h2 class="title">{{ title }}</h2>
+          <p class="subtitle">使用演示账号登录运营工作台。</p>
+        </header>
+
+        <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
+          <el-form-item prop="username">
+            <el-input
+              v-model="loginForm.username"
+              type="text"
+              size="large"
+              auto-complete="off"
+              :placeholder="$t('login.username')"
+            >
+              <template #prefix><svg-icon icon-class="user" class="el-input__icon input-icon" /></template>
+            </el-input>
+          </el-form-item>
+
+          <el-form-item prop="password">
+            <el-input
+              v-model="loginForm.password"
+              type="password"
+              size="large"
+              auto-complete="off"
+              :placeholder="$t('login.password')"
+              @keyup.enter="handleLogin"
+            >
+              <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
+            </el-input>
+          </el-form-item>
+
+          <el-form-item v-if="captchaEnabled" prop="code" class="captcha-row">
+            <el-input
+              v-model="loginForm.code"
+              size="large"
+              auto-complete="off"
+              :placeholder="$t('login.code')"
+              @keyup.enter="handleLogin"
+            >
+              <template #prefix><svg-icon icon-class="validCode" class="el-input__icon input-icon" /></template>
+            </el-input>
+            <div class="login-code">
+              <img :src="codeUrl" class="login-code-img" @click="getCode" />
+            </div>
+          </el-form-item>
+
+          <div class="form-meta">
+            <el-checkbox v-model="loginForm.rememberMe">{{ $t('login.rememberPassword') }}</el-checkbox>
+            <router-link v-if="register" class="link-type" :to="'/register'">
+              {{ $t('login.switchRegisterPage') }}
+            </router-link>
           </div>
-          <lang-select />
-        </div>
 
-        <el-form-item prop="username">
-          <el-input
-            v-model="loginForm.username"
-            type="text"
-            size="large"
-            auto-complete="off"
-            :placeholder="$t('login.username')"
-          >
-            <template #prefix><svg-icon icon-class="user" class="el-input__icon input-icon" /></template>
-          </el-input>
-        </el-form-item>
+          <el-form-item class="submit-row">
+            <el-button :loading="loading" size="large" type="primary" class="submit-button" @click.prevent="handleLogin">
+              <span v-if="!loading">{{ $t('login.login') }}</span>
+              <span v-else>{{ $t('login.logging') }}</span>
+            </el-button>
+          </el-form-item>
 
-        <el-form-item prop="password">
-          <el-input
-            v-model="loginForm.password"
-            type="password"
-            size="large"
-            auto-complete="off"
-            :placeholder="$t('login.password')"
-            @keyup.enter="handleLogin"
-          >
-            <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
-          </el-input>
-        </el-form-item>
-
-        <el-form-item v-if="captchaEnabled" prop="code" class="captcha-row">
-          <el-input
-            v-model="loginForm.code"
-            size="large"
-            auto-complete="off"
-            :placeholder="$t('login.code')"
-            @keyup.enter="handleLogin"
-          >
-            <template #prefix><svg-icon icon-class="validCode" class="el-input__icon input-icon" /></template>
-          </el-input>
-          <div class="login-code">
-            <img :src="codeUrl" class="login-code-img" @click="getCode" />
-          </div>
-        </el-form-item>
-
-        <div class="form-meta">
-          <el-checkbox v-model="loginForm.rememberMe">{{ $t('login.rememberPassword') }}</el-checkbox>
-          <router-link v-if="register" class="link-type" :to="'/register'">
-            {{ $t('login.switchRegisterPage') }}
-          </router-link>
-        </div>
-
-        <div class="social-panel">
-          <span class="social-label">第三方登录</span>
+          <el-divider class="social-divider">第三方登录</el-divider>
           <div class="social-actions">
             <el-button circle :title="$t('login.social.wechat')" @click="doSocialLogin('wechat')">
               <svg-icon icon-class="wechat" />
@@ -97,20 +102,11 @@
               <svg-icon icon-class="github" />
             </el-button>
           </div>
-        </div>
-
-        <el-form-item class="submit-row">
-          <el-button :loading="loading" size="large" type="primary" class="submit-button" @click.prevent="handleLogin">
-            <span v-if="!loading">{{ $t('login.login') }}</span>
-            <span v-else>{{ $t('login.logging') }}</span>
-          </el-button>
-        </el-form-item>
-      </el-form>
+        </el-form>
+      </section>
     </div>
 
-    <div class="el-login-footer">
-      <span>Copyright © 2018-{{ currentYear }} 疯狂的狮子Li All Rights Reserved.</span>
-    </div>
+    <footer class="login-footer">Copyright © 2016-{{ currentYear }} 号源演示系统 · 数据全部虚构</footer>
   </div>
 </template>
 
@@ -248,340 +244,237 @@ onMounted(() => {
   getLoginData();
 });
 </script>
-
 <style lang="scss" scoped>
+/*
+ * 登录页版式（admin/AGENTS §13.5，S12.5 定）：
+ * 左 46% 平面深潭青品牌区 + 右 54% 白卡表单；控件全部是 Element Plus 既有组件，
+ * 不用渐变、不用玻璃拟态（渐变只留移动端首页一处）。
+ */
 .login {
-  min-height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 24px 88px;
-  background:
-    radial-gradient(circle at 12% 12%, rgba(53, 109, 255, 0.22), transparent 24%),
-    radial-gradient(circle at 88% 18%, rgba(14, 165, 233, 0.18), transparent 24%),
-    linear-gradient(135deg, #071120 0%, #0f1b33 42%, #15345f 100%);
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 40px 24px 24px;
+  background: #f5f7fa;
 }
 
 .login-shell {
-  width: min(1180px, 100%);
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(360px, 440px);
-  gap: 26px;
-  align-items: stretch;
-}
-
-.login-brand,
-.login-form {
-  border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 30px 80px rgba(2, 8, 23, 0.32);
-  backdrop-filter: blur(18px);
+  grid-template-columns: 46% 54%;
+  width: min(960px, 100%);
+  overflow: hidden;
+  border: 1px solid #e6ebf2;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 32px rgba(31, 45, 61, 0.08);
 }
 
 .login-brand {
-  padding: 42px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  color: #eef4ff;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
-    linear-gradient(135deg, rgba(53, 109, 255, 0.32), rgba(15, 23, 42, 0.24));
+  padding: 40px;
+  background: #1f7a8c;
+  color: #ffffff;
 }
 
 .brand-logo {
-  width: 44px;
-  height: 44px;
   display: block;
-  margin-bottom: 18px;
+  width: 40px;
+  height: 40px;
 }
 
 .brand-pill {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  padding: 8px 14px;
+  align-self: flex-start;
+  margin-top: 16px;
+  padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.14);
   font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .brand-title {
-  margin: 22px 0 14px;
-  font-size: clamp(34px, 4vw, 52px);
-  line-height: 1.08;
-  letter-spacing: -0.03em;
+  margin: 20px 0 0;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 .brand-desc {
-  margin: 0;
-  max-width: 580px;
-  color: rgba(226, 232, 240, 0.88);
-  font-size: 15px;
+  margin: 16px 0 0;
+  font-size: 14px;
   line-height: 1.8;
+  color: rgba(255, 255, 255, 0.86);
 }
 
 .brand-highlights {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 28px 0 34px;
+  gap: 8px;
+  margin-top: 24px;
 }
 
 .highlight-chip {
-  padding: 9px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #f8fbff;
-  font-size: 13px;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 8px;
+  font-size: 12px;
+  color: #ffffff;
 }
 
 .brand-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
+  margin-top: auto;
+  padding-top: 32px;
 }
 
 .metric-card {
-  padding: 18px 16px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
 
   strong {
-    font-size: 24px;
-    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
   }
 
   span {
-    color: rgba(226, 232, 240, 0.72);
-    font-size: 13px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.72);
   }
+}
+
+.login-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+}
+
+.panel-lang {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+}
+
+.panel-head {
+  padding-right: 48px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: #8a94a6;
+}
+
+.title {
+  margin: 8px 0 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #1f2d3d;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #8a94a6;
 }
 
 .login-form {
-  width: 100%;
-  padding: 34px 30px 26px;
-  z-index: 1;
-  background: var(--app-surface-bg);
-}
+  margin-top: 24px;
 
-.title-box {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 28px;
-
-  .eyebrow {
-    margin: 0 0 8px;
-    color: var(--app-accent-strong);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+  :deep(.el-input__wrapper) {
+    border-radius: 8px;
+    box-shadow: 0 0 0 1px #e6ebf2 inset;
   }
 
-  .title {
-    margin: 0;
-    color: var(--app-text-title);
-    font-weight: 700;
-    font-size: 30px;
-    letter-spacing: -0.03em;
+  :deep(.el-input__inner) {
+    height: 44px;
   }
-
-  .subtitle {
-    margin: 8px 0 0;
-    color: var(--app-text-muted);
-    font-size: 14px;
-    line-height: 1.7;
-  }
-
-  :deep(.lang-select--style) {
-    line-height: 0;
-    color: var(--app-text-muted);
-    padding: 10px;
-    border-radius: 14px;
-    background: var(--app-elevated-soft-bg);
-    border: 1px solid var(--app-surface-border);
-  }
-}
-
-.login-form .el-input {
-  height: 48px;
-}
-
-.login-form .input-icon {
-  height: 46px;
-  width: 14px;
-  margin-left: 0;
 }
 
 .captcha-row {
   :deep(.el-form-item__content) {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 122px;
-    gap: 12px;
+    display: flex;
+    flex-wrap: nowrap;
   }
+}
+
+.login-code {
+  flex: none;
+  margin-left: 12px;
+}
+
+.login-code-img {
+  display: block;
+  width: 96px;
+  height: 44px;
+  border: 1px solid #e6ebf2;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .form-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin: -2px 0 18px;
+  margin: 4px 0 16px;
 }
 
-.social-panel {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 16px;
-  margin-bottom: 22px;
-  border-radius: 20px;
-  background: var(--app-elevated-soft-bg);
-  border: 1px solid var(--app-surface-border);
-}
-
-.social-label {
-  color: var(--app-text-muted);
+.link-type {
   font-size: 13px;
-  font-weight: 600;
-}
-
-.social-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 8px;
 }
 
 .submit-row {
-  margin-bottom: 0;
+  margin-bottom: 8px;
 }
 
 .submit-button {
   width: 100%;
-  height: 50px;
-  border-radius: 16px;
-  box-shadow: 0 18px 34px rgba(53, 109, 255, 0.22);
+  height: 44px;
+  border-radius: 8px;
 }
 
-.login-form :deep(.el-input__wrapper) {
-  min-height: 48px;
-  background-color: var(--el-bg-color);
-  border-radius: 16px;
-  box-shadow: 0 0 0 1px var(--app-surface-border) inset;
-}
+.social-divider {
+  margin: 12px 0 16px;
 
-.login-form :deep(.el-input__wrapper.is-focus) {
-  box-shadow:
-    0 0 0 1px rgba(53, 109, 255, 0.24) inset,
-    0 0 0 4px rgba(53, 109, 255, 0.12);
-}
-
-.login-form :deep(.el-checkbox__label) {
-  color: var(--app-text-muted);
-}
-
-.login-form :deep(.el-button.is-circle) {
-  background: var(--app-elevated-soft-bg);
-  border: 1px solid var(--app-surface-border);
-  color: var(--app-text-muted);
-}
-
-.login-form :deep(.el-button.is-circle:hover) {
-  background: rgba(53, 109, 255, 0.12);
-  border-color: rgba(53, 109, 255, 0.2);
-  color: var(--app-accent-strong);
-}
-
-.login-code {
-  height: 48px;
-  box-sizing: border-box;
-  border-radius: 16px;
-  overflow: hidden;
-  background: var(--el-bg-color);
-  border: 1px solid var(--app-surface-border);
-
-  img {
-    cursor: pointer;
-    vertical-align: middle;
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  :deep(.el-divider__text) {
+    font-size: 12px;
+    color: #8a94a6;
   }
 }
 
-.el-login-footer {
-  height: 40px;
-  line-height: 40px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  color: rgba(226, 232, 240, 0.68);
+.social-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.login-footer {
+  margin-top: 24px;
   font-size: 12px;
-  letter-spacing: 0.08em;
+  color: #8a94a6;
 }
 
-.login-code-img {
-  height: 48px;
-  padding-left: 0;
-}
-
-@media (max-width: 960px) {
-  .login {
-    padding: 24px 14px 80px;
-  }
-
+@media (max-width: 900px) {
   .login-shell {
     grid-template-columns: 1fr;
   }
 
   .login-brand {
-    padding: 28px 24px;
-  }
-
-  .brand-metrics {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px) {
-  .login-brand {
     display: none;
-  }
-
-  .login-form {
-    padding: 26px 18px 20px;
-  }
-
-  .title-box {
-    flex-direction: column;
-  }
-
-  .social-panel {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .social-actions {
-    justify-content: flex-start;
-  }
-
-  .captcha-row :deep(.el-form-item__content) {
-    grid-template-columns: 1fr;
   }
 }
 </style>

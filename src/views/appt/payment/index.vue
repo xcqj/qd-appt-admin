@@ -81,7 +81,7 @@
         </div>
       </template>
 
-      <el-table v-loading="loading" border class="data-table" :data="paymentList">
+      <el-table v-loading="loading" border class="data-table" :data="paymentList" empty-text="暂无支付单">
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="支付单号" align="center" prop="paymentNo" />
         <el-table-column label="挂号单号" align="center" prop="registrationNo" width="160" />
@@ -90,7 +90,11 @@
         <el-table-column label="院区" align="center" prop="campusName" min-width="100" />
         <el-table-column label="金额" align="center" prop="amount" />
         <el-table-column label="支付渠道" align="center" prop="channel" :formatter="(r) => labelOf(PAY_CHANNEL_OPTIONS, r.channel)" />
-        <el-table-column label="支付状态" align="center" prop="status" :formatter="(r) => labelOf(PAY_STATUS_OPTIONS, r.status)" />
+        <el-table-column label="支付状态" align="center" prop="status">
+          <template #default="scope">
+            <appt-status-tag :options="PAY_STATUS_OPTIONS" :value="scope.row.status" />
+          </template>
+        </el-table-column>
         <el-table-column label="渠道流水号" align="center" prop="tradeNo" />
         <el-table-column label="过期时间" align="center" prop="expireTime" width="180">
           <template #default="scope">

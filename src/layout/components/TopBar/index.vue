@@ -257,16 +257,16 @@ html.dark #app .topbar-menu.el-menu--horizontal > .el-sub-menu.is-active > .el-s
 
 .topbar-menu-popper .el-menu--popup .el-menu-item:hover,
 .topbar-menu-popper .el-menu--popup .el-sub-menu__title:hover {
-  background: rgba(64, 158, 255, 0.08) !important;
+  background: rgba(31, 122, 140, 0.08) !important;
   color: v-bind(theme) !important;
   transform: translateX(1px);
 }
 
 .topbar-menu-popper .el-menu--popup .el-menu-item.is-active,
 .topbar-menu-popper .el-menu--popup .el-sub-menu.is-active > .el-sub-menu__title {
-  background: linear-gradient(180deg, rgba(64, 158, 255, 0.16), rgba(64, 158, 255, 0.1)) !important;
+  background: linear-gradient(180deg, rgba(31, 122, 140, 0.16), rgba(31, 122, 140, 0.1)) !important;
   color: v-bind(theme) !important;
-  box-shadow: inset 0 0 0 1px rgba(64, 158, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(31, 122, 140, 0.12);
 }
 
 .topbar-menu-popper .el-menu--popup .svg-icon {

@@ -5,20 +5,20 @@
   --menuBg: #ffffff;
   --menuColor: #1f2937;
   --menuActiveText: #111827;
-  --menuHover: rgba(64, 158, 255, 0.12);
+  --menuHover: rgba(31, 122, 140, 0.12);
 
   --subMenuBg: #ffffff;
   --subMenuActiveText: #111827;
-  --subMenuHover: rgba(64, 158, 255, 0.12);
-  --subMenuTitleHover: rgba(64, 158, 255, 0.08);
+  --subMenuHover: rgba(31, 122, 140, 0.12);
+  --subMenuTitleHover: rgba(31, 122, 140, 0.08);
 
   --el-menu-base-level-padding: 12px;
   --el-menu-level-padding: 8px;
   --el-menu-item-height: 50px;
 
   --fixedHeaderBg: #ffffff;
-  --tableHeaderBg: #f8fafc;
-  --tableHeaderTextColor: #475569;
+  --tableHeaderBg: #f5f7fa;
+  --tableHeaderTextColor: #5a667e;
 
   --brder-color: #e8e8e8;
 
@@ -29,7 +29,7 @@
   --app-radius-sm: max(0px, calc(var(--app-radius-base) - 8px));
   --app-radius-md: max(0px, calc(var(--app-radius-base) - 4px));
   --app-radius-lg: var(--app-radius-base);
-  --app-radius-base: 14px;
+  --app-radius-base: 16px;
 
   --app-space-base: 12px;
 
@@ -42,26 +42,61 @@
   --app-surface-bg: #ffffff;
   --app-surface-border: #e5e7eb;
   --app-shell-bg: #f5f7fa;
-  --app-shell-spot-1: rgba(64, 158, 255, 0.08);
-  --app-shell-spot-2: rgba(64, 158, 255, 0.04);
+  --app-shell-spot-1: rgba(31, 122, 140, 0.08);
+  --app-shell-spot-2: rgba(31, 122, 140, 0.04);
   --app-sidebar-border: #e5e7eb;
   --app-navbar-bg: #ffffff;
   --app-navbar-border: #e5e7eb;
   --app-navbar-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
-  --app-accent-soft: rgba(64, 158, 255, 0.08);
-  --app-accent-strong: #409eff;
+  --app-accent-soft: rgba(31, 122, 140, 0.08);
+  --app-accent-strong: #1f7a8c;
   --app-text-title: #1f2937;
   --app-text-muted: #6b7280;
   --app-overlay-mask: rgba(15, 23, 42, 0.22);
   --app-elevated-soft-bg: #f8fafc;
   --app-elevated-close-bg: rgba(148, 163, 184, 0.14);
-  --app-elevated-close-hover-bg: rgba(64, 158, 255, 0.14);
+  --app-elevated-close-hover-bg: rgba(31, 122, 140, 0.14);
 
   // --- 与 Element Plus 主题变量的桥接（页面背景、默认圆角/阴影） ---
-  --el-border-radius-base: var(--app-radius-md);
-  --el-border-radius-small: var(--app-radius-sm);
+  /* 输入与按钮按 AGENTS §13.1 固定 8px（卡片走 --app-radius-base=16px） */
+  --el-border-radius-base: 8px;
+  --el-border-radius-small: 4px;
   --el-border-radius-round: 999px;
   --el-box-shadow-light: var(--app-shadow-sm);
   --el-box-shadow: var(--app-shadow-md);
   --el-bg-color-page: var(--app-shell-bg);
+
+  /*
+   * 语义色桥接（DESIGN §2.1）：Element 的 success / warning / danger / info 与品牌色对齐，
+   * 否则 el-tag、el-alert 仍是框架默认的绿/橙/红/灰，与移动端状态色两套观感。
+   * light-* 用于 tag / alert 底色，dark-2 用于 hover 与描边加深。
+   */
+  --el-color-success: #2e9e6b;
+  --el-color-success-light-3: #6dbb97;
+  --el-color-success-light-5: #96ceb5;
+  --el-color-success-light-7: #c0e2d3;
+  --el-color-success-light-8: #d5ece1;
+  --el-color-success-light-9: #eaf5f0;
+  --el-color-success-dark-2: #257e56;
+  --el-color-warning: #d98e04;
+  --el-color-warning-light-3: #e4b04f;
+  --el-color-warning-light-5: #ecc682;
+  --el-color-warning-light-7: #f4ddb4;
+  --el-color-warning-light-8: #f7e8cd;
+  --el-color-warning-light-9: #fbf4e6;
+  --el-color-warning-dark-2: #ae7203;
+  --el-color-danger: #d14343;
+  --el-color-danger-light-3: #df7b7b;
+  --el-color-danger-light-5: #e8a1a1;
+  --el-color-danger-light-7: #f1c7c7;
+  --el-color-danger-light-8: #f6d9d9;
+  --el-color-danger-light-9: #faecec;
+  --el-color-danger-dark-2: #a73636;
+  --el-color-info: #3b82c4;
+  --el-color-info-light-3: #76a8d6;
+  --el-color-info-light-5: #9dc0e2;
+  --el-color-info-light-7: #c4daed;
+  --el-color-info-light-8: #d8e6f3;
+  --el-color-info-light-9: #ebf2f9;
+  --el-color-info-dark-2: #2f689d;
 }
