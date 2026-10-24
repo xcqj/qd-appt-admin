@@ -258,7 +258,16 @@ onMounted(() => {
   box-sizing: border-box;
   min-height: 100vh;
   padding: 40px 24px 24px;
-  background: #f5f7fa;
+  background-color: #f7fafa;
+  /*
+   * 页面级背景纹样（2026-10-24 按 Stitch 出图加）：
+   * 极低对比的同心弧线 + 右下斜线，只用线条不用渐变、不引图片素材；
+   * 全站唯一的装饰性背景，仅登录页可用（admin AGENTS §13.5）。
+   */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800' preserveAspectRatio='xMidYMid slice'%3E%3Cg fill='none' stroke='%231F7A8C' stroke-opacity='.07' stroke-width='1.2'%3E%3Ccircle cx='-140' cy='60' r='420'/%3E%3Ccircle cx='-140' cy='60' r='520'/%3E%3Ccircle cx='-140' cy='60' r='620'/%3E%3Ccircle cx='90' cy='880' r='300'/%3E%3Ccircle cx='90' cy='880' r='400'/%3E%3Ccircle cx='1250' cy='740' r='380'/%3E%3Ccircle cx='1250' cy='740' r='480'/%3E%3Cpath d='M980 800 1200 580M1046 800 1200 646M1112 800 1200 712' stroke-opacity='.05'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .login-shell {
@@ -267,9 +276,11 @@ onMounted(() => {
   width: min(960px, 100%);
   overflow: hidden;
   border: 1px solid #e6ebf2;
-  border-radius: 16px;
+  border-radius: 20px;
   background: #ffffff;
-  box-shadow: 0 8px 32px rgba(31, 45, 61, 0.08);
+  box-shadow:
+    0 18px 48px rgba(31, 45, 61, 0.1),
+    0 2px 8px rgba(31, 45, 61, 0.04);
 }
 
 .login-brand {
