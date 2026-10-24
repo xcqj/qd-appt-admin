@@ -1,0 +1,9 @@
+# 构建上下文裁剪（S14）
+.git
+.github
+node_modules
+dist
+dist-ci
+.vscode
+.idea
+*.log

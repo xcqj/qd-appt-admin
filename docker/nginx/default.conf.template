@@ -1,0 +1,61 @@
+# 号源 QueueDepth · 管理后台 nginx 模板（S14）
+#
+# 只有 ${APPT_API_UPSTREAM} 会在容器启动时被替换（NGINX_ENVSUBST_FILTER=^APPT_），
+# $uri / $http_host 等 nginx 变量原样保留。
+
+server {
+    listen 80;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # 上传（头像 / 院区封面）
+    client_max_body_size 20m;
+
+    gzip on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css application/json application/javascript application/xml image/svg+xml;
+
+    # 接口反代：构建期 VITE_APP_BASE_API=/prod-api，转发时剥掉该前缀
+    # SSE（统一消息推送）需要长连接 + 关缓冲
+    location /prod-api/ {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_buffering off;
+        proxy_cache off;
+        proxy_read_timeout 86400s;
+        proxy_send_timeout 86400s;
+        proxy_pass ${APPT_API_UPSTREAM}/;
+    }
+
+    # SnailJob 控制台（后台「运维对账 → 任务调度中心」的 iframe）
+    # 演示镜像**不含** SnailJob 服务端：默认指向宿主机 8800，未启动时该页会 502（属预期）
+    # 不写 URI 部分 → 保留原始 /snail-job/... 路径，与 SnailJob 自带前缀一致
+    # iframe 的 src 可能是 /snail-job（无尾斜杠），补一次跳转，否则会落到 SPA 回退里变成嵌套后台。
+    # 用 $http_host（含端口）拼绝对地址，避免换成 8083/18083 时把端口丢掉
+    location = /snail-job {
+        return 302 $scheme://$http_host/snail-job/;
+    }
+
+    location /snail-job/ {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 300s;
+        proxy_pass ${APPT_SNAILJOB_UPSTREAM};
+    }
+
+    # SPA 回退
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

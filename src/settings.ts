@@ -11,8 +11,9 @@ const setting: DefaultSettings = {
 
   /**
    * 侧边栏主题 深色主题theme-dark，浅色主题theme-light
+   * S14：默认改回深蓝（演示口径与项目既有观感一致）；浅色仍可在「布局设置」里切换并记忆
    */
-  sideTheme: 'theme-light',
+  sideTheme: 'theme-dark',
   /**
    * 是否系统布局配置
    */
