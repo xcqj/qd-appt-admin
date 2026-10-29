@@ -1,76 +1,98 @@
-## 平台简介
+# 号源 QueueDepth · 管理后台
 
-- 本仓库为前端技术栈 [Vue3](https://v3.cn.vuejs.org) + [TS](https://www.typescriptlang.org/) + [Element Plus](https://element-plus.org/zh-CN) + [Vite](https://cn.vitejs.dev) 版本。
-- 官方项目: 基于 React + Ant Design 版本前端项目 [plus-ui-react](https://gitee.com/JavaLionLi/plus-ui/tree/6.X-React/)
-- 成员项目: 基于 vben5(ant-design-vue) 的前端项目 [ruoyi-plus-vben5](https://gitee.com/dapppp/ruoyi-plus-vben5)
-- 成员项目: 基于soybean 的前端项目 [ruoyi-plus-soybean](https://gitee.com/xlsea/ruoyi-plus-soybean)
+> **技术演示项目**：所有院区 / 科室 / 医生 / 就诊人 / 挂号 / 支付数据**全部虚构**，支付走 Mock 渠道，
+> **不提供任何真实医疗服务**，不接入任何真实医院系统。
 
-## 配套后端代码仓库地址
+门诊预约挂号系统的管理端：20 张业务表维护、运营看板、号源台账、停诊处理、七查对账、黑名单与限购。
 
-| 介绍              | 项目名           | 项目地址                                                                                                                                                                       |
-| ----------------- | :--------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 🔥 分布式集群框架 | RuoYi-Vue-Plus   | - [Gitee](https://gitee.com/dromara/RuoYi-Vue-Plus)<br> - [GitHub](https://github.com/dromara/RuoYi-Vue-Plus)<br> - [GitCode](https://gitcode.com/dromara/RuoYi-Vue-Plus)      |
-| 🔥 微服务框架     | RuoYi-Cloud-Plus | - [Gitee](https://gitee.com/dromara/RuoYi-Cloud-Plus)<br>- [GitHub](https://github.com/dromara/RuoYi-Cloud-Plus)<br> - [GitCode](https://gitcode.com/dromara/RuoYi-Cloud-Plus) |
+- 基于 **RuoYi-Vue-Plus 6.0.0 的 plus-ui**（Vue 3 + TS + Element Plus + Vite）做业务二开；
+- 业务页面集中在 `src/views/appt/`，接口在 `src/api/appt/`；
+- 演示地址、截图与五分钟剧本在门面仓 [qd-appt-showcase](https://github.com/xcqj/qd-appt-showcase)。
 
-## 分支说明
+## 技术栈
 
-- 6.X分支(稳定发布主分支 生产可用)
-- dev分支(开发分支 开发过程中使用)
+| 项 | 选型 |
+|---|---|
+| 框架 | Vue **3.5.42** + TypeScript + Vite |
+| UI | Element Plus **2.14.5** |
+| 状态 / 路由 | Pinia 4 · Vue Router 5.3 |
+| 请求 | axios 1.20（统一拦截器：RSA+AES 加解密、token、错误提示） |
+| 门禁 | `vue-tsc --noEmit` → `oxlint` → `vite build` |
 
-## 前端运行
+## 快速启动
 
 ```bash
-# 安装依赖
-pnpm install --registry=https://registry.npmmirror.com
-
-# 启动服务
-pnpm dev
-
-# 构建生产环境
-pnpm build:prod
-
-# 前端访问地址 http://localhost:80
+pnpm install          # Node ≥ 20.19，pnpm ≥ 10
+pnpm dev              # http://localhost:8083
 ```
 
-## 本框架与RuoYi的业务差异
+**后端要先跑起来**：开发态请求 `/dev-api`，由 Vite 代理到 `http://localhost:8082`
+（可用 `VITE_PROXY_TARGET` 覆盖，截图脚本就指向 `18082` 那套演示栈）。
 
-| 业务         | 功能说明                                                      | 本框架 | RuoYi                         |
-| ------------ | ------------------------------------------------------------- | ------ | ----------------------------- |
-| 用户管理     | 用户的管理配置 如:新增用户、分配用户所属部门、角色、岗位等    | 支持   | 支持                          |
-| 部门管理     | 配置系统组织机构（公司、部门、小组） 树结构展现支持数据权限   | 支持   | 支持                          |
-| 岗位管理     | 配置系统用户所属担任职务                                      | 支持   | 支持                          |
-| 菜单管理     | 配置系统菜单、操作权限、按钮权限标识等                        | 支持   | 支持                          |
-| 角色管理     | 角色菜单权限分配、设置角色按机构进行数据范围权限划分          | 支持   | 支持                          |
-| 字典管理     | 对系统中经常使用的一些较为固定的数据进行维护                  | 支持   | 支持                          |
-| 参数管理     | 对系统动态配置常用参数                                        | 支持   | 支持                          |
-| 通知公告     | 系统通知公告信息发布维护                                      | 支持   | 支持                          |
-| 操作日志     | 系统正常操作日志记录和查询 系统异常信息日志记录和查询         | 支持   | 支持                          |
-| 登录日志     | 系统登录日志记录查询包含登录异常                              | 支持   | 支持                          |
-| 文件管理     | 系统文件展示、上传、下载、删除等管理                          | 支持   | 无                            |
-| 文件配置管理 | 系统文件上传、下载所需要的配置信息动态添加、修改、删除等管理  | 支持   | 无                            |
-| 在线用户管理 | 已登录系统的在线用户信息监控与强制踢出操作                    | 支持   | 支持                          |
-| 定时任务     | 运行报表、任务管理(添加、修改、删除)、日志管理、执行器管理等  | 支持   | 仅支持任务与日志管理          |
-| 代码生成     | 多数据源前后端代码的生成（java、html、xml、sql）支持CRUD下载  | 支持   | 仅支持单数据源                |
-| 系统接口     | 根据业务代码自动生成相关的api接口文档                         | 支持   | 支持                          |
-| 服务监控     | 监视集群系统CPU、内存、磁盘、堆栈、在线日志、Spring相关配置等 | 支持   | 仅支持单机CPU、内存、磁盘监控 |
-| 缓存监控     | 对系统的缓存信息查询，命令统计等。                            | 支持   | 支持                          |
-| 在线构建器   | 拖动表单元素生成相应的HTML代码。                              | 支持   | 支持                          |
-| 使用案例     | 系统的一些功能案例                                            | 支持   | 不支持                        |
+```bash
+# 最省事的方式：整套起来（含后端、数据库、演示数据）
+cd ../showcase && ./demo.sh        # 管理后台 http://localhost:18083
+```
 
-## 演示图例
+演示账号：`admin / admin123`（患者端与分诊台共用同一套账号体系，见 `../app/README.md`）。
 
-|                                                                                            |                                                                                            |
-|--------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
-| ![输入图片说明](https://foruda.gitee.com/images/1780299033689126697/868ef1ea_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299052163404649/8d94165d_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299074949590692/27f5bfb5_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299108816841231/619a7c57_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299089818500856/862ba805_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299173744267947/95cb0cd3_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299193694706123/28257dc1_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299147525013883/ebcd9dfe_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299220007761523/dc7e27c9_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299235966983519/35b047e1_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299250884681522/e5731314_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299267028602229/230d5428_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299293149732467/19abcf6c_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299311267192779/e665c668_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299327888096947/283a177f_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299348897579356/caac864e_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299376680669014/452585fb_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299843158459866/ceebbb63_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299432356918392/07abdf6a_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299465584172180/a2b2be12_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299491233431530/d88bfa35_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299513358913413/f2f90032_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299527419238776/549cb852_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299553918371792/43bd3bff_1766278.png "屏幕截图") |
-| ![输入图片说明](https://foruda.gitee.com/images/1780299586662735625/1107a3ee_1766278.png "屏幕截图") | ![输入图片说明](https://foruda.gitee.com/images/1780299613342135530/526d7859_1766278.png "屏幕截图") |
+## 与后端的约定
+
+| 项 | 开发态 | 生产（容器） |
+|---|---|---|
+| 接口前缀 | `/dev-api` → 代理到 `localhost:8082` | `/prod-api` → 由 nginx 反代到 `APPT_API_UPSTREAM` |
+| 加密 | `VITE_APP_ENCRYPT=true`，请求用后端公钥加密、响应用前端私钥解密 | 同左（**前后端密钥必须配对，换就一起换**） |
+| 客户端 id | `VITE_APP_CLIENT_ID`，用于 Sa-Token 多端区分 | 同左 |
+| 实时消息 | SSE `/resource/message`（`VITE_APP_MESSAGE_ENABLED=true`） | 同左，走同一域名经 nginx 反代 |
+| SnailJob 控制台 | 直连 `http://localhost:8800/snail-job` | nginx 把 `/snail-job/` 转到 `APPT_SNAILJOB_UPSTREAM` |
+
+nginx 模板见 [`docker/nginx/default.conf.template`](./docker/nginx/default.conf.template)：`/prod-api/`、`/snail-job/` 两条运行时反代，
+用 `envsubst` 在容器启动时注入上游地址——**同一个镜像可以指向不同后端，不用重新构建**。
+
+## 目录结构
+
+```
+src/
+├── api/appt/          ★ 业务接口（20 张表 + 看板 + 对账 + 停诊）
+├── views/appt/        ★ 业务页面（台账 / 看板 / 排班 / 对账 / 黑名单 …）
+├── views/{system,monitor,tool}/   框架自带（用户、角色、菜单、任务、缓存）
+├── views/{ai,demo,workflow}/      框架示例页（**保留文件，菜单已隐藏**）
+├── components/        通用组件（含 ApptStatusTag：8 状态色映射）
+├── utils/request.ts   请求拦截器（加密 / token / 错误码）
+└── store/             Pinia（用户、权限、通知）
+```
+
+规模：121 个 `.vue` + 177 个 `.ts`。
+
+## 构建与门禁
+
+```bash
+pnpm exec vue-tsc --noEmit     # 类型
+pnpm lint                      # oxlint
+pnpm build                     # 产物 → dist/
+```
+
+CI（`.github/workflows/ci.yml`）在 push main / PR 时依次跑上述三条，与本地一致。
+**本仓无单元测试**：门禁靠类型 + lint + 构建，业务正确性由 `qd-appt-docs/test-evidence.md` 的后端集成测试覆盖。
+
+## 镜像与部署
+
+- 镜像：`ghcr.io/xcqj/appt-admin`，多阶段构建（pnpm build → nginx alpine）；
+- 构建参数 `VITE_APP_BASE_API=/prod-api` 在构建期写死，运行期靠 nginx 模板换上游；
+- tag 与部署见 `qd-appt-showcase/deploy/deploy.sh`（`vX.Y.Z` 不可变 tag，禁止 `latest`）。
+
+## 边界与已知现象
+
+- **菜单不在代码里**：新增页面要同时写菜单 SQL（`qd-appt-docs` 的 `script/sql/appt_s*_menu*.sql`），否则页面存在但后台看不见；
+- **演示密钥**：`.env.production` 里的 RSA 公私钥是上游默认演示值，**不得用于真实业务**；
+- 框架示例页（`views/ai`、`views/demo`、`views/workflow`）文件保留但菜单已隐藏，属已知冗余；
+- 实时消息（SSE）在 Named Tunnel 下约 55 s 重连一次，属已知现象，业务功能不受影响。
+
+## 文档索引
+
+| 需要什么 | 去哪看 |
+|---|---|
+| 接口契约（字段级） | `qd-appt-docs/api-contract.md` |
+| 后台视觉与交互基线 | [`AGENTS.md`](./AGENTS.md) §13、`qd-appt-docs/DESIGN.md` |
+| 实测数字 | `qd-appt-docs/test-evidence.md` |
+| 切片排期 | `qd-appt-docs/ROADMAP.md` |
